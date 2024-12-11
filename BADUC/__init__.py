@@ -9,3 +9,8 @@ __version__ = {
     "pyrogram": pyrogram_version,
     "python": python_version(),
 }
+
+spam_chats = []
+SUDO_USER = SUDO_USERS
+OWNER_USERNAME = OWNER_USERNAME
+SUDO_USERS.append(OWNER_ID)
