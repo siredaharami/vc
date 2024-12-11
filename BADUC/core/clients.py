@@ -51,14 +51,14 @@ async_dirs()
     
 
 app = Client(
-    name = "SHUKLA",
+    name = "BADUC",
     api_id = API_ID,
     api_hash = API_HASH,
     session_string = STRING_SESSION,
 )
 
 bot = Client(
-    name = "ShuklaSUPPORT",
+    name = "BADUCSUPPORT",
     api_id = API_ID,
     api_hash = API_HASH,
     bot_token = BOT_TOKEN,
@@ -73,7 +73,7 @@ def mongodbase():
         LOGGER.info("Connecting To Your Database ...")
         async_client = AsyncIOMotorClient
         mongobase = async_client(MONGO_DB_URL)
-        mongodb = mongobase.SHUKLA
+        mongodb = mongobase.BADUC
         LOGGER.info("Conected To Your Database.")
     except:
         LOGGER.error("Failed To Connect, Please Change Your Mongo Database !")
@@ -105,8 +105,6 @@ async def run_async_clients():
         await app.join_chat("SHIVANSH474")
     except:
         pass
-    if SESSION_STRING:
-        LOGGER.info("Starting Assistant ...")
         await ass.start()
         LOGGER.info("Assistant Started.")
         try:
