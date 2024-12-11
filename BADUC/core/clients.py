@@ -6,7 +6,7 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from BADUC.core.config import *
+from BADUC.core.config import API_ID
 from .logger import LOGGER
 
 def async_config():
