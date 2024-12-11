@@ -3,7 +3,7 @@ from .config import *
 from .logger import LOGGER
 logs = LOGGER
 
-from .core.config import PLUGINS
+from BADUC.core.config import PLUGINS
 plugs = PLUGINS
 
 from .core import config
