@@ -6,9 +6,9 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from .core import API_ID, API_HASH, STRING_SESSION
-from .core import BOT_TOKEN, SESSION_STRING, LOGGER
-from .core import MONGO_DB_URL, LOG_GROUP_ID, SUDOERS
+from core import API_ID, API_HASH, STRING_SESSION
+from core import BOT_TOKEN, SESSION_STRING, LOGGER
+from core import MONGO_DB_URL, LOG_GROUP_ID, SUDOERS
 
 
 def async_config():
