@@ -6,7 +6,7 @@ from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from BADUC.core import Config
+from .config import Config
 
 def async_config():
     LOGGER.info("Checking Variables ...")
