@@ -1,3 +1,4 @@
+from typing import Union, List, Pattern
 from pytgcalls import PyTgCalls, filters as pytgfl
 
 
