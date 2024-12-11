@@ -19,8 +19,6 @@ SUDO_USERS.append(OWNER_ID)
 
 
 
-from .core import LOGS, Config
-
 mongo_async_cli = _mongo_async_(config.MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 
