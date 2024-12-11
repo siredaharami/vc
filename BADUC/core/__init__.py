@@ -6,7 +6,7 @@ logs = LOGGER
 from BADUC.core.config import PLUGINS
 plugs = PLUGINS
 
-from .core import config
+from BADUC.core import config
 vars = config
 
 from .command import cdx, rgx, cdz
