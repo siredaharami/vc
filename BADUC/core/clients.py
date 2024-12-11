@@ -7,6 +7,7 @@ from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from .config import Config
+from .
 
 def async_config():
     LOGGER.info("Checking Variables ...")
