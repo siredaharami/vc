@@ -1,7 +1,8 @@
 from pyrogram import Client, filters
 from .. import bot
 import time
-
+from pyrogram import *
+from pyrogram.types import *
 
 @bot.on_message(cdx(["help"]))
 async def ping_command(client, message):
