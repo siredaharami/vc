@@ -1,5 +1,5 @@
 from typing import Union, List, Pattern
-from .core import *
+from .core.config import *
 from motor.motor_asyncio import AsyncIOMotorClient as _mongo_async_
 from pytgcalls import PyTgCalls, filters as pytgfl
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
