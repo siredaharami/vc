@@ -6,7 +6,7 @@ from .core import logs, plugs, vars
 from .plugins import ALL_PLUGINS
 from .core.clients import run_async_clients
 from .functions.enums import run_async_enums
-from .functions.enums.inline import run_async_inline
+from .functions.inline import run_async_inline
 
 
 async def main():
