@@ -1,7 +1,7 @@
 from .clients import app, bot, call
 from .config import Config
 from .logger import LOGS
-from .command import command
+from .command import commandx, commandz
 
 __all__ = [
     "app",
@@ -9,5 +9,6 @@ __all__ = [
     "call",
     "Config",
     "LOGS",
-    "command",
+    "commandx",
+    "commandz",
 ]
