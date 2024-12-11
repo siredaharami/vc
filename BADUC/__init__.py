@@ -22,7 +22,7 @@ SUDO_USERS.append(OWNER_ID)
 
 
 
-mongo_async_cli = _mongo_async_(config.MONGO_DB_URL)
+mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 
 
