@@ -47,7 +47,7 @@ def cb_wrapper(func):
     return wrapper
 
 def inline_wrapper(func):
-    from ... import __version__
+    from BADUC import __version__
     async def wrapper(bot, query):
         sudousers = SUDOERS
         if (query.from_user.id != app.me.id and
