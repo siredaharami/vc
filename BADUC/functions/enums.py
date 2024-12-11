@@ -4,7 +4,7 @@ from pyrogram import filters
 from pyrogram.enums import *
 from pyrogram.types import *
 
-from .core.clients import app, bot
+from BADUC.core.clients import app, bot
 
 
 
