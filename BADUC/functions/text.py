@@ -1,8 +1,8 @@
 from pyrogram.types import *
 from traceback import format_exc
 
-from . import SUDOERS
-from .core.clients import app, bot
+from BADUC import SUDOERS
+from BADUC.core.clients import app, bot
 
 def super_user_only(mystic):
     async def wrapper(client, message):
