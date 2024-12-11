@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from .. import bot
 import time
 
 
