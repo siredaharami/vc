@@ -10,6 +10,8 @@ from logging.handlers import RotatingFileHandler
 # config variables
 if os.path.exists("vars.env"):
     load_dotenv("vars.env")
+class Config:
+    
 API_ID = int(getenv("API_ID", 0))
 API_HASH = getenv("API_HASH", None)
 BOT_TOKEN = getenv("BOT_TOKEN", None)
