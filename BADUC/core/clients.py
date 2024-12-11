@@ -57,13 +57,6 @@ app = Client(
     session_string = STRING_SESSION,
 )
 
-ass = Client(
-    name = "ShuklaPlayer",
-    api_id = API_ID,
-    api_hash = API_HASH,
-    session_string = SESSION_STRING,
-)
-
 bot = Client(
     name = "ShuklaSUPPORT",
     api_id = API_ID,
