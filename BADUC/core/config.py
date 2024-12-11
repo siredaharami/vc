@@ -35,8 +35,3 @@ PM_LIMIT = {}
 PLUGINS = {}
 SUDOERS = []
 
-
-COMMAND_HANDLERS = []
-for x in COMMAND_PREFIXES:
-    COMMAND_HANDLERS.append(x)
-COMMAND_HANDLERS.append('')
