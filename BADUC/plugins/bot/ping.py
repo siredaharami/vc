@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 from BADUC.core.clients import bot
+from BADUC.core.command import *
 import time
 from pyrogram import *
 from pyrogram.types import *
