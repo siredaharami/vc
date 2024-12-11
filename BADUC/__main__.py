@@ -2,7 +2,7 @@ import asyncio, importlib
 
 from pytgcalls import idle
 
-from .core import logs, plugs, vars
+from .core import LOGGER, plugs, vars
 from .plugins import ALL_PLUGINS
 from .core.clients import run_async_clients
 from .functions.enums import run_async_enums
