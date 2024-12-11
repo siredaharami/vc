@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 import time
+from BADUC.core.clients import app
 
 @app.on_message(filters.command("ping") & filters.private)
 async def ping(client, message):
