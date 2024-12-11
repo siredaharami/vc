@@ -13,7 +13,7 @@ async def main():
     await run_async_clients()
     for all_plugin in ALL_PLUGINS:
         imported_plugin = importlib.import_module(
-            "SHUKLA.plugins" + all_plugin
+            "BADUC.plugins" + all_plugin
         )
         if (hasattr
             (
@@ -32,7 +32,7 @@ async def main():
     logs.info(">> Successfully Imported All Plugins.")
     await run_async_inline()
     logs.info("Successfully Deployed !!")
-    logs.info("Do Visit - @BADBABY")
+    logs.info("Do Visit - @HEROKUBIN_01")
     await idle()
 
 
