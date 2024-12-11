@@ -3,7 +3,7 @@ from .. import bot
 import time
 
 
-@bot.on_message(filters.command("ping") & filters.bot)
+@bot.on_message(cdx(["help"]))
 async def ping_command(client, message):
     start_time = time.time()  # Start time to calculate latency
     sent_message = await message.reply("Pinging... 🏓")  # Initial reply
