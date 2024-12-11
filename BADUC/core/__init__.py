@@ -1,6 +1,14 @@
 from .clients import app, bot, call
 from .config import *
 from .logger import LOGGER
+logs = LOGGER
+
+from .core.config import PLUGINS
+plugs = PLUGINS
+
+from .core import config
+vars = config
+
 from .command import cdx, rgx, cdz
 
 __all__ = [
