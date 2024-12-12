@@ -18,7 +18,7 @@ def abhi(pattern: Union[str, Pattern]):
     """Filter messages matching a regex pattern."""
     return pyrofl.regex(pattern)
 
-from BADUC.functions.text import (
+from BADUC.functions.wrapper import (
     super_user_only, sudo_user
 )
 super_user_only = super_user_only
