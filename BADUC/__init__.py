@@ -27,3 +27,8 @@ mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 
 
+from BADUC.functions.text import (
+    super_user_only, sudo_user
+)
+super_user_only = super_user_only
+sudo_user = sudo_user
