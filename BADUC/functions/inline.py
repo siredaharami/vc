@@ -4,7 +4,6 @@ from BADUC.functions.button import *
 from BADUC.functions.text import *
 from pyrogram.types import *
 
-
 async def help_menu_logo(answer):
     # Providing a fallback thumbnail image directly
     thumb_image = "https://files.catbox.moe/83d5lc.jpg"
@@ -88,4 +87,4 @@ async def run_async_inline():
         except Exception as e:
             print(f"Error: {e}")
             return
-          
+            
