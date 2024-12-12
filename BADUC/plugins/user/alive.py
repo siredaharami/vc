@@ -14,7 +14,7 @@ ALIVE_TEMPLATES = [
         "╭✠╼━━━━━━❖━━━━━━━✠╮\n"
         "│➠ 𝐎ᴡɴᴇʀ » {owner}\n"
         "│➠ 𝐏ʏʀᴏɢʀᴀᴍ » {pyrogram}\n"
-        "│➠ 𝐁ᴀᴅᴜꜱᴇʀʙᴏᴛ » {Pbxbot}\n"
+        "│➠ 𝐁ᴀᴅᴜꜱᴇʀʙᴏᴛ » {baduserbot}\n"
         "│➠ 𝐏ʏᴛʜᴏɴ » {python}\n"
         "│➠ 𝐔ᴘᴛɪᴍᴇ » {uptime}\n"
         "╰✠╼━━━━━━❖━━━━━━━✠╯\n\n"
@@ -33,13 +33,13 @@ async def alive(_, message: Message):
     uptime = datetime.now().strftime("%H:%M:%S, %d-%m-%Y")
     pyrogram_version = "2.0.106"
     python_version = "3.9"
-    pbxbot_version = "2.0"
+    baduserbot_version = "2.0"
 
     text = ALIVE_TEMPLATES[current_template].format(
         owner=owner,
         pyrogram=pyrogram_version,
         python=python_version,
-        Pbxbot=pbxbot_version,
+        baduserbot=baduserbot_version,
         uptime=uptime,
     )
     
