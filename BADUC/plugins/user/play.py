@@ -872,7 +872,7 @@ async def skip_and_change_stream(client, message):
             text = [
     "🥀 ꜱᴋɪᴘ ᴘʀᴏᴄᴇꜱꜱɪɴɢ Qᴜᴇʀʏ... ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ! 🔄",
     ]
-    aux = await message.reply_text(random.choice(text))
+            aux = await message.reply_text(random.choice(text))
             await change_stream(chat_id)
             try:
                 await aux.delete()
