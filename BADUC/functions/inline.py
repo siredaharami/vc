@@ -24,7 +24,7 @@ async def help_menu_logo(answer):
     answer.append(
         InlineQueryResultPhoto(
             photo_url=thumb_image,
-            title="👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:** {owner} ",
+            title="👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:**{message.from_user.first_name}**",
             thumb_url=thumb_image,
             description=f"📃 𝖫𝗈𝖺𝖽𝖾𝖽__ {total_plugins} 𝗉𝗅𝗎𝗀𝗂𝗇𝗌 📱",
             caption=f"""
@@ -49,7 +49,7 @@ async def help_menu_text(answer):
     # Append InlineQueryResultArticle
     answer.append(
         InlineQueryResultArticle(
-            title=f"👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:** {owner} 📃 𝖫𝗈𝖺𝖽𝖾𝖽__ {total_plugins})",
+            title=f"👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:**{message.from_user.first_name}** 📃 𝖫𝗈𝖺𝖽𝖾𝖽__ {total_plugins})",
             input_message_content=InputTextMessageContent(
                 f"""
                 **💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
