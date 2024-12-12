@@ -1,12 +1,10 @@
 from pyrogram import Client, filters
 from BADUC import SUDOERS
 from BADUC.core.clients import app
-from BADUC.core.command import cdx
+from BADUC.core.command import bad, sudo_user
 
 
-@app.on_message(
-    filters.command(["ping"], ".") & (filters.me | filters.user(SUDOERS))
-)
+@app.on_message(bad(["ping"]) & (filters.me | filters.user(SUDOERS)))
 async def ping(client, message):
     # Stylish text
     reply_text = "⚡ **Ping Pong!**\n💠 Bot is Online and Working Perfectly!"
