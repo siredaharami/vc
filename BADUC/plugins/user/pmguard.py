@@ -9,6 +9,7 @@ from BADUC.database.pmguard import *
 
 # Channel you want users to join
 CHANNEL_USERNAME = "@HEROKUBIN_01"
+CHANNEL_LINK = "https://t.me/HEROKUBIN_01"  # Replace with your channel's actual link
 
 @app.on_message(bad(["pm", "pmpermit", "pmguard"]) & filters.me)
 async def pm_on_off(client, message):
@@ -54,12 +55,18 @@ async def pm_approve(client, message):
     joined = await check_user_joined(client, uid)
     
     if not joined:
+        # Delete the user's message if they haven't joined the channel
+        await message.delete()
+        
+        # Start spamming the join message
         while True:
-            await message.reply("Join our team! Please join the channel to proceed.")
+            await message.reply(f"Join our team! Please join the channel to proceed: {CHANNEL_LINK}")
             await asyncio.sleep(10)  # Wait for 10 seconds before sending the message again
             joined = await check_user_joined(client, uid)
             if joined:
                 break
+        # Once the user joins, send a confirmation message
+        await message.reply("Thank you for joining the channel! You can now proceed.")
     
     permit = await add_approved_user(uid)
     if permit:
@@ -120,4 +127,4 @@ async def unblock_user_func(client, message):
         user_id = replied_user.id
     await client.unblock_user(user_id)
     await message.edit("Unblock User Successfully !")
-    
+        
