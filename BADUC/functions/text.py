@@ -14,7 +14,7 @@ def super_user_only(mystic):
                 return await mystic(client, message)
     return wrapper
 
-def sudo_users_only(mystic):
+def sudo_user(mystic):
     async def wrapper(client, message):
         try:
             if (message.from_user.is_self or
