@@ -5,7 +5,8 @@ from pyrogram.enums import *
 from pyrogram.types import *
 
 from BADUC.core.clients import app, bot
-
+from BADUC.database.pmguard import *
+from BADUC.core.scan import vars
 
 
 async def run_async_enums():
@@ -57,52 +58,4 @@ async def run_async_enums():
                     except BaseException:
                         pass
                 check[str(user_id)] = msg_dlt
-
-
-    @app.on_message(
-        (
-            filters.incoming
-            & ~filters.service
-            & ~filters.me
-            & ~filters.bot
-            & ~filters.via_bot
-        ),
-        group=1
-    )
-    async def run_all_events(client, message):
-        try:
-            chat_id = message.chat.id
-            user_id = message.from_user.id
-            cruser = await is_chatraid_user(user_id)
-            lruser = await is_loveraid_user(user_id)
-            fruser = await is_fuckraid_user(user_id)
-        except Exception as e:
-            print(f"Error: {e}")
-            return
-
-        if cruser:
-            pass
-        if lruser:
-            lraid = random.choice(raidzone.LOVERAID)
-            try:
-                await app.send_chat_action(
-                    chat_id,
-                    ChatAction.TYPING,
-                )
-                await asyncio.sleep(3)
-                await message.reply_text(lraid)
-            except Exception as e:
-                # print(f"Error: {e}")
-                pass
-        if fruser:
-            fraid = random.choice(raidzone.GALIRAID)
-            try:
-                await app.send_chat_action(
-                    chat_id,
-                    ChatAction.TYPING,
-                )
-                await asyncio.sleep(3)
-                await message.reply_text(fraid)
-            except Exception as e:
-                # print(f"Error: {e}")
-                pass
+                
