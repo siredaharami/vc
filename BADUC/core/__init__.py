@@ -9,7 +9,7 @@ plugs = PLUGINS
 from BADUC.core import config
 vars = config
 
-from .command import cdx, rgx, cdz
+from .command import bad, sukh, abhi
 
 __all__ = [
     "app",
@@ -17,7 +17,7 @@ __all__ = [
     "call",
     "Config",
     "LOGGER",
-    "rgx",
-    "cdz",
-    "cdx",
+    "bad",
+    "sukh",
+    "abhi",
 ]
