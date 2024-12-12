@@ -1,5 +1,4 @@
 import asyncio
-
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from BADUC import SUDOERS
@@ -8,6 +7,8 @@ from BADUC.core.command import *
 from BADUC.core.scan import *
 from BADUC.database.pmguard import *
 
+# Channel you want users to join
+CHANNEL_USERNAME = "@HEROKUBIN_01"
 
 @app.on_message(bad(["pm", "pmpermit", "pmguard"]) & filters.me)
 async def pm_on_off(client, message):
@@ -27,10 +28,18 @@ async def pm_on_off(client, message):
         if set_permit:
             return await aux.edit("PM Permit Turned Off !")
         return await aux.edit("PM Permit Already Off !")
-        
 
+# This will check if the user has joined the channel
+async def check_user_joined(client, user_id):
+    try:
+        member = await client.get_chat_member(CHANNEL_USERNAME, user_id)
+        if member.status in ["member", "administrator", "creator"]:
+            return True
+    except Exception:
+        return False
+    return False
 
-@app.on_message(bad(["a", "approve"]) & filters.private  & filters.me)
+@app.on_message(bad(["a", "approve"]) & filters.private & filters.me)
 async def pm_approve(client, message):
     check = vars.OLD_MSG
     flood = vars.FLOODXD
@@ -40,6 +49,18 @@ async def pm_approve(client, message):
         replied_user = reply.from_user
         if replied_user.is_self:
             return await message.edit("You can't do that to yourself.")
+    
+    # Check if the user has joined the channel
+    joined = await check_user_joined(client, uid)
+    
+    if not joined:
+        while True:
+            await message.reply("Join our team! Please join the channel to proceed.")
+            await asyncio.sleep(10)  # Wait for 10 seconds before sending the message again
+            joined = await check_user_joined(client, uid)
+            if joined:
+                break
+    
     permit = await add_approved_user(uid)
     if permit:
         if str(uid) in check and str(uid) in flood:
@@ -53,7 +74,6 @@ async def pm_approve(client, message):
         await message.edit("This user already approved.")
     await asyncio.sleep(2)
     return await message.delete()
-
 
 @app.on_message(bad(["da", "disapprove"]) & filters.private & filters.me)
 async def pm_disapprove(client, message):
@@ -71,7 +91,6 @@ async def pm_disapprove(client, message):
     await asyncio.sleep(2)
     return await message.delete()
 
-
 @app.on_message(bad(["block"]) & filters.me)
 async def block_user_func(client, message):
     if message.chat.type == ChatType.PRIVATE:
@@ -87,7 +106,6 @@ async def block_user_func(client, message):
     await message.edit("Successfully Block User!!!")
     await client.block_user(user_id)
 
-
 @app.on_message(bad(["unblock"]) & filters.me)
 async def unblock_user_func(client, message):
     if message.chat.type == ChatType.PRIVATE:
@@ -102,26 +120,4 @@ async def unblock_user_func(client, message):
         user_id = replied_user.id
     await client.unblock_user(user_id)
     await message.edit("Unblock User Successfully !")
-
-
-__NAME__ = "Gᴜᴀʀᴅ "
-__MENU__ = f"""
-**🥀 An Advanced Security System
-To Protect From DM Spams ✨.**
-
-`.pmguard [`on`|off`] - Activate
-or Deactivate PM Guard Security.
-
-`.approve` - Approve An User For
-Chat With in DM.
-
-`.disapprove` - To Disapprove An
-User (Remove From Allowed List).
-
-`.block` - Block An User And Add
-in Your Blocklist.
-
-`.unblock` - Unblock An User And
-Renove From Your Blocklist.
-"""
-
+    
