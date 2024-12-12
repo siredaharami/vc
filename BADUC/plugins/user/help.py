@@ -6,7 +6,7 @@ from pyrogram.types import *
 from BADUC.core.clients import *
 from BADUC.core.command import *
 from BADUC import __version__
-from BADUC.functions.buttons import *
+from BADUC.functions.button import *
 from BADUC.functions.inline import *
 from BADUC.functions.text import *
 
