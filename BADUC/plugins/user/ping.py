@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from BADUC import SUDOERS
 from BADUC.core.clients import app
+from BADUC.core.command import cdx
 
 
 @app.on_message(
