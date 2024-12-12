@@ -17,3 +17,9 @@ def sukh(commands: Union[str, List[str]]):
 def jass(pattern: Union[str, Pattern]):
     """Filter messages matching a regex pattern."""
     return pyrofl.regex(pattern)
+
+from BADUC.functions.text import (
+    super_user_only, sudo_user
+)
+super_user_only = super_user_only
+sudo_user = sudo_user
