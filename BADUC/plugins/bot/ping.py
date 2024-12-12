@@ -5,7 +5,7 @@ import time
 from pyrogram import *
 from pyrogram.types import *
 
-@bot.on_message(bad(["ping"])
+@bot.on_message(bad(["ping"]))
 async def ping_command(client, message):
     start_time = time.time()  # Start time to calculate latency
     sent_message = await message.reply("Pinging... 🏓")  # Initial reply
