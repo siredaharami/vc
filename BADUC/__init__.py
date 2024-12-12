@@ -18,8 +18,8 @@ __version__ = {
 }
 
 spam_chats = []
-SUDO_USER = SUDO_USERS
-SUDO_USERS.append(OWNER_ID)
+SUDOERS = SUDOERS
+SUDOERS.append(OWNER_ID)
 
 
 
