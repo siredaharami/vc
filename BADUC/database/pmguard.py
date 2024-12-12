@@ -69,7 +69,7 @@ async def get_approved_users() -> list:
 async def get_pm_image() -> str:
     image = await pmimagedb.find_one()
     if not image:
-        return vars.USERBOT_PICTURE
+        return vars.PM_PIC
     get_image = image["pm_image"]
     return get_image
 
@@ -121,4 +121,3 @@ async def set_pm_limit(number: int) -> bool:
         upsert=True,
     )
     return True
-
