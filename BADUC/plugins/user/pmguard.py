@@ -4,7 +4,8 @@ from pyrogram import filters
 from pyrogram.enums import ChatType
 from BADUC import SUDOERS
 from BADUC.core.clients import app
-from BADUC.core import clients, scan, command
+from BADUC.core.command import *
+from BADUC.core.scan import *
 from BADUC.database.pmguard import *
 
 
