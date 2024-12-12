@@ -12,7 +12,7 @@ from BADUC.functions.text import *
 
 
 @app.on_message(bad(["help"]))
-@sudo_users_only
+@sudo_user
 async def inline_help_menu(client, message):
     image = None
     try:
