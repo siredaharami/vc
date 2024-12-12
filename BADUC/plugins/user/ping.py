@@ -15,3 +15,21 @@ async def ping(client, message):
     # Sending the message with the image
     await message.reply_photo(photo=image_path, caption=reply_text)
   
+
+__NAME__ = "Sᴜᴅᴏ"
+__MENU__ = f"""
+**🥀 Add Or Remove Sudo Users
+From Your Userbot ✨...**
+
+`.addsudo` - Use This Command
+to Add an User in Sudo List.
+
+`.delsudo` - Use This Command
+to Remove an User from Sudo.
+
+`.sudolist` - Check Your Sudo
+Users By Getting A List.
+
+**Some Shortcut Commands:**
+=> [`.as`, `.ds`, `.sl`]
+"""
