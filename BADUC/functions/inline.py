@@ -1,7 +1,7 @@
 import asyncio
 from . import *
 from BADUC.functions.button import *
-from BADUC.functions.text import *
+from BADUC.functions.wrapper import *
 from pyrogram.types import *
 
 async def help_menu_logo(answer):
