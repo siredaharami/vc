@@ -8,7 +8,7 @@ from BADUC.core.command import *
 from BADUC import __version__
 from BADUC.functions.button import *
 from BADUC.functions.inline import *
-from BADUC.functions.text import *
+from BADUC.functions.wrapper import *
 
 
 @app.on_message(bad(["help"]))
