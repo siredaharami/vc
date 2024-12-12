@@ -7,19 +7,17 @@ import aiohttp
 import os
 from datetime import datetime, timedelta
 
-
 # Global Variables
-PING_PIC = None
-PING_TEMPLATE = """ﾠ╰•★★ 💫 🅿🅱🆇 2.0 💫 ★★•╯
+# Default Ping Picture (provide an initial URL or local path here)
+PING_PIC = "https://files.catbox.moe/83d5lc.jpg"  # Replace this with your default image URL or file path
+PING_TEMPLATE = """ﾠ╰•★★ 💫 𝐁ᴀᴅ 𝐔ꜱᴇʀ𝐁ᴏᴛ 💫 ★★•╯
 ❍════════════════════❍
 ╭✠╼━━━━━━❖━━━━━━━✠╮ 
 │•**𝐒ᴘᴇᴇᴅ ➠** {speed} m/s
 │•**𝐔ᴘᴛɪᴍᴇ ➠** {uptime}
 │•**𝐎ᴡɴᴇʀ ➠** {owner} 
 ╰✠╼━━━━━━❖━━━━━━━✠╯
-        ╔═════════════╗
-            <b><i>✬  <a href='https://t.me/HEROKUBIN_01'> 🇨🇦  𝗣𝗕𝗫  🌸 </a>  ✬</i></b>
-        ╚═════════════╝
+
 ❍════════════════════❍"""
 START_TIME = datetime.now()
 
@@ -48,13 +46,9 @@ async def set_variable(client: Client, message: Message):
 
         key, value = command[1].upper(), command[2]
         if key == "PING_PIC":
-            filename = "ping_pic.jpg"
-            file_path = await download_photo(value, filename)
-            if file_path and os.path.exists(file_path):
-                PING_PIC = file_path
-                await message.reply_text("✅ Ping photo has been set!")
-            else:
-                await message.reply_text("❌ Failed to download the photo. Check the URL.")
+            # If the URL is valid, update the PING_PIC
+            PING_PIC = value
+            await message.reply_text(f"✅ Ping photo has been updated to: {PING_PIC}")
         elif key == "PING_TEMPLATE":
             PING_TEMPLATE = value
             await message.reply_text("✅ Ping template has been updated!")
@@ -72,10 +66,10 @@ async def ping_command(client: Client, message: Message):
         owner = message.from_user.first_name if message.from_user else "Unknown"
         template = PING_TEMPLATE.format(speed=speed, uptime=uptime, owner=owner)
         
-        if PING_PIC and os.path.exists(PING_PIC):
+        if PING_PIC:
             await message.reply_photo(PING_PIC, caption=template)
         else:
             await message.reply_text(template)
     except Exception as e:
         await message.reply_text(f"❌ Error: {str(e)}")
-
+            
