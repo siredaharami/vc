@@ -14,7 +14,7 @@ def sukh(commands: Union[str, List[str]]):
     return pyrofl.command(commands, prefixes=["", "/", "!", "."])
 
 
-def jass(pattern: Union[str, Pattern]):
+def abhi(pattern: Union[str, Pattern]):
     """Filter messages matching a regex pattern."""
     return pyrofl.regex(pattern)
 
