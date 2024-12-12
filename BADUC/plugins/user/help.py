@@ -12,7 +12,7 @@ from BADUC.functions.text import *
 
 
 @app.on_message(bad(["help"]))
-@sudo_user
+@sudo_users_only
 async def inline_help_menu(client, message):
     image = None
     try:
@@ -61,8 +61,16 @@ async def help_button(client, query):
     total_plugins = len(plugs)
 
     top_text = f"""
-**💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
-            ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
+**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
+
+❤️ ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️
+
+ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴꜱ ᴛᴏ
+ɢᴇᴛ ᴜꜱᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅꜱ ✨.
+
+🌹 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡ [ᴜᴘᴅᴀᴛᴇ](https://t.me/SHIVANSH474) 🌹**
+"""
 
     if plug_match:
         plugin = plug_match.group(1)
