@@ -1,6 +1,7 @@
 import os
 from BADUC import SUDOERS
 from BADUC.core.clients import app
+from BADUC.core.command import *
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from datetime import datetime
