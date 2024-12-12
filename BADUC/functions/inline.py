@@ -14,9 +14,6 @@ async def help_menu_logo(answer):
     if image:
         thumb_image = image  # Use dynamic image if available
     
-    # Count total plugins dynamically
-    total_plugins = len(plugs) if 'plugs' in globals() else 0
-    
     # Generate the button
     button = paginate_plugins(0, plugs, "help")
     
@@ -24,12 +21,17 @@ async def help_menu_logo(answer):
     answer.append(
         InlineQueryResultPhoto(
             photo_url=thumb_image,
-            title="👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:**{message.from_user.first_name}**",
+            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ ✨",
             thumb_url=thumb_image,
-            description=f"📃 𝖫𝗈𝖺𝖽𝖾𝖽__ {total_plugins} 𝗉𝗅𝗎𝗀𝗂𝗇𝗌 📱",
+            description="🥀 Open Help Menu Of SHUKLAUSERBOT ✨...",
             caption=f"""
-            **💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
-            ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
+            **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
+ 
+❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
+ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
+ 
+🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ᴜᴘᴅᴀᴛᴇ](https://t.me/SHIVANSH474) 🌹**""",
             reply_markup=InlineKeyboardMarkup(button),
         )
     )
@@ -40,20 +42,22 @@ async def help_menu_text(answer):
     # Importing `__version__` dynamically
     from ... import __version__
     
-    # Count total plugins dynamically
-    total_plugins = len(plugs) if 'plugs' in globals() else 0
-    
     # Generate the button
     button = paginate_plugins(0, plugs, "help")
     
     # Append InlineQueryResultArticle
     answer.append(
         InlineQueryResultArticle(
-            title=f"👻 𝖧𝖾𝗅𝗉 𝖬𝖾𝗇𝗎 𝖿𝗈𝗋:**{message.from_user.first_name}** 📃 𝖫𝗈𝖺𝖽𝖾𝖽__ {total_plugins})",
+            title="💫 ʜᴇʟᴘ ᴍᴇɴᴜ ✨",
             input_message_content=InputTextMessageContent(
                 f"""
-                **💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
-            ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
+                **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
+ 
+❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
+ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️
+ 
+🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ᴜᴘᴅᴀᴛᴇ](https://t.me/SHIVANSH474) 🌹**""",
                 disable_web_page_preview=True,
             ),
             reply_markup=InlineKeyboardMarkup(button),
@@ -84,3 +88,4 @@ async def run_async_inline():
         except Exception as e:
             print(f"Error: {e}")
             return
+          
