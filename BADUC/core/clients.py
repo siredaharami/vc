@@ -2,6 +2,7 @@ import os, sys
 
 from pyrogram import Client
 from pyrogram import filters
+from pytgcalls import PyTgCalls
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
 
