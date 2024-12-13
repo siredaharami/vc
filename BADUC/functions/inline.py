@@ -2,7 +2,7 @@ import asyncio
 from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle, InlineKeyboardMarkup, InputTextMessageContent
 from BADUC.functions.buttons import *
 from BADUC.functions.wrapper import *
-from ... import *
+from . import *
 
 
 async def help_menu_logo(answer):
