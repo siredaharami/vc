@@ -13,7 +13,7 @@ async def main():
     await run_async_clients()
     for all_plugin in ALL_PLUGINS:
         imported_plugin = importlib.import_module(
-            "SHUKLA.plugins" + all_plugin
+            "BADUC.plugins" + all_plugin
         )
         if (hasattr
             (
