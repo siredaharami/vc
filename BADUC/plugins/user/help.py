@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from ...functions.buttons import paginate_plugins
 from ...functions.wrapper import cb_wrapper
-from ... import app
+from ... import app, bot
 
 __version__ = "2.0.106"  # Replace with your bot version
 
