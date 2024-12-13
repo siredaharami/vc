@@ -1,6 +1,7 @@
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
+from BADUC.core.config import MONGO_DB_URL
 from pymongo import MongoClient
 import os
 from pyrogram import Client, filters
@@ -9,8 +10,7 @@ from datetime import datetime
 import time
 
 # MongoDB Setup
-MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://BADMUNDA:BADMYDAD@badhacker.i5nw9na.mongodb.net/")
-client = MongoClient(MONGO_URL)
+client = MongoClient(MONGO_DB_URL)
 db = client["baduserbot"]
 config_collection = db["config"]
 
@@ -140,5 +140,33 @@ async def set_variable(_, message: Message):
                 await message.reply_text("❌ Invalid ping template index.")
         except ValueError:
             await message.reply_text("❌ Ping template index must be an integer.")
+    else:
+        await message.reply_text("❌ Unknown variable. Only `ALIVE_PIC`, `PING_PIC`, `ALIVE_TEMPLATE`, or `PING_TEMPLATE` are supported.")
+
+@app.on_message(bad(["clearvar"]) & (filters.me | filters.user(SUDOERS)))
+async def clear_variable(_, message: Message):
+    global ALIVE_PIC, PING_PIC, current_template, current_ping_template
+    
+    if len(message.command) < 2:
+        await message.reply_text("Usage: `.clearvar VARIABLE`")
+        return
+
+    variable = message.command[1].upper()
+    if variable == "ALIVE_PIC":
+        ALIVE_PIC = default_config["ALIVE_PIC"]
+        config_collection.update_one({"_id": "config"}, {"$set": {"ALIVE_PIC": ALIVE_PIC}}, upsert=True)
+        await message.reply_text(f"✅ ALIVE_PIC reset to default.")
+    elif variable == "PING_PIC":
+        PING_PIC = default_config["PING_PIC"]
+        config_collection.update_one({"_id": "config"}, {"$set": {"PING_PIC": PING_PIC}}, upsert=True)
+        await message.reply_text(f"✅ PING_PIC reset to default.")
+    elif variable == "ALIVE_TEMPLATE":
+        current_template = default_config["ALIVE_TEMPLATE_INDEX"]
+        config_collection.update_one({"_id": "config"}, {"$set": {"ALIVE_TEMPLATE_INDEX": current_template}}, upsert=True)
+        await message.reply_text("✅ ALIVE_TEMPLATE reset to default.")
+    elif variable == "PING_TEMPLATE":
+        current_ping_template = default_config["PING_TEMPLATE_INDEX"]
+        config_collection.update_one({"_id": "config"}, {"$set": {"PING_TEMPLATE_INDEX": current_ping_template}}, upsert=True)
+        await message.reply_text("✅ PING_TEMPLATE reset to default.")
     else:
         await message.reply_text("❌ Unknown variable. Only `ALIVE_PIC`, `PING_PIC`, `ALIVE_TEMPLATE`, or `PING_TEMPLATE` are supported.")
