@@ -124,3 +124,13 @@ async def shellrunner(_, message: Message):
     else:
         await edit_or_reply(message, text="<b>OUTPUT :</b>\n<code>None</code>")
         
+
+
+__NAME__ = " Aᴅᴍɪɴ "
+__MENU__ = """
+`.ban` ** ban  user **
+`.unban` **unban l user**
+`.mute` **mute user**
+`.unmute` **unmute user**
+`.tmute` **timing mute user**
+"""      
