@@ -26,3 +26,20 @@ SUDOERS.append(OWNER_ID)
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 
+
+
+# import 
+
+from .logger import LOGGER
+logs = LOGGER
+
+from BADUC.core.config import PLUGINS
+plugs = PLUGINS
+
+from BADUC.core import config
+vars = config
+
+from BADUC.functions.events import (
+    edit_or_reply
+)
+eor = edit_or_reply
