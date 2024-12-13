@@ -42,10 +42,3 @@ plugs = PLUGINS
 from BADUC.core import config
 vars = config
 
-
-# Decorators
-from BADUC.functions.wrapper import (
-    super_user_only, sudo_user
-)
-super_user_only = super_user_only
-sudo_user = sudo_user
