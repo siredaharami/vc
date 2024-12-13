@@ -6,7 +6,7 @@ from BADUC.core.scan import logs, plugs, vars
 from BADUC.plugins import ALL_PLUGINS
 from BADUC.core.clients import run_async_clients
 from BADUC.functions.enums import run_async_enums
-from BADUC.button.inline import run_async_inline
+from BADUC.database.inline import run_async_inline
 
 async def main():
     await run_async_clients()
