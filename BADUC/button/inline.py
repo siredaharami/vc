@@ -6,6 +6,7 @@ from BADUC.button import __version__
 from BADUC.core.clients import app, bot
 
 
+
 async def help_menu_logo(answer):
     # Providing a fallback thumbnail image directly
     thumb_image = "https://files.catbox.moe/83d5lc.jpg"
