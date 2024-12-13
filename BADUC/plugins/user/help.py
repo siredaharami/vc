@@ -4,6 +4,7 @@ from pyrogram import *
 from pyrogram.types import *
 from pyrogram.types import Message as message
 
+from ... import *
 from ... import __version__, app, bot, plugs
 from ...functions.buttons import paginate_plugins
 from ...functions.wrapper import cb_wrapper
@@ -44,21 +45,24 @@ async def inline_help_menu(client, message):
         pass
       
 
+
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin(.+?)", query.data)
-    prev_match = re.match(r"help_prev(.+?)", query.data)
-    next_match = re.match(r"help_next(.+?)", query.data)
+    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
+    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+    next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
-
-    # Count the total number of plugins
-    total_plugins = len(plugs)
-
     top_text = f"""
-**💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
-  ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
-
+**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
+ 
+❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
+ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️.
+ 
+🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ ᴜᴘᴅᴀᴛᴇ ](https://t.me/SHIVANSH474) 🌹**
+"""
+    
     if plug_match:
         plugin = plug_match.group(1)
         text = (
