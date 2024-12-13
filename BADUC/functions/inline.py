@@ -40,7 +40,7 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
 
 async def help_menu_text(answer):
     # Importing `__version__` dynamically
-    from ... import __version__
+    from .. import __version__
     
     # Generate the button
     button = paginate_plugins(0, plugs, "help")
