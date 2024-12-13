@@ -2,6 +2,7 @@ import re
 
 from pyrogram import *
 from pyrogram.types import *
+from pyrogram.types import Message
 
 from ... import __version__, app, bot, plugs
 from ...functions.buttons import paginate_plugins
