@@ -57,7 +57,7 @@ async def help_button(client, query):
 
     top_text = f"""
 **💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
-            ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
+  ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
 
     if plug_match:
         plugin = plug_match.group(1)
