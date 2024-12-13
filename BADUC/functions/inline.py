@@ -1,6 +1,6 @@
 import asyncio
 from BADUC import *
-from BADUC.functions.button import *
+from BADUC.functions.buttons import *
 from BADUC.functions.wrapper import *
 from pyrogram.types import *
 
