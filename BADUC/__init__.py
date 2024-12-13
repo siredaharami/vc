@@ -11,11 +11,7 @@ from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 
 # Ai-Userbot Version
-__version__ = {
-    "Pbxbot": "3.0",
-    "pyrogram": pyrogram_version,
-    "python": python_version(),
-}
+__version__ = "v3.0.0"
 
 spam_chats = []
 SUDOERS = SUDOERS
