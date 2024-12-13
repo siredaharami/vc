@@ -8,11 +8,12 @@ from BADUC.core.clients import run_async_clients
 from BADUC.functions.enums import run_async_enums
 from BADUC.functions.inline import run_async_inline
 
+
 async def main():
     await run_async_clients()
     for all_plugin in ALL_PLUGINS:
         imported_plugin = importlib.import_module(
-            "BADUC.plugins" + all_plugin
+            "SHUKLA.plugins" + all_plugin
         )
         if (hasattr
             (
@@ -31,7 +32,7 @@ async def main():
     logs.info(">> Successfully Imported All Plugins.")
     await run_async_inline()
     logs.info("Successfully Deployed !!")
-    logs.info("Do Visit - @PBX_CHAT")
+    logs.info("Do Visit - ")
     await idle()
 
 
