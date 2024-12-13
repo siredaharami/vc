@@ -2,8 +2,10 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from BADUC import __version__
+from BADUC import *
 from BADUC.core.clients import *
+from BADUC.core.logger import *
+from BADUC.core.scan import *
 from BADUC.core.config import *
 from BADUC.core.command import *
 from BADUC.functions.button import *
@@ -11,72 +13,124 @@ from BADUC.functions.inline import *
 from BADUC.functions.wrapper import *
 
 
-@app.on_message(filters.command("help") & filters.user(sudo_users))
+@app.on_message(sukh(["help"]))
 async def inline_help_menu(client, message):
+    image = None
     try:
-        bot_results = await client.get_inline_bot_results(
-            bot.me.username, "help_menu_text"
-        )
-        await client.send_inline_bot_result(
+        if image:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_logo"
+            )
+        else:
+            bot_results = await app.get_inline_bot_results(
+                f"@{bot.me.username}", "help_menu_text"
+            )
+        await app.send_inline_bot_result(
             chat_id=message.chat.id,
             query_id=bot_results.query_id,
             result_id=bot_results.results[0].id,
         )
-        await message.delete()
+    except Exception:
+        bot_results = await app.get_inline_bot_results(
+            f"@{bot.me.username}", "help_menu_text"
+        )
+        await app.send_inline_bot_result(
+            chat_id=message.chat.id,
+            query_id=bot_results.query_id,
+            result_id=bot_results.results[0].id,
+        )
     except Exception as e:
-        print(f"Error in help menu: {e}")
+        print(e)
+        return
+
+    try:
+        await message.delete()
+    except:
+        pass
+      
 
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
+@cb_wrapper
 async def help_button(client, query):
-    try:
-        plug_match = re.match(r"help_plugin(.+?)", query.data)
-        prev_match = re.match(r"help_prev(.+?)", query.data)
-        next_match = re.match(r"help_next(.+?)", query.data)
-        back_match = re.match(r"help_back", query.data)
-        
-        top_text = f"""
-**💫 Welcome to the Help Menu!**
-**Shukla Userbot - Version {__version__}**
-Click on the buttons below to explore commands.
-Powered by [Update](https://t.me/SHIVANSH474)
+    plug_match = re.match(r"help_plugin(.+?)", query.data)
+    prev_match = re.match(r"help_prev(.+?)", query.data)
+    next_match = re.match(r"help_next(.+?)", query.data)
+    back_match = re.match(r"help_back", query.data)
+
+    # Count the total number of plugins
+    total_plugins = len(plugs)
+
+    top_text = f"""
+**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
+sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
+
+❤️ ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️
+
+ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴꜱ ᴛᴏ
+ɢᴇᴛ ᴜꜱᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅꜱ ✨.
+
+🌹 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡ [ᴜᴘᴅᴀᴛᴇ](https://t.me/SHIVANSH474) 🌹**
 """
-        if plug_match:
-            plugin = plug_match.group(1)
-            text = f"**💫 Plugin: {plugin}**\n\n{plugs[plugin].__MENU__}"
-            key = InlineKeyboardMarkup(
-                [[InlineKeyboardButton("↪️ Back", callback_data="help_back")]]
+
+    if plug_match:
+        plugin = plug_match.group(1)
+        text = (
+            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏꜰ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
+                plugs[plugin].__NAME__
             )
-            await query.message.edit_text(
-                text=text,
-                reply_markup=key,
-                disable_web_page_preview=True
-            )
-        elif prev_match:
-            curr_page = int(prev_match.group(1))
-            await query.message.edit_text(
-                text=top_text,
-                reply_markup=InlineKeyboardMarkup(
-                    paginate_plugins(curr_page - 1, plugs, "help")
-                ),
-                disable_web_page_preview=True,
-            )
-        elif next_match:
-            next_page = int(next_match.group(1))
-            await query.message.edit_text(
-                text=top_text,
-                reply_markup=InlineKeyboardMarkup(
-                    paginate_plugins(next_page + 1, plugs, "help")
-                ),
-                disable_web_page_preview=True,
-            )
-        elif back_match:
-            await query.message.edit_text(
-                text=top_text,
-                reply_markup=InlineKeyboardMarkup(
-                    paginate_plugins(0, plugs, "help")
-                ),
-                disable_web_page_preview=True,
-            )
-    except Exception as e:
-        print(f"Error in help button: {e}")
+            + plugs[plugin].__MENU__
+        )
+        key = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="↪️ Back", callback_data="help_back"
+                    ),
+                    InlineKeyboardButton(
+                        text="🌐 Group Support", url="https://t.me/your_group_support"
+                    ),
+                    InlineKeyboardButton(
+                        text="📢 Channel Support", url="https://t.me/your_channel_support"
+                    ),
+                ],
+            ]
+        )
+
+        await bot.edit_inline_text(
+            query.inline_message_id,
+            text=text,
+            reply_markup=key,
+            disable_web_page_preview=True
+        )
+    elif prev_match:
+        curr_page = int(prev_match.group(1))
+        await bot.edit_inline_text(
+            query.inline_message_id,
+            text=top_text,
+            reply_markup=InlineKeyboardMarkup(
+                paginate_plugins(curr_page - 1, plugs, "help")
+            ),
+            disable_web_page_preview=True,
+        )
+
+    elif next_match:
+        next_page = int(next_match.group(1))
+        await bot.edit_inline_text(
+            query.inline_message_id,
+            text=top_text,
+            reply_markup=InlineKeyboardMarkup(
+                paginate_plugins(next_page + 1, plugs, "help")
+            ),
+            disable_web_page_preview=True,
+        )
+
+    elif back_match:
+        await bot.edit_inline_text(
+            query.inline_message_id,
+            text=top_text,
+            reply_markup=InlineKeyboardMarkup(
+                paginate_plugins(0, plugs, "help")
+            ),
+            disable_web_page_preview=True,
+        )
