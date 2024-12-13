@@ -16,7 +16,6 @@ images = [
 # Welcome message handler
 @bot.on_message(filters.command("start") & filters.private)
 async def start(client, message):
-    # Select a random image
     selected_image = random.choice(images)
 
     # Welcome text
