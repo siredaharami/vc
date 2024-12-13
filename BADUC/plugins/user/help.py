@@ -8,7 +8,7 @@ from BADUC.core.logger import *
 from BADUC.core.scan import *
 from BADUC.core.config import *
 from BADUC.core.command import *
-from BADUC.functions.button import *
+from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
 from BADUC.functions.wrapper import *
 
