@@ -33,7 +33,7 @@ from BADUC.functions.events import (
 eor = edit_or_reply
 
 
-from .logger import LOGGER
+from BADUC.core.logger import LOGGER
 logs = LOGGER
 
 from BADUC.core.config import PLUGINS
