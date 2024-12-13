@@ -15,7 +15,7 @@ images = [
 ]
 
 # Welcome message handler
-@app.on_message(filters.command("start") & filters.private)
+@bot.on_message(filters.command("start") & filters.private)
 async def start(client, message):
     # Select a random image
     selected_image = random.choice(images)
@@ -48,7 +48,7 @@ async def start(client, message):
 
 
 # Callback query handler for buttons
-@app.on_callback_query()
+@bot.on_callback_query()
 async def handle_callback_query(client, callback_query):
     data = callback_query.data
 
