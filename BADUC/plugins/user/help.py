@@ -2,9 +2,9 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from BADUC import __version__
 from BADUC.core.clients import app, bot
 from BADUC.core.scan import plugs
-from BADUC.core.config import __version__
 from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
 from BADUC.functions.wrapper import cb_wrapper 
