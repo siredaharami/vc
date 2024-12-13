@@ -2,7 +2,7 @@ import asyncio
 from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle, InlineKeyboardMarkup, InputTextMessageContent
 from BADUC.button.buttons import *
 from BADUC.functions.wrapper import *
-from BADUC.button import __version__
+from BADUC import __version__
 from BADUC.core.clients import app, bot
 
 
