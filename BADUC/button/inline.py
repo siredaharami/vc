@@ -1,8 +1,8 @@
 import asyncio
-from ... import *
-from BADUC.button.buttons import *
-from BADUC.functions.wrapper import *
-from pyrogram.types import *
+from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle, InlineKeyboardMarkup, InputTextMessageContent
+from BADUC.button.buttons import paginate_plugins
+from BADUC.functions.wrapper import inline_wrapper
+from BADUC import __version__
 
 
 async def help_menu_logo(answer):
