@@ -2,6 +2,7 @@ import asyncio
 from pyrogram.types import InlineQueryResultPhoto, InlineQueryResultArticle, InlineKeyboardMarkup, InputTextMessageContent
 from BADUC.functions.buttons import *
 from BADUC.functions.wrapper import *
+from .. import __version__, app, bot, plugs
 
 async def help_menu_logo(answer):
     # Providing a fallback thumbnail image directly
