@@ -69,7 +69,6 @@ async def alive(_, message: Message):
     message.chat.id,
     photo=ALIVE_PIC,
     caption=text,
-    parse_mode="HTML"  # Use HTML if you prefer it
     )
 
 @app.on_message(bad(["ping"]) & (filters.me | filters.user(SUDOERS)))
@@ -85,7 +84,6 @@ async def ping(_, message: Message):
     message.chat.id,
     photo=PING_PIC,
     caption=text,
-    parse_mode="HTML"  # Use HTML if you prefer it
     )
 
 @app.on_message(bad(["setvar"]) & (filters.me | filters.user(SUDOERS)))
