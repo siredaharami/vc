@@ -14,7 +14,7 @@ PING_PIC = "https://files.catbox.moe/83d5lc.jpg"  # Default Ping Picture
 
 ALIVE_TEMPLATES = [
     (
-        "╰•★★ 💫 𝐁ᴀᴅ 𝐔ꜱᴇʀ 𝐁ᴏᴛ 𝐀ʟɪᴠᴇ 💫 ★★•╯\n"
+        "  ╰•★★ 💫 𝐁ᴀᴅ 𝐔ꜱᴇʀ 𝐁ᴏᴛ 𝐀ʟɪᴠᴇ 💫 ★★•╯\n"
         "❍═════════════════════════❍\n\n"
         "╭✠╼━━━━━━❖━━━━━━━✠╮\n"
         "│➠ 𝐎ᴡɴᴇʀ » {owner}\n"
