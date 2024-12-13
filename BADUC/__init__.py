@@ -23,3 +23,37 @@ mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 
 
+# import 
+
+# All Clients
+from BADUC.core.clients import (
+    app, bot, call
+)
+app = app
+bot = bot
+call = call
+
+
+
+
+
+# Edit Or Reply
+from BADUC.functions.events import (
+    edit_or_reply
+)
+eor = edit_or_reply
+
+
+# Logger
+from .logger import LOGGER
+logs = LOGGER
+
+
+# Plugins
+from BADUC.core.config import PLUGINS
+plugs = PLUGINS
+
+
+# Variables
+from BADUC.core import config
+vars = config
