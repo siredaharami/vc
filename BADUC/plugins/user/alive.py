@@ -66,10 +66,10 @@ async def alive(_, message: Message):
     )
     
     await app.send_photo(
-        message.chat.id,
-        photo=ALIVE_PIC,
-        caption=text,
-        parse_mode="MarkdownV2"  # Corrected parse mode
+    message.chat.id,
+    photo=ALIVE_PIC,
+    caption=text,
+    parse_mode="HTML"  # Use HTML if you prefer it
     )
 
 @app.on_message(bad(["ping"]) & (filters.me | filters.user(SUDOERS)))
@@ -82,10 +82,10 @@ async def ping(_, message: Message):
     text = PING_TEMPLATE[current_ping_template].format(speed=speed, uptime=uptime, owner=owner)
 
     await app.send_photo(
-        message.chat.id,
-        photo=PING_PIC,
-        caption=text,
-        parse_mode="MarkdownV2"  # Corrected parse mode
+    message.chat.id,
+    photo=PING_PIC,
+    caption=text,
+    parse_mode="HTML"  # Use HTML if you prefer it
     )
 
 @app.on_message(bad(["setvar"]) & (filters.me | filters.user(SUDOERS)))
