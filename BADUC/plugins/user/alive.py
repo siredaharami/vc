@@ -65,12 +65,11 @@ async def alive(_, message: Message):
         uptime=uptime,
     )
     
-    # Send photo with hidden link
     await app.send_photo(
         message.chat.id,
         photo=ALIVE_PIC,
         caption=text,
-        parse_mode="markdown"
+        parse_mode="MarkdownV2"  # Corrected parse mode
     )
 
 @app.on_message(bad(["ping"]) & (filters.me | filters.user(SUDOERS)))
@@ -82,12 +81,11 @@ async def ping(_, message: Message):
     speed = round(1 / (time.time() - start_time), 2)  # Calculating speed
     text = PING_TEMPLATE[current_ping_template].format(speed=speed, uptime=uptime, owner=owner)
 
-    # Send photo with hidden link
     await app.send_photo(
         message.chat.id,
         photo=PING_PIC,
         caption=text,
-        parse_mode="markdown"
+        parse_mode="MarkdownV2"  # Corrected parse mode
     )
 
 @app.on_message(bad(["setvar"]) & (filters.me | filters.user(SUDOERS)))
