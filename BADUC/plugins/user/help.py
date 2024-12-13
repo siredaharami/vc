@@ -1,20 +1,17 @@
 import re
-from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from BADUC import __version__
+from pyrogram import *
+from pyrogram.types import *
+
 from BADUC.core.clients import app, bot
-from BADUC.core.scan import plugs
-from BADUC.functions.buttons import *
-from BADUC.functions.inline import *
-from BADUC.functions.wrapper import cb_wrapper 
-import os
-import sys
+from BADUC.core.scan import vars, plugs
+from BADUC import __version__
+from BADUC.button.buttons import *
+from BADUC.button.inline import *
+from BADUC.functions.wrapper import *
 
-print("Current Working Directory:", os.getcwd())
-print("Python Path:", sys.path)
 
-@app.on_message(filters.command("help"))
+@app.on_message(["help"])
 async def inline_help_menu(client, message):
     image = None
     try:
@@ -48,16 +45,16 @@ async def inline_help_menu(client, message):
         await message.delete()
     except:
         pass
-  
+      
+
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin(.+?)", query.data)
-    prev_match = re.match(r"help_prev(.+?)", query.data)
-    next_match = re.match(r"help_next(.+?)", query.data)
+    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
+    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+    next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
-
     top_text = f"""
 **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
 sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
@@ -71,7 +68,9 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
     if plug_match:
         plugin = plug_match.group(1)
         text = (
-            f"****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {plugs[plugin].__NAME__}\n"
+            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
+                plugs[plugin].__NAME__
+            )
             + plugs[plugin].__MENU__
         )
         key = InlineKeyboardMarkup(
@@ -121,3 +120,4 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
             ),
             disable_web_page_preview=True,
         )
+        
