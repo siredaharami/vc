@@ -10,7 +10,7 @@ from datetime import datetime
 import time
 
 # MongoDB Setup
-client = MongoClient(MONGO_URL)
+client = MongoClient(MONGO_DB_URL)
 db = client["baduserbot"]
 config_collection = db["config"]
 
