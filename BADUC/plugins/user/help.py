@@ -3,8 +3,7 @@ import re
 from pyrogram import *
 from pyrogram.types import *
 
-from BADUC.core.clients import app, bot
-from BADUC import *
+from ... import *
 from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
 from BADUC.functions.wrapper import *
