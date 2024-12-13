@@ -32,7 +32,7 @@ ALIVE_TEMPLATES = [
 current_template = 0  # Default template index
 
 PING_TEMPLATE = [
-    """ﾠ╰•★★ 💫 𝐁ᴀᴅ 𝐔ꜱᴇʀ𝐁ᴏᴛ 💫 ★★•╯
+    """╰•★★ 💫 𝐁ᴀᴅ 𝐔ꜱᴇʀ𝐁ᴏᴛ 💫 ★★•╯
 ❍════════════════════❍
 ╭✠╼━━━━━━❖━━━━━━━✠╮ 
 │•**𝐒ᴘᴇᴇᴅ ➠** {speed} m/s
