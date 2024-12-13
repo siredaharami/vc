@@ -2,7 +2,7 @@ import asyncio, importlib
 
 from pytgcalls import idle
 
-from BADUC.core.scan import logs, plugs, vars
+from . import logs, plugs, vars
 from BADUC.plugins import ALL_PLUGINS
 from BADUC.core.clients import run_async_clients
 from BADUC.functions.enums import run_async_enums
