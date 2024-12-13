@@ -4,8 +4,8 @@ from pyrogram import *
 from pyrogram.types import *
 
 from ... import __version__, app, bot
-from .functions.buttons import paginate_plugins
-from .functions.wrapper import cb_wrapper
+from ...functions.buttons import paginate_plugins
+from ...functions.wrapper import cb_wrapper
 
 @app.on_message(["help"])
 async def inline_help_menu(client, message):
