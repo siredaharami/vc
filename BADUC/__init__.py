@@ -45,7 +45,7 @@ eor = edit_or_reply
 
 
 # Logger
-from .logger import LOGGER
+from BADUC.logger import LOGGER
 logs = LOGGER
 
 
