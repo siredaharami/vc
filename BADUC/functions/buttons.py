@@ -6,7 +6,6 @@ from typing import Union, List
 
 from BADUC.core.clients import app
 
-
 class EqInlineKeyboardButton(InlineKeyboardButton):
     def __eq__(self, other):
         return self.text == other.text
@@ -78,4 +77,3 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
     final_buttons = [row for row in current_page] + [navigation_buttons]
 
     return final_buttons
-    
