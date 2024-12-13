@@ -1,3 +1,10 @@
+from BADUC.core.clients import (
+    app, bot, call
+)
+app = app
+bot = bot
+call = call
+
 from .logger import LOGGER
 logs = LOGGER
 
