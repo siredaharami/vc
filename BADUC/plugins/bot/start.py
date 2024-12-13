@@ -8,10 +8,9 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # List of images for random selection
 images = [
-    "https://example.com/image1.jpg",
-    "https://example.com/image2.jpg",
-    "https://example.com/image3.jpg",
-    "https://example.com/image4.jpg",
+    "https://files.catbox.moe/qdueji.jpg",
+    "https://files.catbox.moe/xkkllz.jpg",
+    "https://files.catbox.moe/wbog9f.jpg",
 ]
 
 # Welcome message handler
