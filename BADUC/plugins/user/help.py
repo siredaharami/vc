@@ -8,6 +8,11 @@ from BADUC.core.scan import plugs
 from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
 from BADUC.functions.wrapper import cb_wrapper 
+import os
+import sys
+
+print("Current Working Directory:", os.getcwd())
+print("Python Path:", sys.path)
 
 @app.on_message(filters.command("help"))
 async def inline_help_menu(client, message):
