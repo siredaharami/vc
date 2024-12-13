@@ -1,103 +1,69 @@
 import random
-from BADUC import SUDOERS
-from BADUC.core.clients import bot
-from BADUC.core.command import *
 from pyrogram import Client, filters
+from BADUC.core.clients import bot
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-# List of images for random selection
-images = [
-  "https://files.catbox.moe/qdueji.jpg",
-  "https://files.catbox.moe/xkkllz.jpg",
-  "https://files.catbox.moe/wbog9f.jpg",
+# Group and Channel Links (Replace with actual links)
+GROUP_LINK = "https://t.me/PBX_CHAT"  # Replace with your group link
+CHANNEL_LINK = "https://t.me/HEROKUBIN_01"  # Replace with your channel link
+
+# List of random images
+IMAGE_LIST = [
+    "https://files.catbox.moe/mpkdqt.jpg",
+    "https://files.catbox.moe/wbog9f.jpg",
 ]
 
-# Welcome message handler
+# Start command handler
 @bot.on_message(filters.command("start") & filters.private)
 async def start(client, message):
-    selected_image = random.choice(images)
+    random_image = random.choice(IMAGE_LIST)  # Pick a random image
+    buttons = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Assistant", callback_data="assistant")],
+            [
+                InlineKeyboardButton("Group Support", url=GROUP_LINK),
+                InlineKeyboardButton("Channel Support", url=CHANNEL_LINK),
+            ],
+            [InlineKeyboardButton("Help", callback_data="help")],
+            [InlineKeyboardButton("Clone", callback_data="clone")],
+        ]
+    )
+    await client.send_photo(
+        chat_id=message.chat.id,
+        photo=random_image,
+        caption="Welcome to the bot! Choose an option below:",
+        reply_markup=buttons,
+    )
 
-    # Welcome text
-    welcome_text = (
-        "✨ **Welcome to My Dynamic Bot!** ✨\n\n"
-        "🌟 This bot provides dynamic features and random content.\n"
-        "Choose an option below to explore!"
-    )
+# Callback query handler for Assistant
+@bot.on_callback_query(filters.regex("assistant"))
+async def assistant(client, callback_query):
+    userbot_id = callback_query.from_user.id  # Get the userbot's ID
+    await callback_query.message.edit_text(
+        f"Userbot ID: `{userbot_id}`",
+        reply_markup=None  # Remove buttons after showing the ID
+    )
 
-    # Inline keyboard with nested button options
-    keyboard = InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("🔍 Explore", callback_data="explore")],
-            [InlineKeyboardButton("🗞 News", callback_data="news")],
-            [
-                InlineKeyboardButton("📊 Stats", callback_data="stats"),
-                InlineKeyboardButton("ℹ️ Help", callback_data="help"),
-            ],
-        ]
-    )
+# Callback query handler for Help
+@bot.on_callback_query(filters.regex("help"))
+async def help(client, callback_query):
+    help_text = (
+        "**Help Menu**\n\n"
+        "1. **Assistant**: Displays the Userbot ID.\n"
+        "2. **Group Support**: Join the support group for assistance.\n"
+        "3. **Channel Support**: Follow the updates in the channel.\n"
+        "4. **Clone**: Automatically types the `/clone` command.\n"
+        "5. For any issues, feel free to contact the support group."
+    )
+    await callback_query.message.edit_text(
+        help_text,
+        reply_markup=None  # Remove buttons after showing help
+    )
 
-    # Send a message with a random image and buttons
-    await message.reply_photo(
-        photo=selected_image,
-        caption=welcome_text,
-        reply_markup=keyboard,
-    )
+# Callback query handler for Clone
+@bot.on_callback_query(filters.regex("clone"))
+async def clone(client, callback_query):
+    await callback_query.message.reply_text("/clone")
+    await callback_query.answer("Command sent to the chat!", show_alert=False)
 
-
-# Callback query handler for buttons
-@bot.on_callback_query()
-async def handle_callback_query(client, callback_query):
-    data = callback_query.data
-
-    # Predefined responses for each button
-    if data == "explore":
-        response_text = "🔍 **Explore Options:**\n\n1. Feature A\n2. Feature B\n3. Feature C"
-    elif data == "news":
-        response_text = "🗞 **Latest News:**\n\n- News Item 1\n- News Item 2\n- News Item 3"
-    elif data == "stats":
-        response_text = "📊 **Statistics:**\n\n- Stat A: 100\n- Stat B: 200"
-    elif data == "help":
-        response_text = "ℹ️ **Help Section:**\n\nContact us at @support"
-    else:
-        response_text = "❓ Unknown option. Please try again."
-
-    # Updated inline keyboard for nested navigation
-    updated_keyboard = InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("⬅️ Back", callback_data="back")],
-        ]
-    )
-
-    # Edit the same message with the new content
-    await callback_query.message.edit_text(
-        text=response_text, reply_markup=updated_keyboard
-    )
-
-    # Handle the "Back" button
-    if data == "back":
-        # Reset to the initial message and buttons
-        selected_image = random.choice(images)
-        initial_text = (
-            "✨ **Welcome to My Dynamic Bot!** ✨\n\n"
-            "🌟 This bot provides dynamic features and random content.\n"
-            "Choose an option below to explore!"
-        )
-
-        initial_keyboard = InlineKeyboardMarkup(
-            [
-                [InlineKeyboardButton("🔍 Explore", callback_data="explore")],
-                [InlineKeyboardButton("🗞 News", callback_data="news")],
-                [
-                    InlineKeyboardButton("📊 Stats", callback_data="stats"),
-                    InlineKeyboardButton("ℹ️ Help", callback_data="help"),
-                ],
-            ]
-        )
-
-        # Update the message with a new random image and buttons
-        await callback_query.message.edit_media(
-            media={"type": "photo", "media": selected_image},
-            caption=initial_text,
-            reply_markup=initial_keyboard,
-        )
