@@ -16,9 +16,6 @@ from typing import Union, List, Pattern
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 
-
-
-
 @app.on_message(bad(["gitpull"]) & (filters.me | filters.user(SUDOERS)))
 async def update_repo_latest(client, message):
     response = await message.reply_text("Checking for available updates...")
@@ -27,7 +24,7 @@ async def update_repo_latest(client, message):
     except GitCommandError:
         return await response.edit("Git Command Error")
     except InvalidGitRepositoryError:
-        return await response.edit("Invalid Git Repsitory")
+        return await response.edit("Invalid Git Repository")
     to_exc = f"git fetch origin main &> /dev/null"
     os.system(to_exc)
     await asyncio.sleep(7)
@@ -43,14 +40,14 @@ async def update_repo_latest(client, message):
         "tsnrhtdd"[(format // 10 % 10 != 1) * (format % 10 < 4) * format % 10 :: 4],
     )
     for info in repo.iter_commits(f"HEAD..origin/main"):
-        updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
+        updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Committed on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
     _update_response_ = "<b>A new update is available for the userbot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"
     _final_updates_ = _update_response_ + updates
     if len(_final_updates_) > 4096:
         link = await paste_queue(updates)
         url = link + "/index.txt"
         nrs = await response.edit(
-            f"<b>A new update is available for the userbot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n[Click Here to checkout Updates]({url})"
+            f"<b>A new update is available for the userbot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n[Click Here to check out Updates]({url})"
         )
     else:
         nrs = await response.edit(_final_updates_, disable_web_page_preview=True)
