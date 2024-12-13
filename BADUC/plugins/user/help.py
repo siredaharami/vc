@@ -2,18 +2,17 @@ import re
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from BADUC import *
-from BADUC.core.clients import *
+from BADUC.core.clients import app, bot
 from BADUC.core.logger import *
 from BADUC.core.scan import *
-from BADUC.core.config import *
+from BADUC.core.config import __version__
 from BADUC.core.command import *
 from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
-from BADUC.functions.wrapper import *
+from BADUC.functions.wrapper import cb_wrapper
+from BADUC.plugins import plugs
 
-
-@app.on_message(sukh(["help"]))
+@app.on_message(filters.command("help"))
 async def inline_help_menu(client, message):
     image = None
     try:
@@ -47,16 +46,16 @@ async def inline_help_menu(client, message):
         await message.delete()
     except:
         pass
-      
-
+  
 
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
+    plug_match = re.match(r"help_plugin(.+?)", query.data)
+    prev_match = re.match(r"help_prev(.+?)", query.data)
+    next_match = re.match(r"help_next(.+?)", query.data)
     back_match = re.match(r"help_back", query.data)
+
     top_text = f"""
 **💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
 sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
@@ -70,9 +69,7 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
     if plug_match:
         plugin = plug_match.group(1)
         text = (
-            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
-                plugs[plugin].__NAME__
-            )
+            f"****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {plugs[plugin].__NAME__}\n"
             + plugs[plugin].__MENU__
         )
         key = InlineKeyboardMarkup(
@@ -122,4 +119,3 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
             ),
             disable_web_page_preview=True,
         )
-        
