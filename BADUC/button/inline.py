@@ -4,7 +4,6 @@ from BADUC.button.buttons import paginate_plugins
 from BADUC.functions.wrapper import inline_wrapper
 from BADUC import __version__
 from BADUC.core.clients import app, bot
-from BADUC.core.scan import vars, plugs
 
 
 async def help_menu_logo(answer):
