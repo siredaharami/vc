@@ -43,28 +43,25 @@ async def inline_help_menu(client, message):
         pass
       
 
-
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
+    plug_match = re.match(r"help_plugin(.+?)", query.data)
+    prev_match = re.match(r"help_prev(.+?)", query.data)
+    next_match = re.match(r"help_next(.+?)", query.data)
     back_match = re.match(r"help_back", query.data)
+
+    # Count the total number of plugins
+    total_plugins = len(plugs)
+
     top_text = f"""
-**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
-sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
-❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
-ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️.
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ ᴜᴘᴅᴀᴛᴇ ](https://t.me/SHIVANSH474) 🌹**
-"""
-    
+**💫 Bad-Userbot Help Menu 👻  » {__version__} ✨
+            ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
+
     if plug_match:
         plugin = plug_match.group(1)
         text = (
-            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
+            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏꜰ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
                 plugs[plugin].__NAME__
             )
             + plugs[plugin].__MENU__
@@ -74,7 +71,13 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
                 [
                     InlineKeyboardButton(
                         text="↪️ Back", callback_data="help_back"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text="🌐 Group Support", url="https://t.me/your_group_support"
+                    ),
+                    InlineKeyboardButton(
+                        text="📢 Channel Support", url="https://t.me/your_channel_support"
+                    ),
                 ],
             ]
         )
