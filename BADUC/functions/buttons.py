@@ -22,7 +22,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
         plugins = sorted(
             [
                 EqInlineKeyboardButton(
-                    x.__NAME__,
+                    f"✬ {x.__NAME__} ✬",
                     callback_data="{}_plugin({})".format(
                         prefix, x.__NAME__.lower()
                     ),
@@ -34,7 +34,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
         plugins = sorted(
             [
                 EqInlineKeyboardButton(
-                    x.__NAME__,
+                    f"✬ {x.__NAME__} ✬",
                     callback_data="{}_plugin({},{})".format(
                         prefix, chat, x.__NAME__.lower()
                     ),
@@ -42,7 +42,6 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
                 for x in plugin_dict.values()
             ]
         )
-
     # Adjust rows and columns here
     ROW_SIZE = 5  # Number of rows (Nice)
     COLUMN_SIZE = 3  # Buttons in one row
