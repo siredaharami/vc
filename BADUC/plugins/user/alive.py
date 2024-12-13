@@ -10,7 +10,7 @@ from datetime import datetime
 import time
 
 # MongoDB Setup
-client = MongoClient(MONGO_DB_URL)
+client = MongoClient(MONGO_URL)
 db = client["baduserbot"]
 config_collection = db["config"]
 
@@ -24,10 +24,14 @@ default_config = {
 
 # Load Config from MongoDB or Use Defaults
 config = config_collection.find_one({"_id": "config"}) or default_config
-ALIVE_PIC = config.get("ALIVE_PIC")
-PING_PIC = config.get("PING_PIC")
-current_template = config.get("ALIVE_TEMPLATE_INDEX")
-current_ping_template = config.get("PING_TEMPLATE_INDEX")
+ALIVE_PIC = config.get("ALIVE_PIC", default_config["ALIVE_PIC"])
+PING_PIC = config.get("PING_PIC", default_config["PING_PIC"])
+current_template = config.get("ALIVE_TEMPLATE_INDEX", default_config["ALIVE_TEMPLATE_INDEX"])
+current_ping_template = config.get("PING_TEMPLATE_INDEX", default_config["PING_TEMPLATE_INDEX"])
+
+# Ensure indices are integers
+current_template = current_template if isinstance(current_template, int) else default_config["ALIVE_TEMPLATE_INDEX"]
+current_ping_template = current_ping_template if isinstance(current_ping_template, int) else default_config["PING_TEMPLATE_INDEX"]
 
 # Templates
 ALIVE_TEMPLATES = [
