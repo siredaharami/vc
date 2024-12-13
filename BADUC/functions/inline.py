@@ -1,5 +1,5 @@
 import asyncio
-from . import *
+from BADUC import *
 from BADUC.functions.button import *
 from BADUC.functions.wrapper import *
 from pyrogram.types import *
