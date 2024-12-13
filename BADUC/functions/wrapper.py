@@ -1,7 +1,6 @@
 from pyrogram.types import *
 from traceback import format_exc
 
-from ... import *
 from BADUC import SUDOERS
 from BADUC.core.clients import app, bot
 
