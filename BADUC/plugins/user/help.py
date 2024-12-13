@@ -3,14 +3,11 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from BADUC.core.clients import app, bot
-from BADUC.core.logger import *
-from BADUC.core.scan import *
+from BADUC.core.scan import plugs
 from BADUC.core.config import __version__
-from BADUC.core.command import *
 from BADUC.functions.buttons import *
 from BADUC.functions.inline import *
-from BADUC.functions.wrapper import cb_wrapper
-from BADUC.plugins import plugs
+from BADUC.functions.wrapper import cb_wrapper 
 
 @app.on_message(filters.command("help"))
 async def inline_help_menu(client, message):
