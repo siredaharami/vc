@@ -4,7 +4,7 @@ from pyrogram import *
 from pyrogram.types import *
 
 from BADUC.core.clients import app, bot
-from BADUC.button import *
+from BADUC import *
 from BADUC.button.buttons import *
 from BADUC.button.inline import *
 from BADUC.functions.wrapper import *
