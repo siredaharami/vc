@@ -7,6 +7,7 @@ from BADUC.database.gchat import get_ub_chats
 from BADUC.database.misc import extract_user, extract_user_and_reason
 from BADUC.database import gbandb as Zaid
 from BADUC.database import gmutedb as Gmute
+from BADUC.database.gmutedb import is_gmuted, ungmute, gmute_list
 
 ok = []
 
@@ -237,15 +238,20 @@ async def ungmute_user(app: Client, message: Message):
 async def gmutelist(app: Client, message: Message):
     ex = await message.reply_text("`Fetching globally muted users...`")
 
-    # Fetch globally muted users
-    users = await Gmute.gmute_list()
-    if not users:
-        return await ex.edit("No users are globally muted.")
+    try:
+        # Fetch muted users
+        users = await Gmute.gmute_list()  # Ensure this is implemented and working
+        if not users:
+            return await ex.edit("No users are globally muted.")
 
-    # Build list of muted users
-    gmute_list = "**Globally Muted Users:**\n"
-    for count, user in enumerate(users, start=1):
-        gmute_list += f"**{count}.** User ID: `{user['user_id']}`\n"
+        # Prepare list
+        gmute_list = "**Globally Muted Users:**\n"
+        for count, user in enumerate(users, start=1):
+            gmute_list += f"**{count}.** User ID: `{user['user_id']}`\n"
 
-    # Display list
-    await ex.edit(gmute_list)
+        # Output list
+        await ex.edit(gmute_list)
+    except AttributeError:
+        await ex.edit("The `gmute_list` function is not implemented in the database module.")
+    except Exception as e:
+        await ex.edit(f"An unexpected error occurred: {e}")
