@@ -121,39 +121,74 @@ async def gbanlist(app: Client, message: Message):
 # GMUTE Function
 @app.on_message(bad(["gmute"]) & (filters.me | filters.user(SUDOERS)))
 async def gmute_user(app: Client, message: Message):
-    args = await extract_user(message)
-    reply = message.reply_to_message
+    user_id, reason = await extract_user_and_reason(message)
     ex = await message.reply_text("`Processing...`")
 
-    if args:
-        try:
-            user = await app.get_users(args)
-        except Exception:
-            return await ex.edit("`Please specify a valid user!`")
-    elif reply:
-        user = reply.from_user
-    else:
-        return await ex.edit("`Please specify a valid user!`")
-
-    if user.id == app.me.id:
+    # Check if user exists and is valid
+    if not user_id:
+        return await ex.edit("`I can't find that user.`")
+    if user_id == app.me.id:
         return await ex.edit("`You can't gmute yourself!`")
-    if user.id in DEVS:
+    if user_id in DEVS:
         return await ex.edit("`You can't gmute a developer!`")
 
+    try:
+        user = await app.get_users(user_id)
+    except Exception:
+        return await ex.edit("`Please specify a valid user!`")
+
+    # Check if already globally muted
     if await Gmute.is_gmuted(user.id):
         return await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) is already gmuted.`")
 
+    # Add to GMUTE database
     await Gmute.gmute(user.id)
     ok.append(user.id)
 
-    try:
-        common_chats = await app.get_common_chats(user.id)
-        for chat in common_chats:
-            await app.restrict_chat_member(chat.id, user.id, ChatPermissions())
-    except BaseException:
-        pass
+    # Restrict user in common chats
+    common_chats = await app.get_common_chats(user.id)
+    restricted = 0
+    errors = 0
 
-    await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) has been globally muted!`")
+    for chat in common_chats:
+        try:
+            await app.restrict_chat_member(chat.id, user.id, ChatPermissions())
+            restricted += 1
+        except Exception:
+            errors += 1
+
+    # Prepare success message
+    msg = (
+        f"**\\#GMuted_User//**\n\n"
+        f"**Name:** [{user.first_name}](tg://user?id={user.id})\n"
+        f"**User ID:** `{user.id}`\n"
+        f"**Reason:** `{reason}`\n" if reason else ""
+        f"**Restricted in:** `{restricted}` chats.\n"
+        f"**Errors in:** `{errors}` chats."
+    )
+    await ex.edit(msg)
+
+@app.on_message(filters.group & filters.incoming)
+async def enforce_gmute(app: Client, message: Message):
+    if not message.from_user:
+        return
+
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+
+    # Check if the user is globally muted
+    if await Gmute.is_gmuted(user_id):
+        try:
+            # Delete the message
+            await message.delete()
+        except errors.RPCError:
+            pass
+
+        try:
+            # Ensure the user is restricted
+            await app.restrict_chat_member(chat_id, user_id, ChatPermissions())
+        except BaseException:
+            pass
 
 
 # UNGMUTE Function
