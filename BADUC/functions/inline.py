@@ -31,6 +31,7 @@ async def help_menu_logo(answer):
             description=f"📃 ʟᴏᴀᴅᴇᴅ__ {total_plugins} ᴘʟᴜɢɪɴꜱ 📱",
             caption=f"""
             **💫 ʙᴀᴅ-ᴜꜱᴇʀʙᴏᴛ ʜᴇʟᴘ ᴍᴇɴᴜ 👻  » {__version__} ✨
+            
 ❤️ ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️**""",
             
             reply_markup=InlineKeyboardMarkup(button),
@@ -56,6 +57,7 @@ async def help_menu_text(answer):
             input_message_content=InputTextMessageContent(
                 f"""
                 **💫 ʙᴀᴅ-ᴜꜱᴇʀʙᴏᴛ ʜᴇʟᴘ ᴍᴇɴᴜ 👻  » {__version__} ✨
+                
 ❤️ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️**""",
                 
                 disable_web_page_preview=True,
