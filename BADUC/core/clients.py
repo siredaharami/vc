@@ -94,6 +94,11 @@ async def enable_inline_mode():
     """
     LOGGER.info("Enabling Inline Mode via BotFather...")
     try:
+        # Ensure the app is started
+        if not app.is_connected:
+            LOGGER.info("Starting Userbot Client...")
+            await app.start()
+
         # Fetch bot details to get the username
         bot_details = await bot.get_me()
         bot_username = bot_details.username  # Fetch bot username dynamically
@@ -133,7 +138,7 @@ async def run_async_clients():
             LOG_GROUP_ID,
             "**sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ ɪs ᴀʟɪᴠᴇ**",
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Support", url="https://t.me/HEROKUBIN_01")]]
+                [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
             )
         )
         LOGGER.info("Logger Group Message Sent.")
@@ -141,8 +146,8 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Send Message To Logger Group: {e}")
 
     try:
-        await app.join_chat("HEROKUBIN_01")
-        await app.join_chat("PBX_CHAT")
+        await app.join_chat("MASTIWITHFRIENDSXD")
+        await app.join_chat("SHIVANSH474")
     except Exception as e:
         LOGGER.error(f"Failed To Join Chats: {e}")
 
