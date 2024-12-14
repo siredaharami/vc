@@ -3,6 +3,7 @@ import os, platform, random, re, socket
 import sys, time, textwrap
 
 from BADUC.core.clients import *
+from pyrogram import Client, filters
 from BADUC.core.config import *
 from BADUC import *
 from BADUC import SUDOERS
