@@ -5,11 +5,13 @@ from pyrogram.types import *
 from pyrogram.types import Message as message
 
 from ... import *
+from BADUC.core.command import *
 from ... import __version__, app, bot, plugs
 from ...functions.buttons import paginate_plugins
 from ...functions.wrapper import cb_wrapper
 
-@app.on_message(["help"])
+@app.on_message(bad(["help"]))
+@super_user_only
 async def inline_help_menu(client, message):
     image = None
     try:
