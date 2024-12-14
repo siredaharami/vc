@@ -190,7 +190,6 @@ async def enforce_gmute(app: Client, message: Message):
         except BaseException:
             pass
 
-
 # UNGMUTE Function
 @app.on_message(bad(["ungmute"]) & (filters.me | filters.user(SUDOERS)))
 async def ungmute_user(app: Client, message: Message):
@@ -209,17 +208,19 @@ async def ungmute_user(app: Client, message: Message):
         return await ex.edit("`Please specify a valid user!`")
 
     if not await Gmute.is_gmuted(user.id):
-        return await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) is not gmuted.`")
+        return await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) is not globally muted.`")
 
     await Gmute.ungmute(user.id)
-    ok.remove(user.id)
 
     try:
         common_chats = await app.get_common_chats(user.id)
         for chat in common_chats:
-            await app.unban_chat_member(chat.id, user.id)
-    except BaseException:
-        pass
+            try:
+                await app.unban_chat_member(chat.id, user.id)
+            except Exception as e:
+                print(f"Failed to unban in {chat.id}: {e}")
+    except Exception as e:
+        print(f"Error in fetching common chats: {e}")
 
     await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) has been globally unmuted!`")
 
@@ -231,10 +232,10 @@ async def gmutelist(app: Client, message: Message):
     ex = await message.reply_text("`Processing...`")
 
     if not users:
-        return await ex.edit("`No users have been gmuted yet.`")
+        return await ex.edit("`No users have been globally muted yet.`")
 
-    gmute_list = "**GMuted Users:**\n"
+    gmute_list = "**Globally Muted Users:**\n"
     for count, user in enumerate(users, start=1):
-        gmute_list += f"**{count}.** `{user.sender}`\n"
+        gmute_list += f"**{count}.** `{user['user_id']}`\n"
 
     await ex.edit(gmute_list)
