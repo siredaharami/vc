@@ -8,9 +8,6 @@ from time import time
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 
-flood = {}
-profile_photo = "cache/pfp.jpg"
-
 
 async def extract_userid(message, text: str):
     def is_int(text: str):
