@@ -1,4 +1,4 @@
-from BADUC import cli
+from BADUC import mongodb as cli
 
 gmuteh = cli["GMUTE"]
 
