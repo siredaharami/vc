@@ -123,7 +123,14 @@ async def gbanlist(app: Client, message: Message):
 async def gmute_user(app: Client, message: Message):
     args = await extract_user(message)
     reply = message.reply_to_message
-    ex = await message.edit_text("`Processing...`")
+    ex = None  # Placeholder for the response message
+
+    # Use send_message or reply if edit is not allowed
+    if message.from_user.id == app.me.id:
+        ex = await message.reply("`Processing...`")
+    else:
+        ex = await message.reply("`Processing...`")
+
     if args:
         try:
             user = await app.get_users(args)
@@ -136,10 +143,12 @@ async def gmute_user(app: Client, message: Message):
     else:
         await ex.edit(f"`Please specify a valid user!`")
         return
+
     if user.id == app.me.id:
         return await ex.edit("**Okay Sure.. 🐽**")
     if user.id in DEVS:
         return await ex.edit("**Baap Ko mat sikha 🗿**")
+
     try:
         replied_user = reply.from_user
         if replied_user.is_self:
@@ -148,18 +157,21 @@ async def gmute_user(app: Client, message: Message):
         pass
 
     try:
-        if (await Gmute.is_gmuted(user.id)):
+        if await Gmute.is_gmuted(user.id):
             return await ex.edit("`User already gmuted`")
+
         await Gmute.gmute(user.id)
         ok.append(user.id)
         await ex.edit(f"[{user.first_name}](tg://user?id={user.id}) globally gmuted!")
+        
         try:
+            # Apply restrictions to common chats
             common_chats = await app.get_common_chats(user.id)
             for i in common_chats:
                 await i.restrict_member(user.id, ChatPermissions())
         except BaseException:
             pass
-    
+
     except Exception as e:
         await ex.edit(f"**ERROR:** `{e}`")
         return
