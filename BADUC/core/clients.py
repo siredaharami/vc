@@ -1,11 +1,9 @@
 import os, sys
 
 from pyrogram import Client
-from pyrogram import filters
-from pytgcalls import PyTgCalls
-from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
-from motor.motor_asyncio import AsyncIOMotorClient
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pytgcalls import PyTgCalls
+from motor.motor_asyncio import AsyncIOMotorClient
 
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
@@ -13,28 +11,28 @@ from .logger import LOGGER
 def async_config():
     LOGGER.info("Checking Variables ...")
     if not API_ID:
-        LOGGER.info("'API_ID' - Not Found !")
+        LOGGER.error("'API_ID' - Not Found!")
         sys.exit()
     if not API_HASH:
-        LOGGER.info("'API_HASH' - Not Found !")
+        LOGGER.error("'API_HASH' - Not Found!")
         sys.exit()
     if not BOT_TOKEN:
-        LOGGER.info("'BOT_TOKEN' - Not Found !")
+        LOGGER.error("'BOT_TOKEN' - Not Found!")
         sys.exit()
     if not STRING_SESSION:
-        LOGGER.info("'STRING_SESSION' - Not Found !")
+        LOGGER.error("'STRING_SESSION' - Not Found!")
         sys.exit()
     if not MONGO_DB_URL:
-        LOGGER.info("'MONGO_DB_URL' - Not Found !")
+        LOGGER.error("'MONGO_DB_URL' - Not Found!")
         sys.exit()
     if not LOG_GROUP_ID:
-        LOGGER.info("'LOG_GROUP_ID' - Not Found !")
+        LOGGER.error("'LOG_GROUP_ID' - Not Found!")
         sys.exit()
     LOGGER.info("All Required Variables Collected.")
 
 
 def async_dirs():
-    LOGGER.info("Initializing Directories ...")
+    LOGGER.info("Initializing Directories...")
     if "downloads" not in os.listdir():
         os.mkdir("downloads")
     if "cache" not in os.listdir():
@@ -43,45 +41,41 @@ def async_dirs():
     for file in os.listdir():
         if file.endswith(".session"):
             os.remove(file)
-    for file in os.listdir():
         if file.endswith(".session-journal"):
             os.remove(file)
     LOGGER.info("Directories Initialized.")
 
 async_dirs()
-    
 
 app = Client(
-    name = "BADUC",
-    api_id = API_ID,
-    api_hash = API_HASH,
-    session_string = STRING_SESSION,
+    name="BADUC",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    session_string=STRING_SESSION,
 )
 
 bot = Client(
-    name = "BADUCSUPPORT",
-    api_id = API_ID,
-    api_hash = API_HASH,
-    bot_token = BOT_TOKEN,
+    name="BADUCSUPPORT",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN,
 )
 
 call = PyTgCalls(app)
 
-
 def mongodbase():
     global mongodb
     try:
-        LOGGER.info("Connecting To Your Database ...")
+        LOGGER.info("Connecting To Your Database...")
         async_client = AsyncIOMotorClient
         mongobase = async_client(MONGO_DB_URL)
         mongodb = mongobase.BADUC
         LOGGER.info("Connected To Your Database.")
-    except:
-        LOGGER.error("Failed To Connect, Please Change Your Mongo Database!")
+    except Exception as e:
+        LOGGER.error(f"Failed To Connect To Database: {e}")
         sys.exit()
 
 mongodbase()
-
 
 async def sudo_users():
     sudoersdb = mongodb.sudoers
@@ -91,58 +85,53 @@ async def sudo_users():
         for user_id in sudoers:
             SUDOERS.append(int(user_id))
     LOGGER.info("Sudo Users Loaded.")
-    
 
 async def run_async_clients():
-    LOGGER.info("Starting Userbot ...")
-    await app.start()
-    LOGGER.info("Userbot Started.")
     try:
+        LOGGER.info("Starting Userbot...")
+        await app.start()
+        LOGGER.info("Userbot Started.")
+    except Exception as e:
+        LOGGER.error(f"Failed To Start Userbot: {e}")
+        return
+    
+    try:
+        LOGGER.info("Sending Logger Group Message...")
         await app.send_message(
             LOG_GROUP_ID,
             "**sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ ɪs ᴀʟɪᴠᴇ**",
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
+                [[InlineKeyboardButton("Support", url="https://t.me/HEROKUBIN_01")]]
             )
         )
-    except:
-        pass
+        LOGGER.info("Logger Group Message Sent.")
+    except Exception as e:
+        LOGGER.error(f"Failed To Send Message To Logger Group: {e}")
+
     try:
-        await app.join_chat("PBX_CHAT")
         await app.join_chat("HEROKUBIN_01")
-    except:
-        pass
-        await ass.start()
-        LOGGER.info("Assistant Started.")
-        try:
-            await ass.send_message(
-                LOG_GROUP_ID,
-                "**Assistant Started.**",
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("Updates", url="https://t.me/badmunda")]]
-                )
-            )
-        except:
-            pass
-        try:
-            await app.join_chat("PBX_CHAT")
-            await app.join_chat("HEROKUBIN_01")
-        except:
-            pass
-    LOGGER.info("Starting Helper Robot ...")
-    await bot.start()
-    LOGGER.info("Helper Robot Started.")
+        await app.join_chat("PBX_CHAT")
+    except Exception as e:
+        LOGGER.error(f"Failed To Join Chats: {e}")
+
     try:
+        await bot.start()
+        LOGGER.info("Helper Bot Started.")
         await bot.send_message(
             LOG_GROUP_ID,
-            "**ʙᴀᴅ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
+            "**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Help", callback_data="help_menu")]]
             )
         )
-    except:
-        pass
-    LOGGER.info("Starting PyTgCalls Client...")
-    await call.start()
-    LOGGER.info("PyTgCalls Client Started.")
+    except Exception as e:
+        LOGGER.error(f"Failed To Start Helper Bot Or Send Message: {e}")
+
+    try:
+        LOGGER.info("Starting PyTgCalls...")
+        await call.start()
+        LOGGER.info("PyTgCalls Started.")
+    except Exception as e:
+        LOGGER.error(f"Failed To Start PyTgCalls: {e}")
+
     await sudo_users()
