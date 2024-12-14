@@ -1,6 +1,8 @@
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
+from pyrogram.errors import RPCError
+from typing import List
 from pyrogram import Client, errors, filters
 from pyrogram.types import ChatPermissions, Message
 from BADUC.database.gchat import get_ub_chats
@@ -235,22 +237,54 @@ async def ungmute_user(app: Client, message: Message):
 
 # GMUTE List Function
 @app.on_message(bad(["listgmute"]) & (filters.me | filters.user(SUDOERS)))
-async def gmutelist(app: Client, message: Message):
-    ex = await message.reply_text("`Fetching globally muted users...`")
+async def list_gmuted_users(app: Client, message: Message):
+    """
+    Lists all globally muted users.
+    """
+    # Fetch the list of globally muted users
+    users = await Gmute.gmute_list()
+    ex = await message.edit_text("`Processing...`")
+    
+    if not users:
+        await ex.edit("There are no globally muted users yet.")
+        return
+    
+    # Prepare the list of muted users
+    gmute_list = "**GMuted Users:**\n"
+    for count, user in enumerate(users, start=1):
+        gmute_list += f"**{count} -** `{user.sender}`\n"
+    
+    await ex.edit(gmute_list)
 
-    try:
-        # Fetch globally muted users
-        users = await Gmute.gmute_list()  # Ensure this is implemented as shown above
-        if not users:
-            return await ex.edit("No users are globally muted.")
+# Function to check global restrictions
+@app.on_message(filters.incoming & filters.group)
+async def global_restrictions_check(app: Client, message: Message):
+    """
+    Checks if the user is globally muted or banned, and applies restrictions.
+    """
+    if not message or not message.from_user:
+        return
 
-        # Prepare the list of muted users
-        gmute_list = "**Globally Muted Users:**\n"
-        for count, user in enumerate(users, start=1):
-            user_id = user.get("user_id", "Unknown")  # Get 'user_id', fallback to 'Unknown'
-            gmute_list += f"**{count}.** User ID: `{user_id}`\n"
+    user_id = message.from_user.id
+    chat_id = message.chat.id
 
-        # Display the list
-        await ex.edit(gmute_list)
-    except Exception as e:
-        await ex.edit(f"An unexpected error occurred: {e}")
+    # Handle globally banned users
+    if await Zaid.gban_info(user_id):
+        try:
+            await app.ban_chat_member(chat_id, user_id)
+        except Exception as e:
+            print(f"Failed to ban user {user_id} in chat {chat_id}: {e}")
+
+    # Handle globally muted users
+    if await Gmute.is_gmuted(user_id):
+        try:
+            await message.delete()
+        except RPCError as e:
+            print(f"Failed to delete message from muted user {user_id}: {e}")
+        
+        try:
+            await app.restrict_chat_member(chat_id, user_id, ChatPermissions())
+        except Exception as e:
+            print(f"Failed to restrict user {user_id} in chat {chat_id}: {e}")
+
+    message.continue_propagation()
