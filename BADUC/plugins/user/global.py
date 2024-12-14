@@ -193,49 +193,59 @@ async def enforce_gmute(app: Client, message: Message):
 # UNGMUTE Function
 @app.on_message(bad(["ungmute"]) & (filters.me | filters.user(SUDOERS)))
 async def ungmute_user(app: Client, message: Message):
-    args = await extract_user(message)
-    reply = message.reply_to_message
     ex = await message.reply_text("`Processing...`")
+
+    # Extract user from command or reply
+    args = await extract_user(message)  # Ensure this function works as intended.
+    reply = message.reply_to_message
 
     if args:
         try:
             user = await app.get_users(args)
-        except Exception:
-            return await ex.edit("`Please specify a valid user!`")
+        except Exception as e:
+            return await ex.edit(f"Invalid user specified! Error: {e}")
     elif reply:
         user = reply.from_user
     else:
-        return await ex.edit("`Please specify a valid user!`")
+        return await ex.edit("Please specify a user to unmute!")
 
-    if not await Gmute.is_gmuted(user.id):
-        return await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) is not globally muted.`")
+    # Check if the user is globally muted
+    is_gmuted = await Gmute.is_gmuted(user.id)
+    if not is_gmuted:
+        return await ex.edit(f"[{user.first_name}](tg://user?id={user.id}) is not globally muted.")
 
+    # Remove user from global mute list
     await Gmute.ungmute(user.id)
 
+    # Unban the user from common chats
     try:
         common_chats = await app.get_common_chats(user.id)
         for chat in common_chats:
             try:
                 await app.unban_chat_member(chat.id, user.id)
             except Exception as e:
-                print(f"Failed to unban in {chat.id}: {e}")
+                print(f"Failed to unban in chat {chat.id}: {e}")
     except Exception as e:
-        print(f"Error in fetching common chats: {e}")
+        print(f"Error fetching common chats: {e}")
 
-    await ex.edit(f"`[{user.first_name}](tg://user?id={user.id}) has been globally unmuted!`")
+    # Confirm unmute
+    await ex.edit(f"[{user.first_name}](tg://user?id={user.id}) has been globally unmuted!")
 
 
 # GMUTE List Function
 @app.on_message(bad(["listgmute"]) & (filters.me | filters.user(SUDOERS)))
 async def gmutelist(app: Client, message: Message):
+    ex = await message.reply_text("`Fetching globally muted users...`")
+
+    # Fetch globally muted users
     users = await Gmute.gmute_list()
-    ex = await message.reply_text("`Processing...`")
-
     if not users:
-        return await ex.edit("`No users have been globally muted yet.`")
+        return await ex.edit("No users are globally muted.")
 
+    # Build list of muted users
     gmute_list = "**Globally Muted Users:**\n"
     for count, user in enumerate(users, start=1):
-        gmute_list += f"**{count}.** `{user['user_id']}`\n"
+        gmute_list += f"**{count}.** User ID: `{user['user_id']}`\n"
 
+    # Display list
     await ex.edit(gmute_list)
