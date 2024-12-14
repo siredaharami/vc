@@ -235,25 +235,26 @@ async def ungmute_user(app: Client, message: Message):
 
 
 # GMUTE List Function
-@app.on_message(bad(["listgmute"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command("listgmute", prefixes=["."]) & filters.me)
 async def list_gmuted_users(app: Client, message: Message):
     """
     Lists all globally muted users.
     """
-    # Fetch the list of globally muted users
-    users = await Gmute.gmute_list()
-    ex = await message.edit_text("`Processing...`")
-    
-    if not users:
-        await ex.edit("There are no globally muted users yet.")
-        return
-    
-    # Prepare the list of muted users
-    gmute_list = "**GMuted Users:**\n"
-    for count, user in enumerate(users, start=1):
-        gmute_list += f"**{count} -** `{user.sender}`\n"
-    
-    await ex.edit(gmute_list)
+    try:
+        users = await Gmute.gmute_list()
+        ex = await message.edit_text("`Processing...`")
+        
+        if not users:
+            await ex.edit("There are no globally muted users yet.")
+            return
+        
+        gmute_list = "**GMuted Users:**\n"
+        for count, user in enumerate(users, start=1):
+            gmute_list += f"**{count} -** `{user['sender']}`\n"
+        
+        await ex.edit(gmute_list)
+    except Exception as e:
+        await message.edit_text(f"Error: {e}")
 
 # Function to check global restrictions
 @app.on_message(filters.incoming & filters.group)
