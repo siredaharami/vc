@@ -8,6 +8,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
 
+BOTFATHER_USERNAME = "BotFather"  # BotFather username
+
 def async_config():
     LOGGER.info("Checking Variables ...")
     if not API_ID:
@@ -86,6 +88,36 @@ async def sudo_users():
             SUDOERS.append(int(user_id))
     LOGGER.info("Sudo Users Loaded.")
 
+async def enable_inline_mode():
+    """
+    Automates enabling Inline Mode in BotFather for the bot.
+    """
+    LOGGER.info("Enabling Inline Mode via BotFather...")
+    try:
+        # Fetch bot details to get the username
+        bot_details = await bot.get_me()
+        bot_username = bot_details.username  # Fetch bot username dynamically
+
+        if not bot_username:
+            LOGGER.error("Bot Username Not Found!")
+            return
+
+        LOGGER.info(f"Bot Username: @{bot_username}")
+
+        # Start conversation with BotFather
+        botfather_chat = await app.get_chat(BOTFATHER_USERNAME)
+        await app.send_message(botfather_chat.id, "/setinline")
+        
+        # Select bot username dynamically
+        await app.send_message(botfather_chat.id, f"@{bot_username}")
+        
+        # Enable inline mode (confirmation message)
+        await app.send_message(botfather_chat.id, "Enabled")
+        
+        LOGGER.info("Inline Mode Enabled Successfully.")
+    except Exception as e:
+        LOGGER.error(f"Failed To Enable Inline Mode: {e}")
+
 async def run_async_clients():
     try:
         LOGGER.info("Starting Userbot...")
@@ -113,6 +145,11 @@ async def run_async_clients():
         await app.join_chat("PBX_CHAT")
     except Exception as e:
         LOGGER.error(f"Failed To Join Chats: {e}")
+
+    try:
+        await enable_inline_mode()  # Call the function to enable inline mode
+    except Exception as e:
+        LOGGER.error(f"Failed To Enable Inline Mode: {e}")
 
     try:
         await bot.start()
