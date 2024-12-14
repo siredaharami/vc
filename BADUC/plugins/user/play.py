@@ -547,7 +547,7 @@ async def get_call_status(chat_id):
 
 
 @app.on_message(bad(["play", "vplay"]) & filters.me & filters.group)
-@super_user_only
+@sudo_user
 async def stream_audio_or_video(client, message):
     try:
         await message.delete()
@@ -830,7 +830,7 @@ async def stream_audio_or_video(client, message):
             return
 
 @app.on_message(bad(["resume", "vresume"]) & filters.me & filters.group)
-@super_user_only
+@sudo_user
 async def resume_paused_stream_on_vc(client, message):
     chat_id = message.chat.id
     try:
@@ -858,7 +858,7 @@ async def resume_paused_stream_on_vc(client, message):
 
 
 @app.on_message(bad(["skip", "vskip"]) & filters.me & filters.group)
-@super_user_only
+@sudo_user
 async def skip_and_change_stream(client, message):
     chat_id = message.chat.id
     try:
@@ -888,7 +888,7 @@ async def skip_and_change_stream(client, message):
 
 
 @app.on_message(bad(["end", "vend"]) & filters.me & filters.group)
-@super_user_only
+@sudo_user
 async def stop_stream_and_leave_vc(client, message):
     chat_id = message.chat.id
     try:
