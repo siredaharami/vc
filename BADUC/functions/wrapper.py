@@ -32,7 +32,7 @@ def cb_wrapper(func):
         if (cb.from_user.id != app.me.id and
             cb.from_user.id not in sudousers):
             return await cb.answer(
-                "❎ You Are Not A Sudo User❗",
+                "🥺 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ꜱᴜᴅᴏ ᴜꜱᴇʀ❗",
                 cache_time=0,
                 show_alert=True,
             )
@@ -42,7 +42,7 @@ def cb_wrapper(func):
             except Exception:
                 print(format_exc())
                 return await cb.answer(
-                    f"❎ Something Went Wrong, Please Check Logs❗..."
+                    f"🤖 ꜱᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ ᴡʀᴏɴɢ, ᴘʟᴇᴀꜱᴇ ᴄʜᴇᴄᴋ ʟᴏɢꜱ❗..."
                 )
     return wrapper
 
@@ -56,8 +56,8 @@ def inline_wrapper(func):
                 button = [
                     [
                         InlineKeyboardButton(
-                            "💥 Deploy Shukla Userbot ✨",
-                            url=f"https://github.com/Badhacker98/BAD_USERBOT"
+                            "💫 ᴅᴇᴘʟᴏʏ ʏᴏᴜʀ ᴏᴡɴ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ❤️",
+                            url=f"https://github.com/Badhacker98/BAD_USERBOT/fork"
                         )
                     ]
                 ]
@@ -67,10 +67,10 @@ def inline_wrapper(func):
                     results=[
                         InlineQueryResultPhoto(
                             photo_url="https://files.catbox.moe/83d5lc.jpg",
-                            title="🥀 Shukla Userbot ✨",
+                            title="🥀 ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ✨",
                             thumb_url="https://files.catbox.moe/83d5lc.jpg",
-                            description="🌷 Deploy Your Own SHUKLAUSERBOT🌿...",
-                            caption=f"<b>🥀 Welcome » To » Shukla 🌷\n✅ Userbot {__version__} ✨...</b>",
+                            description="🌸 ᴅᴇᴘʟᴏʏ ʏᴏᴜʀ ᴏᴡɴ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ 💕...",
+                            caption=f"<b>🥀 ᴡᴇʟᴄᴏᴍᴇ » ᴛᴏ » ʙᴀᴅᴜᴄ 🌷\n✅ ᴜꜱᴇʀʙᴏᴛ {__version__} ✨...</b>",
                             reply_markup=InlineKeyboardMarkup(button),
                         )
                     ],
@@ -82,9 +82,9 @@ def inline_wrapper(func):
                     cache_time=1,
                     results=[
                         InlineQueryResultArticle(
-                            title="Deploy Your Own Shukla Userbot",
+                            title="⚜️ ᴅᴇᴘʟᴏʏ ʏᴏᴜʀ ᴏᴡɴ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ⚜️",
                             input_message_content=InputTextMessageContent(
-                                f"**🥀 Please, Deploy Your Own Shukla Userbot❗...\n\nRepo:** [Click Here](https://github.com/itzshukla/STRANGER-OPUSERBOT2.0)"
+                                f"🥀 ᴘʟᴇᴀꜱᴇ, ᴅᴇᴘʟᴏʏ ʏᴏᴜʀ ᴏᴡɴ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ❗...\n\nʀᴇᴘᴏ - [ᴠɪᴇᴡ](https://github.com/Badhacker98/BAD_USERBOT/fork)"
                             ),
                         )
                     ],
