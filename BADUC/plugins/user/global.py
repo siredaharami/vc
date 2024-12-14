@@ -9,7 +9,6 @@ from BADUC.database.gchat import get_ub_chats
 from BADUC.database.misc import extract_user, extract_user_and_reason
 from BADUC.database import gbandb as Zaid
 from BADUC.database import gmutedb as Gmute
-from BADUC.database.gmutedb import is_gmuted, ungmute, gmute_list
 
 ok = []
 
