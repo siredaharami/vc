@@ -54,14 +54,8 @@ async def help_button(client, query):
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
     top_text = f"""
-**💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏᴘ.
-sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
- 
-❤️ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴs ᴛᴏ
-ɢᴇᴛ ᴜsᴇʀʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs ❤️.
- 
-🌹ᴘᴏᴡᴇʀᴇᴅ ʙʏ ♡  [ ᴜᴘᴅᴀᴛᴇ ](https://t.me/SHIVANSH474) 🌹**
-"""
+**💫 ʙᴀᴅ-ᴜꜱᴇʀʙᴏᴛ ʜᴇʟᴘ ᴍᴇɴᴜ 👻  » {__version__} ✨
+🌸 ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴꜱ: {total_plugins} ❤️***""",
     
     if plug_match:
         plugin = plug_match.group(1)
@@ -76,7 +70,13 @@ sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ  » {__version__} ✨
                 [
                     InlineKeyboardButton(
                         text="↪️ Back", callback_data="help_back"
-                    )
+                    ),
+                    InlineKeyboardButton(
+                        text="🌐 Group Support", url="https://t.me/your_group_support"
+                    ),
+                    InlineKeyboardButton(
+                        text="📢 Channel Support", url="https://t.me/your_channel_support"
+                    ),
                 ],
             ]
         )
