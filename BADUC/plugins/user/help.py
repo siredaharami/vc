@@ -11,7 +11,7 @@ from ...functions.buttons import paginate_plugins
 from ...functions.wrapper import cb_wrapper
 
 @app.on_message(bad(["help"]))
-@super_user_only
+@sudo_user
 async def inline_help_menu(client, message):
     image = None
     try:
