@@ -70,11 +70,13 @@ async def help_button(client, query):
                     InlineKeyboardButton(
                         text="↪️ Back", callback_data="help_back"
                     ),
+                 ],
+                [
                     InlineKeyboardButton(
-                        text="🌐 Group Support", url="https://t.me/your_group_support"
+                        text="🌐 ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/your_group_support"
                     ),
                     InlineKeyboardButton(
-                        text="📢 Channel Support", url="https://t.me/your_channel_support"
+                        text="📢 ᴜᴘᴅᴀᴛᴇ", url="https://t.me/your_channel_support"
                     ),
                 ],
             ]
