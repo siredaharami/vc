@@ -5,6 +5,7 @@ from pyrogram import filters
 from pytgcalls import PyTgCalls
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 from motor.motor_asyncio import AsyncIOMotorClient
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
@@ -74,9 +75,9 @@ def mongodbase():
         async_client = AsyncIOMotorClient
         mongobase = async_client(MONGO_DB_URL)
         mongodb = mongobase.BADUC
-        LOGGER.info("Conected To Your Database.")
+        LOGGER.info("Connected To Your Database.")
     except:
-        LOGGER.error("Failed To Connect, Please Change Your Mongo Database !")
+        LOGGER.error("Failed To Connect, Please Change Your Mongo Database!")
         sys.exit()
 
 mongodbase()
@@ -89,7 +90,7 @@ async def sudo_users():
     if sudoers:
         for user_id in sudoers:
             SUDOERS.append(int(user_id))
-    LOGGER.info(f"Sudo Users Loaded.")
+    LOGGER.info("Sudo Users Loaded.")
     
 
 async def run_async_clients():
@@ -97,30 +98,48 @@ async def run_async_clients():
     await app.start()
     LOGGER.info("Userbot Started.")
     try:
-        await app.send_message(LOG_GROUP_ID, "**sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ ɪs ᴀʟɪᴠᴇ**")
+        await app.send_message(
+            LOG_GROUP_ID,
+            "**sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ ɪs ᴀʟɪᴠᴇ**",
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
+            )
+        )
     except:
         pass
     try:
-        await app.join_chat("MASTIWITHFRIENDSXD")
-        await app.join_chat("SHIVANSH474")
+        await app.join_chat("PBX_CHAT")
+        await app.join_chat("HEROKUBIN_01")
     except:
         pass
         await ass.start()
         LOGGER.info("Assistant Started.")
         try:
-            await ass.send_message(LOG_GROUP_ID, "**Assistant Started.**")
+            await ass.send_message(
+                LOG_GROUP_ID,
+                "**Assistant Started.**",
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton("Updates", url="https://t.me/badmunda")]]
+                )
+            )
         except:
             pass
         try:
-            await app.join_chat("bad")
-            await app.join_chat("badmunda")
+            await app.join_chat("PBX_CHAT")
+            await app.join_chat("HEROKUBIN_01")
         except:
             pass
     LOGGER.info("Starting Helper Robot ...")
     await bot.start()
     LOGGER.info("Helper Robot Started.")
     try:
-        await bot.send_message(LOG_GROUP_ID, "**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**")
+        await bot.send_message(
+            LOG_GROUP_ID,
+            "**ʙᴀᴅ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("Help", callback_data="help_menu")]]
+            )
+        )
     except:
         pass
     LOGGER.info("Starting PyTgCalls Client...")
