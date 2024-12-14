@@ -251,8 +251,8 @@ async def gmutelist(app: Client, message: Message):
 if ok:
     
 # Function to check global restrictions
-@app.on_message(filters.incoming & filters.group)
-async def global_restrictions_check(app: Client, message: Message):
+@app.on_message(filters.group & filters.incoming)
+async def enforce_gmute(app: Client, message: Message):
     """
     Checks if the user is globally muted or banned, and applies restrictions.
     """
