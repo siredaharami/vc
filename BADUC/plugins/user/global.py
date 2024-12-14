@@ -247,9 +247,7 @@ async def gmutelist(app: Client, message: Message):
         count += 1
         gmute_list += f"**{count} -** `{i.sender}`\n"
     return await ex.edit(gmute_list)
-
-if ok:
-    
+ 
 # Function to check global restrictions
 @app.on_message(filters.group & filters.incoming)
 async def enforce_gmute(app: Client, message: Message):
