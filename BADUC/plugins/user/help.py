@@ -61,7 +61,7 @@ async def help_button(client, query):
     if plug_match:
         plugin = plug_match.group(1)
         text = (
-            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}\n".format(
+            "****💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʜᴇʟᴘ ᴍᴇɴᴜ ᴏғ \n💕 ᴘʟᴜɢɪɴ ✨ ** {}".format(
                 plugs[plugin].__NAME__
             )
             + plugs[plugin].__MENU__
