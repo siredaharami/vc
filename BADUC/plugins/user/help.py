@@ -55,8 +55,7 @@ async def help_button(client, query):
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
-    top_text = f"""
-🌸 ʙᴀᴅ-ᴜꜱᴇʀʙᴏᴛ ʜᴇʟᴘ ᴍᴇɴᴜ 👻  » {__version__} ✨""",
+    top_text = f"""🌸 ʙᴀᴅ-ᴜꜱᴇʀʙᴏᴛ ʜᴇʟᴘ ᴍᴇɴᴜ 👻  » {__version__} ✨""",
     
     if plug_match:
         plugin = plug_match.group(1)
