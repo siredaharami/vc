@@ -6,7 +6,6 @@ from pyrogram import filters
 
 
 @app.on_message(bad(["🙈🙈"]) & (filters.me | filters.user(SUDOERS)))
-    & filters.private & filters.me)
 async def self_media(client, message):
     try:
         replied = message.reply_to_message
