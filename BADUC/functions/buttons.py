@@ -44,7 +44,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
         )
     # Adjust rows and columns here
     ROW_SIZE = 5  # Number of rows (Nice)
-    COLUMN_SIZE = 3  # Buttons in one row
+    COLUMN_SIZE = 2  # Buttons in one row
 
     # Create button pairs with ROW_SIZE and COLUMN_SIZE
     pairs = [plugins[i:i + COLUMN_SIZE] for i in range(0, len(plugins), COLUMN_SIZE)]
