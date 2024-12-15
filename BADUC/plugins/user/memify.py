@@ -17,7 +17,7 @@ async def mmf(_, message: Message):
         await message.delete()
         return
 
-    msg = await message.reply_text("```❍ ᴍᴇᴍɪғʏɪɴɢ ᴛʜɪs ɪᴍᴀɢᴇ 🥀 ```")
+    msg = await message.reply_text("❍ ᴍᴇᴍɪғʏɪɴɢ ᴛʜɪs ɪᴍᴀɢᴇ 🥀 ")
     text = message.text.split(None, 1)[1]
     
     if not reply_message or not reply_message.media:
