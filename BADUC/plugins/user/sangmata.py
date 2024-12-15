@@ -7,7 +7,7 @@ from pyrogram.types import *
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
-from BADUC.database.misc import extract_user
+from BADUC.database.misc import *
 
 @app.on_message(bad(["sg"]) & (filters.me | filters.user(SUDOERS)))
 async def sg(client: Client, message: Message):
