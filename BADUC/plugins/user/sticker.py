@@ -229,10 +229,14 @@ async def kang(client, message: Message):
         pack_num = 0
         pack_name = f"f{message.from_user.id}_kangpack"
         pack_title = f"{message.from_user.first_name[:32]}'s Kang Pack"
-        
+
+        # Debug log for pack_name
+        print(f"Attempting to fetch or create sticker pack: {pack_name}")
+
         # Try to find or create the sticker set
         stickerset = await get_sticker_set_by_name(client, pack_name)
         if not stickerset:
+            print("Sticker pack not found. Creating a new one...")
             stickerset = await create_sticker_set(
                 client, 
                 message.from_user.id, 
