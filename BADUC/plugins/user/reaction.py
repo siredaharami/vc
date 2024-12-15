@@ -740,32 +740,51 @@ async def give_cringe(bot: Client, message: Message):
             )
 
 
-__NAME__ = "animation3"
+__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ3"
 __MENU__ = """
-`.bully` **Type bully and see magic**
-`.cuddle` **Type cuddle and see magic**
-`.cry` **Type cry and see magic**
 `.hug` **Type hug and see magic**
+
 `.awoo` **Type awoo and see magic**
+
 `.kiss` **Type kiss and see magic**
+
 `.lick` **Type lick and see magic**
+
 `.patt` **Type patt and see magic**
+
 `.smug` **Type smug and see magic**
+
 `.bonk` **Type bonk and see magic**
+
 `.yeet` **Type yeet and see magic**
+
 `.blush` **Type blush and see magic**
+
 `.smile` **Type smile and see magic**
+
 `.wave` **Type wave and see magic**
+
 `.handold` **Type handold and see magic**
+
 `.highfive` **Type highfive and see magic**
+
 `.glomp` **Type glomp and see magic**
+
 `.bites` **Type bites and see magic**
+
 `.nom` **Type nom and see magic**
+
 `.wink` **Type wink and see magic**
+
 `.happy` **Type happy and see magic**
+
 `.killyou` **Type killyou and see magic**
+
 `.slap` **Type slap and see magic**
+
 `.poke` **Type poke and see magic**
+
 `.dance` **Type dance and see magic**
+
 `.cring` **Type cring and see magic**
 """
