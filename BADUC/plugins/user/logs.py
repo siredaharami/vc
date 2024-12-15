@@ -20,6 +20,8 @@ def upload_logs_to_batbin(log_content):
     url = "https://batbin.me/api/v1/paste"
     data = {"content": log_content}
     response = requests.post(url, json=data)
+    print(f"Response Status: {response.status_code}")  # Debug: Print response status
+    print(f"Response Text: {response.text}")  # Debug: Print response text for error
     if response.status_code == 200:
         return f"https://batbin.me/{response.json().get('key')}"
     else:
@@ -40,4 +42,4 @@ async def handle_logs(client, message):
         await message.reply(f"Logs uploaded successfully: [View Logs]({paste_url})", disable_web_page_preview=True)
     else:
         await message.reply("Failed to upload logs to batbin.me. Please try again later.")
-      
+
