@@ -292,16 +292,55 @@ async def gunid(client: Client, message: Message):
 "⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿\n"
         
 
-__NAME__ = "animation2"
+__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ2"
 __MENU__ = """
+`.dead` **Type dead and see magic**
+
+`.dlove` **Type dlove and see magic**
+
+`.rocket` **Type rocket and see magic**
+
+`.drugs` **Type drugs and see magic**
+
+`.run` **Type run and see magic**
+
+`.thumb` **Type thumb and see magic**
+
+`.tank` **Type tank and see magic**
+
+`.cat` **Type cat and see magic**
+
+`.nolove` **Type nolove and see magic**
+
+`.peg` **Type peg and see magic**
+
+`.scam` **Type scam and see magic**
+
+`.ror` **Type ror and see magic**
+
 `.plain` **Type plain and see magic**
+
 `.mp3` **Type mp3 and see magic**
+
 `.snake` **Type snake and see magic**
+
 `.mc` **Type mc and see magic**
+
 `.nikal` **Type nikal and see magic**
+
 `.gm` **Type gm and see magic**
+
 `.goodmorning` **Type goodmorning and see magic**
+
 `.gn` **Type gn and see magic**
+
 `.goodnight` **Type goodnight and see magic**
+
 `.Pikachu` **Type Pikachu and see magic**
+
+`.bully` **Type bully and see magic**
+
+`.cuddle` **Type cuddle and see magic**
+
+`.cry` **Type cry and see magic**
 """
