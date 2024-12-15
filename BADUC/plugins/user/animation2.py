@@ -286,3 +286,18 @@ async def gunid(client: Client, message: Message):
 "⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿\n"
 "⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿\n"
 )
+
+
+__NAME__ = "animation2"
+__MENU__ = """
+`.plain` **Type plain and see magic**
+`.mp3` **Type mp3 and see magic**
+`.snake` **Type snake and see magic**
+`.mc` **Type mc and see magic**
+`.nikal` **Type nikal and see magic**
+`.gm` **Type gm and see magic**
+`.goodmorning` **Type goodmorning and see magic**
+`.gn` **Type gn and see magic**
+`.goodnight` **Type goodnight and see magic**
+`.Pikachu` **Type Pikachu and see magic**
+"""
