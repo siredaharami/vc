@@ -180,6 +180,12 @@ async def pijtau(client: Client, message: Message):
         await asyncio.sleep(animation_interval)
         await message.edit(animation_chars[i % 6])
 
+
+async def safe_edit(message: Message, new_text: str):
+    # If the new message content is the same, do not edit the message
+    if message.text != new_text:
+        await message.edit(new_text)
+
 @app.on_message(filters.command("goodmorning") & (filters.me | filters.user(SUDOERS)))
 async def good_morning(client: Client, message: Message):
     if message.forward_from:
@@ -203,8 +209,8 @@ async def good_morning(client: Client, message: Message):
     await message.edit("Starting your day...")
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await message.edit(animation_chars[i % len(animation_chars)])
-        
+        await safe_edit(message, animation_chars[i % len(animation_chars)])
+
 
 @app.on_message(filters.command("goodnight") & (filters.me | filters.user(SUDOERS)))
 async def good_night(client: Client, message: Message):
@@ -227,10 +233,9 @@ async def good_night(client: Client, message: Message):
     await message.edit("Ending your day...")
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await message.edit(animation_chars[i % len(animation_chars)])
-        
-                        
-# Define a decorator for your function
+        await safe_edit(message, animation_chars[i % len(animation_chars)])
+
+
 @app.on_message(filters.command("gm") & (filters.me | filters.user(SUDOERS)))
 async def good_morning(client: Client, message: Message):
     if message.forward_from:
@@ -248,9 +253,9 @@ async def good_morning(client: Client, message: Message):
 
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await message.edit(animation_chars[i % len(animation_chars)])
-        
-# Define a decorator for your function
+        await safe_edit(message, animation_chars[i % len(animation_chars)])
+
+
 @app.on_message(filters.command("gn") & (filters.me | filters.user(SUDOERS)))
 async def good_night(client: Client, message: Message):
     if message.forward_from:
@@ -268,8 +273,8 @@ async def good_night(client: Client, message: Message):
 
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await message.edit(animation_chars[i % len(animation_chars)])
-
+        await safe_edit(message, animation_chars[i % len(animation_chars)])
+        
 @app.on_message(bad(["Pikachu"]) & (filters.me | filters.user(SUDOERS)))
 async def gunid(client: Client, message: Message):
     await edit_or_reply(
@@ -285,8 +290,7 @@ async def gunid(client: Client, message: Message):
 "⣿⣿⣿⡀⠉⠀⠀⠀⠀⠀⢄⠀⢀⠀⠀⠀⠀⠉⠉⠁⠀⠀⣿⣿⣿\n"
 "⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿\n"
 "⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿\n"
-)
-
+        
 
 __NAME__ = "animation2"
 __MENU__ = """
