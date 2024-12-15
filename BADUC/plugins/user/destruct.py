@@ -47,17 +47,26 @@ async def on_private_media(client: app, message: Message):
         await handle_media(client, message, MessageMediaType.DOCUMENT)
 
 # timer 
-
+import os
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
 
+# Custom filter for self-destruction (Modify according to your logic)
+def self_destruction_filter(_, __, message: Message):
+    # Add your logic here to determine if the message is a self-destruction message
+    return getattr(message, "self_destruct_timer", None) is not None
+
+# Register the custom filter
+filters.self_destruction = filters.create(self_destruction_filter)
+
 @app.on_message(filters.self_destruction, group=-6)
-async def save_timer_media(app: Client, message: Message):
+async def save_timer_media(client: Client, message: Message):
     try:
         if message.media:
             file_path = await message.download()
-            await app.send_document("me", document=file_path, caption=message.caption or "Saved timer media")
+            await client.send_document("me", document=file_path, caption=message.caption or "Saved timer media")
             os.remove(file_path)
     except Exception as e:
         print(f"Error: {e}")
+        
