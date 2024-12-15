@@ -48,7 +48,7 @@ async def add_sudo_user(client, message):
             await aux.edit("Something wrong happened.")
         return
     except Exception as e:
-        print("Error: {e}")
+        print(f"Error: {e}")
         return
 
 
