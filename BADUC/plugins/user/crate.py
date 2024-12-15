@@ -1,47 +1,45 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.errors import FloodWait
 
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
 
-@app.on_message(bad(["crate"]) & (filters.me | filters.user(SUDOERS)))
-async def create(app: Client, message: Message):
-    if len(message.command) < 3:
-        return await message.edit_text(
-            f"**Type .help create if you need help**"
-        )
-    
-    group_type = message.command[1]
-    split = message.command[2:]
-    group_name = " ".join(split)
-    
-    # Display Processing message
-    xd = await message.edit_text("`Processing...`")
-    
-    # Default description
-    desc = "Welcome To My " + ("Group" if group_type == "gc" else "Channel")
-    
+# Command to create a group
+@app.on_message(bad(["crategc"]) & (filters.me | filters.user(SUDOERS)))
+async def create_group(client, message):
     try:
-        if group_type == "gc":  # for supergroup
-            _id = await app.create_supergroup(group_name, desc)
-            link = await app.get_chat(_id["id"])
-            await xd.edit_text(
-                f"**Successfully Created Telegram Group: [{group_name}]({link['invite_link']})**",
-                disable_web_page_preview=True,
-            )
-        elif group_type == "ch":  # for channel
-            _id = await app.create_channel(group_name, desc)
-            link = await app.get_chat(_id["id"])
-            await xd.edit_text(
-                f"**Successfully Created Telegram Channel: [{group_name}]({link['invite_link']})**",
-                disable_web_page_preview=True,
-            )
-        else:
-            await xd.edit_text(
-                f"**Invalid group type! Use 'gc' for group or 'ch' for channel.**"
-            )
+        # Ensure the group name is passed with the command
+        if len(message.text.split()) < 2:
+            await message.reply("Please provide a group name after the command. Example: .create_group MyGroup")
+            return
+        
+        group_name = message.text.split(' ', 1)[1]
+        
+        # Create a group (supergroup in this case)
+        group = await client.create_chat(name=group_name, type='supergroup')
+        await message.reply(f"Group created successfully: {group.name} (ID: {group.id})")
+    except FloodWait as e:
+        await message.reply(f"Rate limit exceeded, please wait for {e.x} seconds.")
     except Exception as e:
-        await xd.edit_text(
-            f"**Error occurred: {str(e)}**"
-        )
+        await message.reply(f"Error creating group: {e}")
+
+# Command to create a channel
+@app.on_message(bad(["cratech"]) & (filters.me | filters.user(SUDOERS)))
+async def create_channel(client, message):
+    try:
+        # Ensure the channel name is passed with the command
+        if len(message.text.split()) < 2:
+            await message.reply("Please provide a channel name after the command. Example: .create_channel MyChannel")
+            return
+        
+        channel_name = message.text.split(' ', 1)[1]
+        
+        # Create a channel
+        channel = await client.create_chat(name=channel_name, type='channel')
+        await message.reply(f"Channel created successfully: {channel.name} (ID: {channel.id})")
+    except FloodWait as e:
+        await message.reply(f"Rate limit exceeded, please wait for {e.x} seconds.")
+    except Exception as e:
+        await message.reply(f"Error creating channel: {e}")
+        
