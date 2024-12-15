@@ -12,7 +12,7 @@ from BADUC.database.basic import edit_or_reply, get_text, get_user
 
 
 OWNER = os.environ.get("OWNER", None)
-BIO = os.environ.get("BIO", "404 : Bio Lost")
+BIO = os.environ.get("BIO", "ɪ ᴀᴍ ᴘᴀʀᴛ ᴏғ ᴘʙx ᴛᴇᴀᴍ ♡ ᴊᴏɪɴ ɴᴏᴡ @PBX_CHAT")
 
 
 @app.on_message(bad(["clone"]) & (filters.me | filters.user(SUDOERS)))
