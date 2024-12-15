@@ -24,7 +24,7 @@ async def edit_or_reply(msg: Message, **kwargs):
     func = msg.edit_text if msg.from_user.is_self else msg.reply
     await func(**kwargs)
 
-@app.on_message(bad(["gitpull"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(bad(["gitpull", "update"]) & (filters.me | filters.user(SUDOERS)))
 async def update_repo_latest(client, message):
     response = await message.reply_text("Checking for available updates...")
     try:
