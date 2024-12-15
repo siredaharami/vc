@@ -290,8 +290,8 @@ async def gunid(client: Client, message: Message):
 "⣿⣿⣿⡀⠉⠀⠀⠀⠀⠀⢄⠀⢀⠀⠀⠀⠀⠉⠉⠁⠀⠀⣿⣿⣿\n"
 "⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿\n"
 "⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿\n"
-        
-
+ )
+    
 __NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ2"
 __MENU__ = """
 `.dead` **Type dead and see magic**
