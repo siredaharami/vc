@@ -22,9 +22,11 @@ def upload_file(file_path):
 @app.on_message(bad(["tm"]) & (filters.me | filters.user(SUDOERS)))
 async def get_link_group(client, message):
     if not message.reply_to_message:
-        return await message.reply_text(
+        await message.reply_text(
             "Pʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇᴅɪᴀ ᴛᴏ ᴜᴘʟᴏᴀᴅ ᴏɴ Tᴇʟᴇɢʀᴀᴘʜ"
         )
+        await message.delete()  # Delete the original command message
+        return
 
     media = message.reply_to_message
     file_size = 0
@@ -36,7 +38,9 @@ async def get_link_group(client, message):
         file_size = media.document.file_size
 
     if file_size > 200 * 1024 * 1024:
-        return await message.reply_text("Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴍᴇᴅɪᴀ ғɪʟᴇ ᴜɴᴅᴇʀ 200MB.")
+        await message.reply_text("Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴍᴇᴅɪᴀ ғɪʟᴇ ᴜɴᴅᴇʀ 200MB.")
+        await message.delete()  # Delete the original command message
+        return
 
     try:
         text = await message.reply("❍ ʜᴏʟᴅ ᴏɴ ʙᴀʙʏ....♡")
@@ -73,6 +77,10 @@ async def get_link_group(client, message):
                 os.remove(local_path)
             except Exception:
                 pass
+            await message.delete()  # Delete the original command message if upload fails
             return
+
     except Exception:
         pass
+
+    await message.delete()  # Delete the original command message after processing
