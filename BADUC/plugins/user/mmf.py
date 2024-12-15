@@ -36,7 +36,7 @@ async def drawText(image_path, text):
     i_width, i_height = img.size
 
     if os.name == "nt":
-    fnt = "arial.ttf"
+        fnt = "arial.ttf"
     else:
     fnt = "./BADUC/resources/font/hiroko.ttf"
     
