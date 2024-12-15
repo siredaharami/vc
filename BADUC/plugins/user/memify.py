@@ -13,19 +13,32 @@ async def mmf(_, message: Message):
     reply_message = message.reply_to_message
 
     if len(message.text.split()) < 2:
-        await message.reply_text("**Give me text after /mmf to memify.**")
+        await message.reply_text("❍ ʏᴏᴜ ᴍɪɢʜᴛ ᴡᴀɴᴛ ᴛᴏ ᴛʀʏ `/mmf ᴛᴇxᴛ`")
+        await message.delete()
         return
 
-    msg = await message.reply_text("**Memifying this image! ✊🏻**")
+    msg = await message.reply_text("```❍ ᴍᴇᴍɪғʏɪɴɢ ᴛʜɪs ɪᴍᴀɢᴇ 🥀 ```")
     text = message.text.split(None, 1)[1]
+    
+    if not reply_message or not reply_message.media:
+        await msg.edit_text("❍ ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀɴ ɪᴍᴀɢᴇ.")
+        await message.delete()
+        return
+
     file = await app.download_media(reply_message)
 
-    meme = await drawText(file, text)
-    await app.send_document(chat_id, document=meme)
-
-    await msg.delete()
-
-    os.remove(meme)
+    try:
+        meme = await drawText(file, text)
+        if reply_message:
+            await reply_message.reply_document(meme)
+        else:
+            await message.reply_document(meme)
+    except Exception as e:
+        await message.reply_text(f"❍ ᴇʀʀᴏʀ: {e}")
+    finally:
+        os.remove(meme)
+        await msg.delete()
+        await message.delete()
 
 
 async def drawText(image_path, text):
@@ -98,5 +111,4 @@ async def drawText(image_path, text):
 __NAME__ = "Mᴍғ"
 __MENU__ = """
 `.mmf` - **Make a message into a sticker .**
-
 """
