@@ -38,14 +38,9 @@ async def drawText(image_path, text):
     if os.name == "nt":
         fnt = "arial.ttf"
     else:
-    fnt = "./BADUC/resources/font/hiroko.ttf"
-    
-    try:
+        fnt = "./BADUC/resources/font/hiroko.ttf"
+
     m_font = ImageFont.truetype(fnt, int((70 / 640) * i_width))
-    except OSError:
-    # Log a warning and fall back to a default font
-    print("Warning: Specified font not found. Using default font.")
-    m_font = ImageFont.load_default()
 
     if ";" in text:
         upper_text, lower_text = text.split(";")
@@ -168,5 +163,4 @@ __MENU__ = """
 `.mmf` - **Make a message into a sticker .**
 
 """
-          
           
