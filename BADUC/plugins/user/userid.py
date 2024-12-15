@@ -2,10 +2,7 @@ from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
 from pyrogram import Client, filters
-
 from pyrogram.enums import ParseMode
-
-####
 
 @app.on_message(bad(["id"]) & (filters.me | filters.user(SUDOERS)))
 async def getid(client, message):
@@ -20,17 +17,15 @@ async def getid(client, message):
     if not message.command:
         message.command = message.text.split()
 
-    if not message.command:
-        message.command = message.text.split()
-
     if len(message.command) == 2:
         try:
             split = message.text.split(None, 1)[1].strip()
             user_id = (await client.get_users(split)).id
             text += f"**[ᴜsᴇʀ ɪᴅ:](tg://user?id={user_id})** `{user_id}`\n"
-
         except Exception:
-            return await message.reply_text("ᴛʜɪs ᴜsᴇʀ ᴅᴏᴇsɴ'ᴛ ᴇxɪsᴛ.", quote=True)
+            await message.reply_text("ᴛʜɪs ᴜsᴇʀ ᴅᴏᴇsɴ'ᴛ ᴇxɪsᴛ.", quote=True)
+            await message.delete()
+            return
 
     text += f"**[ᴄʜᴀᴛ ɪᴅ:](https://t.me/{chat.username})** `{chat.id}`\n\n"
 
@@ -50,10 +45,18 @@ async def getid(client, message):
         text += f"ɪᴅ ᴏғ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴄʜᴀᴛ/ᴄʜᴀɴɴᴇʟ, ɪs `{reply.sender_chat.id}`"
         print(reply.sender_chat)
 
-    await message.reply_text(
-        text,
-        disable_web_page_preview=True,
-        parse_mode=ParseMode.DEFAULT,
-          )
-
-  
+    try:
+        if reply:
+            await reply.reply_text(
+                text,
+                disable_web_page_preview=True,
+                parse_mode=ParseMode.DEFAULT,
+            )
+        else:
+            await message.reply_text(
+                text,
+                disable_web_page_preview=True,
+                parse_mode=ParseMode.DEFAULT,
+            )
+    finally:
+        await message.delete()
