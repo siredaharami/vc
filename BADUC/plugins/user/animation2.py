@@ -186,13 +186,13 @@ async def safe_edit(message: Message, new_text: str):
     if message.text != new_text:
         await message.edit(new_text)
 
-@app.on_message(filters.command("goodmorning") & (filters.me | filters.user(SUDOERS)))
-async def good_morning(client: Client, message: Message):
+@app.on_message(bad(["goodmorning"]) & (filters.me | filters.user(SUDOERS)))
+async def space_exploration(client: Client, message: Message):
     if message.forward_from:
         return
-
-    animation_interval = 0.5
-    animation_ttl = range(10)  # Number of frames
+    animation_interval = 1
+    animation_ttl = range(0, 14)
+    await message.edit("🥀 good morning ❤️")
     animation_chars = [
         "🌞 ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌞\n\n☕ Starting your day with smiles ☕",
         "☀️ Rise and Shine! 🌟\n\n✨ ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ✨",
@@ -205,20 +205,17 @@ async def good_morning(client: Client, message: Message):
         "🌤 Wishing you a day filled with joy 🌤\n\n💐 Stay Blessed 💐",
         "🌈 Dream big, work hard 🌈\n\n✨ ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ✨",
     ]
-
-    await message.edit("Starting your day...")
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await safe_edit(message, animation_chars[i % len(animation_chars)])
-
-
-@app.on_message(filters.command("goodnight") & (filters.me | filters.user(SUDOERS)))
-async def good_night(client: Client, message: Message):
+        await message.edit(animation_chars[i % 14])
+    
+@app.on_message(bad(["goodnight"]) & (filters.me | filters.user(SUDOERS)))
+async def space_exploration(client: Client, message: Message):
     if message.forward_from:
         return
-
-    animation_interval = 0.5
-    animation_ttl = range(8)  # Number of frames
+    animation_interval = 1
+    animation_ttl = range(0, 14)
+    await message.edit("🌃 Ending your day..")
     animation_chars = [
         "🌙 ɢᴏᴏᴅ ɴɪɢʜᴛ 🌙\n\n💤 Dream Sweetly 💤",
         "🌌 Close your eyes and relax 🌌\n\n✨ ɢᴏᴏᴅ ɴɪɢʜᴛ ✨",
@@ -229,12 +226,10 @@ async def good_night(client: Client, message: Message):
         "✨ Rest well under the moonlight ✨\n\n🌙 Sleep Peacefully 🌙",
         "💤 The night is yours to dream 💤\n\n🌌 ɢᴏᴏᴅ ɴɪɢʜᴛ 🌌",
     ]
-
-    await message.edit("Ending your day...")
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
-        await safe_edit(message, animation_chars[i % len(animation_chars)])
-
+        await message.edit(animation_chars[i % 14])
+        
 @app.on_message(filters.command("gm") & (filters.me | filters.user(SUDOERS)))
 async def hello_world(client: Client, message: Message):
     mg = await edit_or_reply(
