@@ -198,10 +198,11 @@ async def kang(client, message: Message):
     if not message.reply_to_message:
         return await message.reply_text("Reply to a sticker/image to kang it.")
     if not message.from_user:
-        return await message.reply_text("You are anon admin, kang stickers in my pm.")
+        return await message.reply_text("You are an anonymous admin. I can't kang for you.")
+    
     msg = await message.reply_text("Kanging Sticker...")
 
-    # Find the proper emoji
+    # Extract emoji
     args = message.text.split()
     sticker_emoji = args[1] if len(args) > 1 else "🤔"
 
@@ -234,9 +235,14 @@ async def kang(client, message: Message):
         print(f"Attempting to fetch or create sticker pack: {pack_name}")
 
         # Try to find or create the sticker set
-        stickerset = await get_sticker_set_by_name(client, pack_name)
+        try:
+            stickerset = await get_sticker_set_by_name(client, pack_name)
+        except errors.exceptions.internal_server_error_500.StickersetInvalid:
+            print("Sticker pack not found or invalid. Creating a new one...")
+            stickerset = None
+
         if not stickerset:
-            print("Sticker pack not found. Creating a new one...")
+            print("Creating new sticker pack...")
             stickerset = await create_sticker_set(
                 client, 
                 message.from_user.id, 
