@@ -50,7 +50,6 @@ def get_entities(message: Message) -> list[dict]:
 
     return entities
 
-
 @app.on_message(bad(["q", "ss"]) & (filters.me | filters.user(SUDOERS)))
 async def quotely(client: Client, message: Message):
     if not message.reply_to_message:
@@ -68,11 +67,12 @@ async def quotely(client: Client, message: Message):
     if len(message.command) > 1:
         cmd = message.command[1].lower()
 
-    app = await app.edit(message, "__Generating quote...__")
+    # Rename the local variable to avoid conflict with the imported 'app'
+    editing_message = await app.edit(message, "__Generating quote...__")
 
     msg_data = []
     if cmd and cmd == "r":
-        await app.edit("__Generating quote with reply...__")
+        await editing_message.edit("__Generating quote with reply...__")
         reply_msg_id = message.reply_to_message.reply_to_message_id
         if reply_msg_id:
             reply_msg = await client.get_messages(message.chat.id, reply_msg_id)
@@ -118,10 +118,8 @@ async def quotely(client: Client, message: Message):
 
     status, path = generate_quote(msg_data)
     if not status:
-        return await app.error(message, f"`{path}`")
+        return await editing_message.error(message, f"`{path}`")
 
     await message.reply_sticker(path)
-    await app.delete()
+    await editing_message.delete()
     os.remove(path)
-
-
