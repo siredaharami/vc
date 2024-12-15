@@ -3,6 +3,9 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import requests
 
+from BADUC import SUDOERS
+from BADUC.core.clients import app
+from BADUC.core.command import *
 
 def upload_file(file_path):
     url = "https://catbox.moe/user/api.php"
@@ -16,7 +19,7 @@ def upload_file(file_path):
         return False, f"ᴇʀʀᴏʀ: {response.status_code} - {response.text}"
 
 
-@app.on_message(filters.command(["tgm"]))
+@app.on_message(bad(["tm"]) & (filters.me | filters.user(SUDOERS)))
 async def get_link_group(client, message):
     if not message.reply_to_message:
         return await message.reply_text(
