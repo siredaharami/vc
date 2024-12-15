@@ -3,7 +3,7 @@ import os
 import time
 
 import requests
-from pyrogram import Client
+from pyrogram import Client, filters
 from pyrogram.types import Message
 
 from BADUC import SUDOERS
