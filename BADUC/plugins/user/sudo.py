@@ -70,19 +70,22 @@ async def del_sudo_user(client, message):
             await message.edit("Removed from Bot's Sudo User")
             return
         else:
-            await message.edit(f"Something wrong happened.")
+            await message.edit(f"Something went wrong.")
             return
     user_id = message.reply_to_message.from_user.id
     if user_id not in SUDOERS:
         return await message.edit("Not a part of Bot's Sudo.")
-    removed = await del_sudo(user_id)
-    if removed:
-        SUDOERS.remove(user_id)
-        await message.edit("Removed from Bot's Sudo User")
-        return
-    else:
-        await message.edit(f"Something wrong happened.")
-        return
+    
+    try:
+        removed = await del_sudo(user_id)
+        if removed:
+            SUDOERS.remove(user_id)
+            await message.edit("Removed from Bot's Sudo User")
+        else:
+            await message.edit(f"Something went wrong.")
+    except ValueError:
+        await message.edit(f"User is not in the SUDOERS list.")
+    return
 
 
 @app.on_message(bad(["sudousers", "sudolist", "sl"]))
