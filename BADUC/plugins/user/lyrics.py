@@ -6,7 +6,7 @@ from BADUC.core.clients import app
 from BADUC.core.command import *
 
 # Initialize Genius API client
-genius = lyricsgenius.Genius"cEY025D7DKhqHyrQsin7ALo0Qq2AAVeuZMqVXlaMwb001UV0vbQ90gUnGktLkjKm"
+genius = lyricsgenius.Genius("cEY025D7DKhqHyrQsin7ALo0Qq2AAVeuZMqVXlaMwb001UV0vbQ90gUnGktLkjKm")
 
 # Command to get lyrics
 @app.on_message(bad(["lyrics"]) & (filters.me | filters.user(SUDOERS)))
