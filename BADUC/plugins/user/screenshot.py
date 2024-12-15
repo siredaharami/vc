@@ -12,12 +12,13 @@ async def screenshot(bot: Client, message: Message):
     # Properly await the delete coroutine
     await message.delete()
 
-    # Use SendScreenshotNotification without unsupported parameters
+    # Add the required 'reply_to' argument
     try:
         await bot.send(
             functions.messages.SendScreenshotNotification(
                 peer=await bot.resolve_peer(message.chat.id),
                 random_id=bot.rnd_id(),
+                reply_to=0  # Set appropriately (e.g., message ID to reply to)
             )
         )
     except Exception as e:
