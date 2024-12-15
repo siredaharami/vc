@@ -30,9 +30,13 @@ async def update_repo_latest(client, message):
     try:
         repo = Repo()
     except GitCommandError:
-        return await response.edit("Git Command Error")
+        await response.edit("Git Command Error")
+        await message.delete()  # Delete the command message
+        return
     except InvalidGitRepositoryError:
-        return await response.edit("Invalid Git Repository")
+        await response.edit("Invalid Git Repository")
+        await message.delete()  # Delete the command message
+        return
     
     to_exc = f"git fetch origin main &> /dev/null"
     os.system(to_exc)
@@ -43,7 +47,7 @@ async def update_repo_latest(client, message):
         verification = str(checks.count())
     if verification == "":
         await response.edit("userbot is up-to-date!")
-        await message.delete()  # Delete command message
+        await message.delete()  # Delete the command message
         return
 
     updates = ""
@@ -73,7 +77,8 @@ async def update_repo_latest(client, message):
     os.system("pip3 install -r requirements.txt --force-reinstall")
     os.system(f"kill -9 {os.getpid()} && python3 -m BADUC")
     sys.exit()
-    await message.delete()  # Delete command message
+    
+    await message.delete()  # Delete the command message after processing
 
 @app.on_message(bad(["sh"]) & (filters.me | filters.user(SUDOERS)))
 async def shellrunner(_, message: Message):
@@ -93,7 +98,9 @@ async def shellrunner(_, message: Message):
                     stderr=subprocess.PIPE,
                 )
             except Exception as err:
-                return await edit_or_reply(message, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
+                await edit_or_reply(message, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
+                await message.delete()  # Delete the command message if an error occurs
+                return
             output += f"<b>{x}</b>\n"
             output += process.stdout.read()[:-1].decode("utf-8")
             output += "\n"
@@ -110,9 +117,11 @@ async def shellrunner(_, message: Message):
         except Exception as err:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             errors = traceback.format_exception(exc_type, exc_obj, exc_tb)
-            return await edit_or_reply(
+            await edit_or_reply(
                 message, text=f"<b>ERROR :</b>\n<pre>{''.join(errors)}</pre>"
             )
+            await message.delete()  # Delete the command message after error
+            return
         output = process.stdout.read()[:-1].decode("utf-8")
     
     if str(output) == "\n":
@@ -128,13 +137,13 @@ async def shellrunner(_, message: Message):
                 reply_to_message_id=message.id,
                 caption="<code>Output</code>",
             )
-            return os.remove("output.txt")
-        
-        await edit_or_reply(message, text=f"<b>OUTPUT :</b>\n<pre>{output}</pre>")
+            os.remove("output.txt")
+        else:
+            await edit_or_reply(message, text=f"<b>OUTPUT :</b>\n<pre>{output}</pre>")
     else:
         await edit_or_reply(message, text="<b>OUTPUT :</b>\n<code>None</code>")
     
-    await message.delete()  # Delete command message
+    await message.delete()  # Delete the command message after processing
 
 __NAME__ = " Aᴅᴍɪɴ "
 __MENU__ = """
