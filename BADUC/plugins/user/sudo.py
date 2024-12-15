@@ -1,4 +1,4 @@
-from BADUC import SUDOERS
+from BADUC import SUDOERS, eor
 from BADUC.core.clients import app
 from BADUC.core.command import *
 from BADUC.database.sudodb import add_sudo, del_sudo
