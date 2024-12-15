@@ -12,17 +12,20 @@ from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
 
-
-
 @app.on_message(bad(["sg"]) & (filters.me | filters.user(SUDOERS)))
 async def sg(client: Client, message: Message):
     args = await extract_user(message)
     lol = await edit_or_reply(message, "`ᴘʀᴏᴄᴇꜱꜱɪɴɢ...`")
+
+    # Check if args is provided and valid
     if args:
         try:
             user = await client.get_users(args)
         except Exception:
             return await lol.edit(f"`ᴘʟᴇᴀꜱᴇ ꜱᴘᴇᴄɪꜰʏ ᴀ ᴠᴀʟɪᴅ ᴜꜱᴇʀ!`")
+    else:
+        return await lol.edit(f"`ᴘʟᴇᴀꜱᴇ ꜱᴘᴇᴄɪꜰʏ ᴀ ᴠᴀʟɪᴅ ᴜꜱᴇʀ!`")
+
     bot = "@SangMataInfo_bot"
     try:
         await client.send_message(bot, f"{user.id}")
@@ -45,5 +48,6 @@ async def sg(client: Client, message: Message):
         elif stalk:
             await message.reply(stalk.text)
             await stalk.delete()
+    
     user_info = await client.resolve_peer(bot)
     return await client.send(DeleteHistory(peer=user_info, max_id=0, revoke=True))
