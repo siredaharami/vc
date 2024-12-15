@@ -50,23 +50,24 @@ def get_entities(message: Message) -> list[dict]:
 
     return entities
 
+
 @app.on_message(bad(["q", "ss"]) & (filters.me | filters.user(SUDOERS)))
 async def quotely(client: Client, message: Message):
     if not message.reply_to_message:
-        return await message.delete()  # Change to delete the message object
+        return await message.delete()  # Delete the message if no reply
 
     if message.reply_to_message.media:
         if message.reply_to_message.caption:
             message.reply_to_message.text = message.reply_to_message.caption
         else:
-            return await message.delete()  # Change to delete the message object
+            return await message.delete()  # Delete if not a text message
 
     cmd = None
     if len(message.command) > 1:
         cmd = message.command[1].lower()
 
-    # Rename the local variable to avoid conflict with the imported 'app'
-    editing_message = await app.edit(message, "__Generating quote...__")
+    # Edit the original message
+    editing_message = await message.edit("__Generating quote...__")
 
     msg_data = []
     if cmd and cmd == "r":
@@ -119,6 +120,5 @@ async def quotely(client: Client, message: Message):
         return await editing_message.error(message, f"`{path}`")
 
     await message.reply_sticker(path)
-    await editing_message.delete()
+    await editing_message.delete()  # Delete the edited message after processing
     os.remove(path)
-
