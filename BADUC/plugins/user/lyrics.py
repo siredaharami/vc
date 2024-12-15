@@ -21,7 +21,6 @@ async def fetch_lyrics(song_name: str) -> str:
     except Exception as e:
         return f"Error fetching lyrics: {str(e)}"
 
-
 @app.on_message(bad(["lyrics"]) & (filters.me | filters.user(SUDOERS)))
 async def send_lyrics(bot: Client, message: Message):
     try:
@@ -57,7 +56,8 @@ async def send_lyrics(bot: Client, message: Message):
         # Create a text file and save the lyrics
         file_path = f"lyrics_{song_name}.txt"
         with open(file_path, "w", encoding="utf-8") as file:
-            file.write(lyrics)
+            file.write(f"Lyrics for: {song_name}\n\n")  # Optional: song name at the top
+            file.write(lyrics)  # Write the entire lyrics
 
         # Send the text file to the user
         await message.reply_document(file_path)
@@ -80,10 +80,5 @@ async def fetch_lyrics(song_name: str) -> str:
     For now, it will return a placeholder text for demonstration purposes.
     """
     # This is a placeholder. Replace it with actual lyrics fetching logic
-    return f"Lyrics for the song: {song_name}\n\nExample lyrics...\nLine 1\nLine 2\nLine 3"
-
-
-__NAME__ = "Lʏʀɪᴄs"
-__MENU__ = """
-`.l` - **Search lyrics and send as a text file.**
-"""
+    # Example of lyrics that would be fetched for a song
+    return f"Lyrics for {song_name}:\n\nVerse 1:\nLa la la...\nChorus:\nFa la la...\nVerse 2:\nRa ra ra..."
