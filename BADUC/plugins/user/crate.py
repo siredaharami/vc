@@ -11,22 +11,37 @@ async def create(app: Client, message: Message):
         return await message.edit_text(
             f"**Type .help create if you need help**"
         )
+    
     group_type = message.command[1]
     split = message.command[2:]
     group_name = " ".join(split)
+    
+    # Display Processing message
     xd = await message.edit_text("`Processing...`")
+    
+    # Default description
     desc = "Welcome To My " + ("Group" if group_type == "gc" else "Channel")
-    if group_type == "gc":  # for supergroup
-        _id = await app.create_supergroup(group_name, desc)
-        link = await app.get_chat(_id["id"])
+    
+    try:
+        if group_type == "gc":  # for supergroup
+            _id = await app.create_supergroup(group_name, desc)
+            link = await app.get_chat(_id["id"])
+            await xd.edit_text(
+                f"**Successfully Created Telegram Group: [{group_name}]({link['invite_link']})**",
+                disable_web_page_preview=True,
+            )
+        elif group_type == "ch":  # for channel
+            _id = await app.create_channel(group_name, desc)
+            link = await app.get_chat(_id["id"])
+            await xd.edit_text(
+                f"**Successfully Created Telegram Channel: [{group_name}]({link['invite_link']})**",
+                disable_web_page_preview=True,
+            )
+        else:
+            await xd.edit_text(
+                f"**Invalid group type! Use 'gc' for group or 'ch' for channel.**"
+            )
+    except Exception as e:
         await xd.edit_text(
-            f"**Successfully Created Telegram Group: [{group_name}]({link['invite_link']})**",
-            disable_web_page_preview=True,
-        )
-    elif group_type == "ch":  # for channel
-        _id = await app.create_channel(group_name, desc)
-        link = await app.get_chat(_id["id"])
-        await xd.edit_text(
-            f"**Successfully Created Telegram Channel: [{group_name}]({link['invite_link']})**",
-            disable_web_page_preview=True,
+            f"**Error occurred: {str(e)}**"
         )
