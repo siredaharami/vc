@@ -53,15 +53,13 @@ def get_entities(message: Message) -> list[dict]:
 @app.on_message(bad(["q", "ss"]) & (filters.me | filters.user(SUDOERS)))
 async def quotely(client: Client, message: Message):
     if not message.reply_to_message:
-        return await app.delete(message, "Reply to a message to quote it.")
+        return await message.delete()  # Change to delete the message object
 
     if message.reply_to_message.media:
         if message.reply_to_message.caption:
             message.reply_to_message.text = message.reply_to_message.caption
         else:
-            return await app.delete(
-                message, "Reply to a text message to quote it."
-            )
+            return await message.delete()  # Change to delete the message object
 
     cmd = None
     if len(message.command) > 1:
@@ -123,3 +121,4 @@ async def quotely(client: Client, message: Message):
     await message.reply_sticker(path)
     await editing_message.delete()
     os.remove(path)
+
