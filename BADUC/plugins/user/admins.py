@@ -28,7 +28,7 @@ def is_owner(user_id):
     return user_id == OWNER_ID
 
 # 1. ban
-@app.on_message(bad(["alive"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(bad(["ban"]) & (filters.me | filters.user(SUDOERS)))
 async def ban_user(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
