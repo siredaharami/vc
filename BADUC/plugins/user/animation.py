@@ -149,7 +149,7 @@ async def _(client: Client, message: Message):
     reply_text = NOBLE[noble]
     await edit_or_reply(message, reply_text)
 
-@on_message("hmm", allow_stan=True)
+@app.on_message(bad(["hmm"]) & (filters.me | filters.user(SUDOERS)))
 async def hello_world(client: Client, message: Message):
     mg = await edit_or_reply(
         message,
@@ -1290,6 +1290,7 @@ __NAME__ = "animation"
 __MENU__ = """
 `.love` **Type love and see magic**
 `.bad` **Type bad and see magic**
+`.hmm` **Type hmm and see magic**
 `.rain` **Type rain and see magic**
 `.loveu` **Type loveu and see magic**
 `.ahh` **Type ahh and see magic**
