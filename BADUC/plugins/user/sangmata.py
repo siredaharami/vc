@@ -26,7 +26,7 @@ async def sg(client: Client, message: Message):
     else:
         return await lol.edit(f"`ᴘʟᴇᴀꜱᴇ ꜱᴘᴇᴄɪꜰʏ ᴀ ᴠᴀʟɪᴅ ᴜꜱᴇʀ!`")
 
-    bot = "@SangMataInfo_bot"
+    bot = "@SangMata_BOT"
     try:
         await client.send_message(bot, f"{user.id}")
     except YouBlockedUser:
