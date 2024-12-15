@@ -38,7 +38,7 @@ async def drawText(image_path, text):
     if os.name == "nt":
     fnt = "arial.ttf"
     else:
-    fnt = "./BADUC/font/font/Montserrat.ttf"
+    fnt = "./BADUC/resources/font/hiroko.ttf"
     
     try:
     m_font = ImageFont.truetype(fnt, int((70 / 640) * i_width))
