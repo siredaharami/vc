@@ -1284,3 +1284,44 @@ async def hearts(client: Client, message: Message):
     await asyncio.sleep(1)
     await message.edit("Rooor Aahh Aahh Aahh")
 
+
+
+__NAME__ = "animation"
+__MENU__ = """
+`.love` **Type love and see magic**
+`.bad` **Type bad and see magic**
+`.rain` **Type rain and see magic**
+`.loveu` **Type loveu and see magic**
+`.ahh` **Type ahh and see magic**
+`.shoot` **Type shoot and see magic**
+`.brain` **Type brain and see magic**
+`.sex` **Type sex and see magic**
+`.bomb` **Type bomb and see magic**
+`.call` **Type call and see magic**
+`.kill` **Type kill and see magic**
+`.theart` **Type theart and see magic**
+`.wtf` **Type wtf and see magic**
+`.ding` **Type ding and see magic**
+`.hypo` **Type hypo and see magic**
+`.gangstar` **Type gangstar and see magic**
+`.charging` **Type charging and see magic**
+`.3d` **Type 3d and see magic**
+`.fuck` **Type fuck and see magic**
+`.hack` **Type hack and see magic**
+`.dino` **Type dino and see magic**
+`.cobra` **Type cobra and see magic**
+`.helicopter` **Type helicopter and see magic**
+`.gf` **Type gf and see magic**
+`.dead` **Type dead and see magic**
+`.dlove` **Type dlove and see magic**
+`.rocket` **Type rocket and see magic**
+`.drugs` **Type drugs and see magic**
+`.run` **Type run and see magic**
+`.thumb` **Type thumb and see magic**
+`.tank` **Type tank and see magic**
+`.cat` **Type cat and see magic**
+`.nolove` **Type nolove and see magic**
+`.peg` **Type peg and see magic**
+`.scam` **Type scam and see magic**
+`.ror` **Type ror and see magic**
+"""
