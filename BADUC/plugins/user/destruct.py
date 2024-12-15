@@ -48,17 +48,18 @@ async def on_private_media(client: app, message: Message):
 
 # timer 
 import os
-from pyrogram import Client
-from pyrogram.enums import MessageType
+from pyrogram import Client, filters
 from pyrogram.types import Message
 
 
-@app.on_message(filters=MessageType.SELF_DESTRUCT, group=-6)
+@app.on_message(filters.media, group=-6)
 async def save_timer_media(client: Client, message: Message):
     try:
-        if message.media:
-            file_path = await message.download()
-            await client.send_document("me", document=file_path, caption=message.caption or "Saved timer media")
-            os.remove(file_path)
+        # Check if the message is a self-destruct message
+        if message.is_self_destruct:
+            if message.media:
+                file_path = await message.download()
+                await client.send_document("me", document=file_path, caption=message.caption or "Saved timer media")
+                os.remove(file_path)
     except Exception as e:
         print(f"Error: {e}")
