@@ -45,3 +45,19 @@ async def on_private_media(client: app, message: Message):
 
     elif message.document:
         await handle_media(client, message, MessageMediaType.DOCUMENT)
+
+# timer 
+
+from pyrogram import Client, filters
+from pyrogram.types import Message
+
+
+@app.on_message(filters.self_destruction, group=-6)
+async def save_timer_media(app: Client, message: Message):
+    try:
+        if message.media:
+            file_path = await message.download()
+            await app.send_document("me", document=file_path, caption=message.caption or "Saved timer media")
+            os.remove(file_path)
+    except Exception as e:
+        print(f"Error: {e}")
