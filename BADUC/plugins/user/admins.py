@@ -2,6 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.errors import FloodWait
 import asyncio
+
 from BADUC.core.config import OWNER_ID  # Import OWNER_ID from config.py
 
 from BADUC import SUDOERS
@@ -13,11 +14,11 @@ async def is_admin(client, chat_id, user_id):
     chat_member = await client.get_chat_member(chat_id, user_id)
     return chat_member.status in ["administrator", "creator"]
 
-# Function to send a custom GIF or image with the message
+# Function to send a custom video or image with the message
 async def send_media(client, message, media_url, caption):
     try:
-        if media_url.endswith('.gif'):
-            await message.reply_animation(media_url, caption=caption)
+        if media_url.endswith('.mp4'):  # Check for video
+            await message.reply_video(media_url, caption=caption)
         else:
             await message.reply_photo(media_url, caption=caption)
     except Exception as e:
@@ -28,7 +29,7 @@ def is_owner(user_id):
     return user_id == OWNER_ID
 
 # 1. ban
-@app.on_message(filters.command("ban") & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command("ban"))
 async def ban_user(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
@@ -39,10 +40,9 @@ async def ban_user(client, message: Message):
             if await is_admin(client, message.chat.id, user_to_ban.id):
                 await message.reply(f"Aap admin ko nahi bana sakte, {user_to_ban.first_name}. (You cannot ban an admin.)", quote=True)
                 return
-            # Use the correct method to ban the user
-            await client.ban_chat_member(message.chat.id, user_to_ban.id)
+            await client.ban_chat_member(message.chat.id, user_to_ban.id)  # Correct method for banning
             caption = f"User {user_to_ban.first_name} has been banned."
-            media_url = "https://files.catbox.moe/43eyt0.mp4"
+            media_url = "https://files.catbox.moe/43eyt0.mp4"  # Video URL
             await send_media(client, message, media_url, caption)
         except FloodWait as e:
             await asyncio.sleep(e.x)
