@@ -5,7 +5,7 @@ from pyrogram.types import Message
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
-from BADUC.database.afkdb import *
+from BADUC.database.afkdb import add_afk, is_afk, remove_afk, get_readable_time
 
 @app.on_message(bad(["afk", "brb"]) & (filters.me | filters.user(SUDOERS)))
 async def active_afk(_, message: Message):
