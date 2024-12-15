@@ -268,7 +268,7 @@ async def gahite(client: Client, message: Message):
     await asyncio.sleep(0.5)
     await message.edit("▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n▪️▪️▪️▪️ \n😵😵😵😵 \n")
     await asyncio.sleep(0.5)
-    await message.edit("`RIP PLOXXX......`")
+    await message.edit("`RIP BAD 😔......`")
     await asyncio.sleep(2)
 
 
