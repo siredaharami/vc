@@ -235,46 +235,21 @@ async def good_night(client: Client, message: Message):
         await asyncio.sleep(animation_interval)
         await safe_edit(message, animation_chars[i % len(animation_chars)])
 
-
 @app.on_message(filters.command("gm") & (filters.me | filters.user(SUDOERS)))
-async def good_morning(client: Client, message: Message):
-    if message.forward_from:
-        return
-
-    animation_interval = 0.5  # Interval between animations
-    animation_ttl = range(6)  # Number of animation frames
-    animation_chars = [
+async def hello_world(client: Client, message: Message):
+    mg = await edit_or_reply(
+        message,
         "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･\n╱╱╱╱╱╱╱╭╮╱╱╱╭╮╱╭╮╭╮\n╭━┳━┳━┳╯┃╭━┳╋╋━┫╰┫╰╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃┃╋┃┃┃╭┫\n┣╮┣━┻━┻━╯╰┻━┻╋╮┣┻┻━╯\n╰━╯╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥° ♥｡･ﾟ♡ﾟ･",
-        # Add more frames here if you want
-    ]
-
-    # Initial message
-    await message.edit("ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ...")
-
-    for i in animation_ttl:
-        await asyncio.sleep(animation_interval)
-        await safe_edit(message, animation_chars[i % len(animation_chars)])
-
+    )
 
 @app.on_message(filters.command("gn") & (filters.me | filters.user(SUDOERS)))
-async def good_night(client: Client, message: Message):
-    if message.forward_from:
-        return
-
-    animation_interval = 0.5  # Interval between animations
-    animation_ttl = range(6)  # Number of animation frames
-    animation_chars = [
+async def hello_world(client: Client, message: Message):
+    mg = await edit_or_reply(
+        message,
         "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･\n╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╭╮\n╭━┳━┳━┳╯┃╭━━┳━┳┳┳━┳╋╋━┳┳━╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃╋┃╭┫┃┃┃┃┃┃┃╋┃\n┣╮┣━┻━┻━╯╰┻┻┻━┻╯╰┻━┻┻┻━╋╮┃\n╰━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･",
-        # Add more frames if needed
-    ]
+    )
 
-    # Initial message
-    await message.edit("ɢᴏᴏᴅ ɴɪɢʜᴛ...")
 
-    for i in animation_ttl:
-        await asyncio.sleep(animation_interval)
-        await safe_edit(message, animation_chars[i % len(animation_chars)])
-        
 @app.on_message(bad(["Pikachu"]) & (filters.me | filters.user(SUDOERS)))
 async def gunid(client: Client, message: Message):
     await edit_or_reply(
