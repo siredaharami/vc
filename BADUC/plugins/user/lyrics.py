@@ -1,9 +1,25 @@
 import asyncio
+import os
 from pyrogram import filters, Client
 from pyrogram.types import Message
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
+
+import requests
+
+async def fetch_lyrics(song_name: str) -> str:
+    """
+    Fetch lyrics from a lyrics API.
+    Replace this with a real API request for fetching lyrics.
+    """
+    api_url = f"https://api.lyrics.ovh/v1/{song_name}"
+    try:
+        response = requests.get(api_url)
+        data = response.json()
+        return data.get("lyrics", "No lyrics found.")
+    except Exception as e:
+        return f"Error fetching lyrics: {str(e)}"
 
 
 @app.on_message(bad(["lyrics"]) & (filters.me | filters.user(SUDOERS)))
@@ -12,6 +28,7 @@ async def send_lyrics(bot: Client, message: Message):
         cmd = message.command
         song_name = ""
 
+        # Extract the song name from the command or the reply
         if len(cmd) > 1:
             song_name = " ".join(cmd[1:])
         elif message.reply_to_message:
@@ -27,37 +44,26 @@ async def send_lyrics(bot: Client, message: Message):
 
         await message.edit(f"Searching lyrics for `{song_name}`...")
 
-        try:
-            # Attempt to get inline bot results
-            lyrics_results = await bot.get_inline_bot_results("ilyricsbot", song_name)
+        # Assume here we fetch the lyrics somehow, replacing inline bot result fetching
+        # For example, using a hypothetical lyrics API or a local method
+        lyrics = await fetch_lyrics(song_name)
 
-            if not lyrics_results.results:
-                await message.edit("No lyrics found.")
-                await asyncio.sleep(2)
-                await message.delete()
-                return
-
-            # Send to saved messages because 'hide_via' may fail
-            saved = await bot.send_inline_bot_result(
-                chat_id="me",
-                query_id=lyrics_results.query_id,
-                result_id=lyrics_results.results[0].id,
-            )
+        if not lyrics:
+            await message.edit("No lyrics found for the song.")
             await asyncio.sleep(2)
+            await message.delete()
+            return
 
-            # Forward the result to the original chat
-            await bot.copy_message(
-                chat_id=message.chat.id,
-                from_chat_id="me",
-                message_id=saved.updates[1].message.id,
-            )
+        # Create a text file and save the lyrics
+        file_path = f"lyrics_{song_name}.txt"
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(lyrics)
 
-            # Delete the message from saved messages after forwarding
-            await bot.delete_messages("me", saved.updates[1].message.id)
+        # Send the text file to the user
+        await message.reply_document(file_path)
 
-        except TimeoutError:
-            await message.edit("Sorry, something went wrong while fetching the lyrics.")
-            await asyncio.sleep(2)
+        # Clean up the created file after sending it
+        os.remove(file_path)
 
         await message.delete()
 
@@ -67,7 +73,17 @@ async def send_lyrics(bot: Client, message: Message):
         await message.delete()
 
 
+async def fetch_lyrics(song_name: str) -> str:
+    """
+    Fetch lyrics for the given song name.
+    This function should be replaced with a valid method to fetch lyrics.
+    For now, it will return a placeholder text for demonstration purposes.
+    """
+    # This is a placeholder. Replace it with actual lyrics fetching logic
+    return f"Lyrics for the song: {song_name}\n\nExample lyrics...\nLine 1\nLine 2\nLine 3"
+
+
 __NAME__ = "Lʏʀɪᴄs"
 __MENU__ = """
-`.l` - **Search lyrics and send..**
+`.l` - **Search lyrics and send as a text file.**
 """
