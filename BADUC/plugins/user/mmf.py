@@ -30,7 +30,6 @@ async def mmf(_, message: Message):
 
 async def drawText(image_path, text):
     img = Image.open(image_path)
-
     os.remove(image_path)
 
     i_width, i_height = img.size
@@ -50,42 +49,15 @@ async def drawText(image_path, text):
 
     draw = ImageDraw.Draw(img)
 
-    current_h, pad = 10, 5
+    # Adjusted vertical position for text
+    current_h, pad = int(20 / 640 * i_width), 5
 
     if upper_text:
         for u_text in textwrap.wrap(upper_text, width=15):
             u_width, u_height = draw.textsize(u_text, font=m_font)
 
             draw.text(
-                xy=(((i_width - u_width) / 2) - 2, int((current_h / 640) * i_width)),
-                text=u_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(((i_width - u_width) / 2) + 2, int((current_h / 640) * i_width)),
-                text=u_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=((i_width - u_width) / 2, int(((current_h / 640) * i_width)) - 2),
-                text=u_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(((i_width - u_width) / 2), int(((current_h / 640) * i_width)) + 2),
-                text=u_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=((i_width - u_width) / 2, int((current_h / 640) * i_width)),
+                xy=((i_width - u_width) / 2, current_h),
                 text=u_text,
                 font=m_font,
                 fill=(255, 255, 255),
@@ -95,64 +67,29 @@ async def drawText(image_path, text):
 
     if lower_text:
         for l_text in textwrap.wrap(lower_text, width=15):
-            u_width, u_height = draw.textsize(l_text, font=m_font)
+            l_width, l_height = draw.textsize(l_text, font=m_font)
 
             draw.text(
                 xy=(
-                    ((i_width - u_width) / 2) - 2,
-                    i_height - u_height - int((20 / 640) * i_width),
-                ),
-                text=l_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(
-                    ((i_width - u_width) / 2) + 2,
-                    i_height - u_height - int((20 / 640) * i_width),
-                ),
-                text=l_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(
-                    (i_width - u_width) / 2,
-                    (i_height - u_height - int((20 / 640) * i_width)) - 2,
-                ),
-                text=l_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(
-                    (i_width - u_width) / 2,
-                    (i_height - u_height - int((20 / 640) * i_width)) + 2,
-                ),
-                text=l_text,
-                font=m_font,
-                fill=(0, 0, 0),
-            )
-
-            draw.text(
-                xy=(
-                    (i_width - u_width) / 2,
-                    i_height - u_height - int((20 / 640) * i_width),
+                    (i_width - l_width) / 2,
+                    i_height - l_height - int(50 / 640 * i_width),
                 ),
                 text=l_text,
                 font=m_font,
                 fill=(255, 255, 255),
             )
 
-            current_h += u_height + pad
+            current_h += l_height + pad
+
+    # Adding PNG overlay
+    overlay_path = "./BADUC/resources/pic/overlay.png"  # Update the path to your PNG file
+    if os.path.exists(overlay_path):
+        overlay = Image.open(overlay_path).convert("RGBA")
+        overlay = overlay.resize((i_width, int(i_height * 0.2)))  # Resize to fit
+        img.paste(overlay, (0, i_height - overlay.size[1]), overlay)
 
     image_name = "memify.webp"
-
     webp_file = os.path.join(image_name)
-
     img.save(webp_file, "webp")
 
     return webp_file
@@ -163,4 +100,3 @@ __MENU__ = """
 `.mmf` - **Make a message into a sticker .**
 
 """
-          
