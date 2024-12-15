@@ -146,8 +146,8 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Send Message To Logger Group: {e}")
 
     try:
-        await app.join_chat("MASTIWITHFRIENDSXD")
-        await app.join_chat("SHIVANSH474")
+        await app.join_chat("dn")
+        await app.join_chat("bdu")
     except Exception as e:
         LOGGER.error(f"Failed To Join Chats: {e}")
 
