@@ -457,7 +457,7 @@ async def gajjajay(client: Client, message: Message):
     await message.edit("EVERyBOdy iZ GangSTur UNtIL I ArRivE 🔥🔥🔥")
 
 
-@on_message(bad(["charging"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(bad(["charging"]) & (filters.me | filters.user(SUDOERS)))
 async def timer_blankx(client: Client, message: Message):
     txt = (
         message.text[10:]
