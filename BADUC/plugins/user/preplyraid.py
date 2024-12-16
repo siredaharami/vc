@@ -10,7 +10,7 @@ from pyrogram.enums import MessageEntityType as MET, ChatAction as CA
 from pyrogram.types import Message
 
 
-PRAID_STR = [
+RAID_STR = [
    "🥹ਬਾਰੀ ਬਰਸੀ ਖੱਟਣ ਗਿਆ ਸੀ ਖੱਟ ਕੇ ਲਿਆਂਦਾ ਬੱਲਾ ਤੇਰੀ ਭੈਣ ਦਾ ਫੁੱਦਾ ਮਾਰੇ ਗਰੁੱਪ ਦਾ ਮੇਂਬਰ ਕੱਲਾ ਕੱਲਾ😭",
 "😈ਬਾਰੀ ਬਰਸੀ ਖੱਟਣ ਗਿਆ ਸੀ ਖੱਟ ਕੇ ਲਿਆਂਦਾ ਆਲੂ ਪਿਓ ਤੇਰਾ ਟੈਮਪੂ ਮਾਂ ਤੇਰੀ ਚਾਲੂ😈",
 "🥵ਬਾਰੀ ਬਰਸੀ ਖੱਟਣ ਗਿਆ ਸੀ ਖੱਟ ਕੇ ਲਿਆਂਦਾ ਫੂਸਾ ਮੇਰਾ ਡੈਡੀ ਤੇਰੀ ਬੁੰਡ ਮਾਰੇ ਮੈ ਮਾਰਾਂ ਤੇਰੀ ਭੈਣ ਦਾ ਘੁਸਾ👅",
@@ -53,7 +53,7 @@ def is_reply_raid(func):
 @app.on_message(filters.all,group=-18)
 @is_reply_raid
 async def _(c: Client,m: Message):
-    message = random.choice(PRAID_STR)
+    message = random.choice(RAID_STR)
     await c.send_chat_action(m.chat.id, CA.TYPING)
     await asyncio.sleep(1)
     await m.reply_text(message)
