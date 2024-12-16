@@ -483,3 +483,43 @@ async def ngefuck(client: Client, message: Message):
     await e.edit(
         ".                       /¯ )\n                      /¯  /\n                    /    /\n              /´¯/'   '/´¯¯`•¸\n          /'/   /    /       /¨¯\\ \n        ('(   (   (   (  ¯~/'  ')\n         \\                        /\n          \\                _.•´\n            \\              (\n              \\  H  O  U  R  S"
     )
+
+
+__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ 3"
+__MENU__ = """
+`.kill` **Type kill and see magic**
+
+`.bad` **Type bad and see magic**
+
+`.sunset` **Type sunset and see magic**
+
+`.weather` **Type weather and see magic**
+
+`.nature` **Type nature and see magic**
+
+`.fire_ice` **Type fire_ice and see magic**
+
+`.space` **Type space and see magic**
+
+`.underwater` **Type underwater and see magic**
+
+`.fantasy` **Type fantasy and see magic**
+
+`.game` **Type game and see magic**
+
+`.space_exploration` **Type space_exploration and see magic**
+
+`.superhero` **Type superhero and see magic**
+
+`.alarm` **Type alarm and see magic**
+
+`.lights` **Type lights and see magic**
+
+`.warning` **Type warning and see magic**
+
+`.badd` **Type badd and see magic**
+
+`.shizu` **Type shizu and see magic**
+
+`.hours` **Type hours and see magic**
+"""
