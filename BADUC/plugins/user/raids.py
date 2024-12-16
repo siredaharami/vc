@@ -8,6 +8,7 @@ import time
 # import 
 
 from BADUC import SUDOERS
+from BADUC import SUDOERS as SUDO_USER
 from BADUC.core.clients import app
 from BADUC.core.command import *
 
