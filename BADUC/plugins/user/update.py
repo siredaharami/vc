@@ -26,15 +26,15 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 @app.on_message(bad(["gitpull", "update"]) & (filters.me | filters.user(SUDOERS)))
 async def update_repo_latest(client, message):
-    response = await message.reply_text("Checking for available updates...")
+    response = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ꜰᴏʀ ᴀᴠᴀɪʟᴀʙʟᴇ ᴜᴘᴅᴀᴛᴇꜱ...🪄")
     try:
         repo = Repo()
     except GitCommandError:
-        await response.edit("Git Command Error")
+        await response.edit("ɢɪᴛ ᴄᴏᴍᴍᴀɴᴅ ᴇʀʀᴏʀ 🥺")
         await message.delete()  # Delete the command message
         return
     except InvalidGitRepositoryError:
-        await response.edit("Invalid Git Repository")
+        await response.edit("ɪɴᴠᴀʟɪᴅ ɢɪᴛ ʀᴇᴘᴏꜱɪᴛᴏʀʏ 🙃")
         await message.delete()  # Delete the command message
         return
     
@@ -46,7 +46,7 @@ async def update_repo_latest(client, message):
     for checks in repo.iter_commits(f"HEAD..origin/main"):
         verification = str(checks.count())
     if verification == "":
-        await response.edit("userbot is up-to-date!")
+        await response.edit("ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ɪꜱ ᴜᴘ-ᴛᴏ-ᴅᴀᴛᴇ ! 💫")
         await message.delete()  # Delete the command message
         return
 
@@ -58,20 +58,20 @@ async def update_repo_latest(client, message):
     for info in repo.iter_commits(f"HEAD..origin/main"):
         updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Committed on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
     
-    _update_response_ = "<b>A new update is available for the userbot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"
+    _update_response_ = "<b>ᴀ ɴᴇᴡ ᴜᴘᴅᴀᴛᴇ ɪꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴛʜᴇ ᴜꜱᴇʀʙᴏᴛ  🥳</b>\n\n➣ ᴘᴜꜱʜɪɴɢ ᴜᴘᴅᴀᴛᴇꜱ ɴᴏᴡ 🔍</code>\n\n**<u>ᴜᴘᴅᴀᴛᴇꜱ: ✨:</u>**\n\n"
     _final_updates_ = _update_response_ + updates
     if len(_final_updates_) > 4096:
         link = await paste_queue(updates)
         url = link + "/index.txt"
         nrs = await response.edit(
-            f"<b>A new update is available for the userbot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n[Click Here to check out Updates]({url})"
+            f"<b>ᴀ ɴᴇᴡ ᴜᴘᴅᴀᴛᴇ ɪꜱ ᴀᴠᴀɪʟᴀʙʟᴇ ꜰᴏʀ ᴛʜᴇ ᴜꜱᴇʀʙᴏᴛ  🥳</b>\n\n➣ ᴘᴜꜱʜɪɴɢ ᴜᴘᴅᴀᴛᴇꜱ ɴᴏᴡ 🔍</code>\n\n**<u>ᴜᴘᴅᴀᴛᴇꜱ ✨</u>**\n\n[ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴄʜᴇᴄᴋ ᴏᴜᴛ ᴜᴘᴅᴀᴛᴇꜱ]({url})"
         )
     else:
         nrs = await response.edit(_final_updates_, disable_web_page_preview=True)
     
     os.system("git stash &> /dev/null && git pull")
     await response.edit(
-        f"{nrs.text}\n\nuserbot was updated successfully! Now, wait for 1 - 2 mins until the userbot reboots!"
+        f"{nrs.text}\n\nʙᴀᴅᴜꜱᴇʀʙᴏᴛ ᴡᴀꜱ ᴜᴘᴅᴀᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ! ɴᴏᴡ, ᴡᴀɪᴛ ꜰᴏʀ 1 - 2 ᴍɪɴꜱ ᴜɴᴛɪʟ ᴛʜᴇ ᴜꜱᴇʀʙᴏᴛ ʀᴇʙᴏᴏᴛꜱ 🥀"
     )
     
     os.system("pip3 install -r requirements.txt --force-reinstall")
@@ -79,6 +79,7 @@ async def update_repo_latest(client, message):
     sys.exit()
     
     await message.delete()  # Delete the command message after processing
+    
 
 @app.on_message(bad(["sh"]) & (filters.me | filters.user(SUDOERS)))
 async def shellrunner(_, message: Message):
