@@ -396,17 +396,11 @@ async def fullpromote_user(client, message: Message):
         await message.reply("Reply to a message to full promote user.")
 
 # 13. Demote (Updated with both usernames and video link)
-@app.on_message(bad(["demote"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command("demote") & filters.me)
 async def demote_user(client, message):
+    user_to_demote = message.reply_to_message.from_user
+
     try:
-        # Get the user to demote (assuming the command is in the form "/demote @username")
-        user_to_demote = message.reply_to_message.from_user if message.reply_to_message else None
-
-        if not user_to_demote:
-            await message.reply("Please reply to the user's message to demote them.")
-            return
-
-        # Remove the user from the admin list and revoke admin privileges
         await message.chat.promote_chat_member(
             user_to_demote.id,
             can_change_info=False,
@@ -418,10 +412,7 @@ async def demote_user(client, message):
             can_promote_members=False
         )
 
-        # Ensure the user is removed from the admin list
-        admins = await message.chat.get_members(filter="administrators")
-        admin_ids = [admin.user.id for admin in admins]
-        
-        if user_to_demote.id in admin_ids:
-            await message.reply(f"User {user_to_demote.mention} is still in the admin list.")
-            
+        await message.reply(f"User {user_to_demote.mention} has been demoted and removed from the admin list.")
+
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
