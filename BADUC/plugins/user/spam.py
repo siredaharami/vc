@@ -82,18 +82,20 @@ async def spamMessage(client: Client, message: Message):
 @app.on_message(bad(["dspam"]) & (filters.me | filters.user(SUDOERS)))
 async def delaySpam(client: Client, message: Message):
     if len(message.command) < 4:
-        return await Client.delete(message, "Give me something to spam.")
+        return await message.delete()
 
     reply_to = message.reply_to_message.id if message.reply_to_message else None
     try:
         count = int(message.command[1])
     except ValueError:
-        return await Client.delete(message, "Give me a valid number to spam.")
+        await message.delete()
+        return
 
     try:
         delay = float(message.command[2])
     except ValueError:
-        return await Client.delete(message, "Give me a valid delay to spam.")
+        await message.delete()
+        return
 
     to_spam = message.text.split(" ", 3)[3].strip()
     event = asyncio.Event()
@@ -113,15 +115,16 @@ async def delaySpam(client: Client, message: Message):
 @app.on_message(bad(["mspam"]) & (filters.me | filters.user(SUDOERS)))
 async def mediaSpam(client: Client, message: Message):
     if not message.reply_to_message:
-        return await Client.delete(message, "Reply to a media to spam.")
+        return await message.delete()
 
     if len(message.command) < 2:
-        return await Client.delete(message, "Give me a valid number to spam.")
+        return await message.delete()
 
     try:
         count = int(message.command[1])
     except ValueError:
-        return await Client.delete(message, "Give me a valid number to spam.")
+        await message.delete()
+        return
 
     copy_id = message.reply_to_message.id
     event = asyncio.Event()
