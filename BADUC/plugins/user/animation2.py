@@ -230,21 +230,6 @@ async def space_exploration(client: Client, message: Message):
         await asyncio.sleep(animation_interval)
         await message.edit(animation_chars[i % 14])
         
-@app.on_message(filters.command("gm") & (filters.me | filters.user(SUDOERS)))
-async def hello_world(client: Client, message: Message):
-    mg = await edit_or_reply(
-        message,
-        "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･\n╱╱╱╱╱╱╱╭╮╱╱╱╭╮╱╭╮╭╮\n╭━┳━┳━┳╯┃╭━┳╋╋━┫╰┫╰╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃┃╋┃┃┃╭┫\n┣╮┣━┻━┻━╯╰┻━┻╋╮┣┻┻━╯\n╰━╯╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥° ♥｡･ﾟ♡ﾟ･",
-    )
-
-@app.on_message(filters.command("gn") & (filters.me | filters.user(SUDOERS)))
-async def hello_world(client: Client, message: Message):
-    mg = await edit_or_reply(
-        message,
-        "｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･\n╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╭╮\n╭━┳━┳━┳╯┃╭━━┳━┳┳┳━┳╋╋━┳┳━╮\n┃╋┃╋┃╋┃╋┃┃┃┃┃╋┃╭┫┃┃┃┃┃┃┃╋┃\n┣╮┣━┻━┻━╯╰┻┻┻━┻╯╰┻━┻┻┻━╋╮┃\n╰━╯╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━╯\n｡♥｡･ﾟ♡ﾟ･｡♥｡･｡･｡･｡♥｡･｡♥｡･ﾟ♡ﾟ･",
-    )
-
-
 @app.on_message(bad(["Pikachu"]) & (filters.me | filters.user(SUDOERS)))
 async def gunid(client: Client, message: Message):
     await edit_or_reply(
