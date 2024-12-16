@@ -1327,55 +1327,55 @@ async def hearts(client: Client, message: Message):
     await message.edit("Rooor Aahh Aahh Aahh")
 
 
-
 __NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ"
 __MENU__ = """
-`.love` **Type love and see magic**
+`.love` ᴛʏᴘᴇ ʟᴏᴠᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.bad` **Type bad and see magic**
+`.bad` ᴛʏᴘᴇ ʙᴀᴅ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.hmm` **Type hmm and see magic**
+`.hmm` ᴛʏᴘᴇ hᴍᴍ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.rain` **Type rain and see magic**
+`.rain` ᴛʏᴘᴇ ʀᴀɪɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.loveu` **Type loveu and see magic**
+`.loveu` ᴛʏᴘᴇ ʟᴏᴠᴇᴜ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.ahh` **Type ahh and see magic**
+`.ahh` ᴛʏᴘᴇ ᴀʜʜ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.shoot` **Type shoot and see magic**
+`.shoot` ᴛʏᴘᴇ sʜᴏᴏᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.brain` **Type brain and see magic**
+`.brain` ᴛʏᴘᴇ bʀᴀɪɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.sex` **Type sex and see magic**
+`.sex` ᴛʏᴘᴇ sᴇx ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.bomb` **Type bomb and see magic**
+`.bomb` ᴛʏᴘᴇ ʙᴏᴍʙ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.call` **Type call and see magic**
+`.call` ᴛʏᴘᴇ ᴄᴀʟʟ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.kill` **Type kill and see magic**
+`.kill` ᴛʏᴘᴇ ᴋɪʟʟ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.theart` **Type theart and see magic**
+`.theart` ᴛʏᴘᴇ ᴛʜᴇᴀʀᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.wtf` **Type wtf and see magic**
+`.wtf` ᴛʏᴘᴇ ᴡᴛғ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.ding` **Type ding and see magic**
+`.ding` ᴛʏᴘᴇ dɪɴɢ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.hypo` **Type hypo and see magic**
+`.hypo` ᴛʏᴘᴇ hʏᴘᴏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.gangstar` **Type gangstar and see magic**
+`.gangstar` ᴛʏᴘᴇ ɢᴀɴɢsᴛᴀʀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.charging` **Type charging and see magic**
+`.charging` ᴛʏᴘᴇ ᴄʜᴀʀɢɪɴɢ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.3d` **Type 3d and see magic**
+`.3d` ᴛʏᴘᴇ 3d ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.fuck` **Type fuck and see magic**
+`.fuck` ᴛʏᴘᴇ ғᴜᴄᴋ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.hack` **Type hack and see magic**
+`.hack` ᴛʏᴘᴇ hᴀᴄᴋ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.dino` **Type dino and see magic**
+`.dino` ᴛʏᴘᴇ dɪɴᴏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.cobra` **Type cobra and see magic**
+`.cobra` ᴛʏᴘᴇ ᴄᴏʙʀᴀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.helicopter` **Type helicopter and see magic**
-`.gf` **Type gf and see magic**
+`.helicopter` ᴛʏᴘᴇ ʜᴇʟɪᴄᴏᴘᴛᴇʀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
+
+`.gf` ᴛʏᴘᴇ ɢf ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 """
