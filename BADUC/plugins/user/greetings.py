@@ -104,8 +104,8 @@ async def showgoodbye(client: Client, message: Message):
     await message.edit("Goodbye message sent.")
 
 # Event Handlers
-@app.on_message(filters.new_chat_members & filters.group)
-async def welcome_handler(client: Client, message: Message):
+@app.on_chat_member_updated(filters.group, group=-4)
+async def greet_new_members(_, member: ChatMemberUpdated):
     welcome = get_welcome(message.chat.id)
     if not welcome:
         return
@@ -130,8 +130,8 @@ async def welcome_handler(client: Client, message: Message):
             )
             await message.reply(formatted_text)
 
-@app.on_message(filters.left_chat_member & filters.group)
-async def goodbye_handler(client: Client, message: Message):
+@app.on_message(filters.left_chat_member, group=-12)
+async def on_left_chat_member(_, message: Message):
     goodbye = get_goodbye(message.chat.id)
     if not goodbye:
         return
