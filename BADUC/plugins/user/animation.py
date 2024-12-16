@@ -175,6 +175,48 @@ async def hello_world(client: Client, message: Message):
     await asyncio.sleep(0.2)
     await mg.edit("aaahhhhhhhh")
 
+@app.on_message(bad(["gm"]) & (filters.me | filters.user(SUDOERS)))
+async def gmid(client: Client, message: Message):
+    await edit_or_reply(
+        message,
+"░░░░░▄█▌▄▌▄▌▄▌▄▌▄▌█▄░░░░░\n"  
+"░░▄███▒▒▒▒▒▒▒▒▒▒▒▒▒███▄░░\n"  
+"▄█████▒▒▒▒▒▒▒▒▒▒▒▒▒█████▄\n"  
+"██████▒▒▒▒▒▒▒▒▒▒▒▒▒██████\n"  
+"▀▀▀▀██████████████████▀▀▀▀\n"  
+"        ░▐█▄▄▄▄▄▄▄▄▄█▄░\n"  
+"        ░█████████████░\n"  
+"        ░▓▓▓▓▓▓▓▓▓▓▓█▓░\n"  
+"        ░GOOD MORNING░\n"  
+"        ░▓▓▓▓▓▓▓▓▓▓▓█▓░\n"  
+"        ░█████████████░\n"  
+"        ░▐█▄▄▄▄▄▄▄▄▄█▄░\n"  
+"▀▀▀▀██████████████████▀▀▀▀\n"
+)
+
+
+@app.on_message(bad(["gn"]) & (filters.me | filters.user(SUDOERS)))
+async def gnid(client: Client, message: Message):
+    await edit_or_reply(
+        message,
+"░░░░░░░░░▄██▄░░░░░░░░░\n"  
+"░░░░░░░▄████████▄░░░░░\n"  
+"░░░░░▄████████████▄░░░\n"  
+"░░░░████████████████░░\n"  
+"░░░███████▀▀▀▀▀█████░░\n"  
+"░░████▀▀░░░░░░░░░▀███░\n"  
+"░░██▀░░░░░░░░░░░░░░▀█░\n"  
+"░░█░░░░░░░░░░░░░░░░░█░\n"  
+"░░█░ GOOD NIGHT  ░░░░█░\n"  
+"░░█░░░░░░░░░░░░░░░░░█░\n"  
+"░░█▄░░░░░░░░░░░░░░▄█░░\n"  
+"░░░█▄░░░▀█████▀░░▄█░░░\n"  
+"░░░░▀██▄░░░░░░░▄██▀░░░\n"  
+"░░░░░░▀██▄▄▄▄▄██▀░░░░░\n"  
+"░░░░░░░░▀▀▀▀▀▀░░░░░░░░\n"
+    )
+
+
 @app.on_message(bad(["shoot"]) & (filters.me | filters.user(SUDOERS)))
 async def gunid(client: Client, message: Message):
     await edit_or_reply(
