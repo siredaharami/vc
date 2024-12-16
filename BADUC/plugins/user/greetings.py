@@ -4,12 +4,12 @@ from pyrogram.types import Message
 
 from BADUC import SUDOERS
 from BADUC.core.clients import app
-from BADUC.core.config import LOG_GROUP_ID as LOGGER_ID, MONGO_DB_URL  # Importing MONGO_DB_URL from config
+from BADUC.core.config import LOG_GROUP_ID as LOGGER_ID, MONGO_DB_URL
 from BADUC.core.command import *
 
-# MongoDB setup using MONGO_DB_URL from config
-client = MongoClient(MONGO_DB_URL)
-db = client["bot_database"]
+# MongoDB setup
+mongo_client = MongoClient(MONGO_DB_URL)
+db = mongo_client["bot_database"]
 welcome_col = db["welcome_messages"]
 goodbye_col = db["goodbye_messages"]
 
@@ -32,15 +32,16 @@ def set_goodbye(chat_id, message_id):
 def delete_goodbye(chat_id):
     goodbye_col.delete_one({"chat_id": chat_id})
 
+# Format strings
 GREETINGS_FORMATTINGS = """
-`{first}` - __First name of the user who joined/left.__
-`{last}` - __Last name of the user who joined/left.__
-`{fullname}` - __Full name of the user who joined/left.__
-`{mention}` - __Mentions the user who joined/left.__
-`{username}` - __Username of the user who joined/left.__
-`{userid}` - __ID of the user who joined/left.__
-`{chatname}` - __Name of the chat.__
-`{chatid}` - __ID of the chat.__
+`{first}` - First name of the user.
+`{last}` - Last name of the user.
+`{fullname}` - Full name of the user.
+`{mention}` - Mentions the user.
+`{username}` - Username of the user.
+`{userid}` - User ID.
+`{chatname}` - Name of the chat.
+`{chatid}` - Chat ID.
 """
 
 @app.on_message(bad(["greetings"]) & (filters.me | filters.user(SUDOERS)))
@@ -53,7 +54,7 @@ async def greetings_format(_, message: Message):
 async def setwelcome(client: Client, message: Message):
     if not message.reply_to_message:
         return await message.edit("Reply to a message to set it as the welcome message.")
-
+    
     forwarded_message = await message.reply_to_message.forward(LOGGER_ID)
     set_welcome(message.chat.id, forwarded_message.id)
     await message.edit(f"Welcome message set for {message.chat.title}.")
@@ -108,33 +109,33 @@ async def welcome_handler(client: Client, message: Message):
     welcome = get_welcome(message.chat.id)
     if not welcome:
         return
-
+    
     msg = await client.get_messages(LOGGER_ID, welcome["message_id"])
     if not msg:
         return
 
     # Replace placeholders
-    new_member = message.new_chat_members[0]
-    text = msg.text or msg.caption
-    if text:
-        formatted_text = text.format(
-            first=new_member.first_name or "User",
-            last=new_member.last_name or "",
-            fullname=f"{new_member.first_name} {new_member.last_name}".strip(),
-            mention=new_member.mention or f"[{new_member.first_name}](tg://user?id={new_member.id})",
-            username=f"@{new_member.username}" if new_member.username else "No Username",
-            userid=new_member.id,
-            chatname=message.chat.title,
-            chatid=message.chat.id,
-        )
-        await message.reply(formatted_text)
+    for member in message.new_chat_members:
+        text = msg.text or msg.caption
+        if text:
+            formatted_text = text.format(
+                first=member.first_name or "User",
+                last=member.last_name or "",
+                fullname=f"{member.first_name} {member.last_name}".strip(),
+                mention=member.mention or f"[{member.first_name}](tg://user?id={member.id})",
+                username=f"@{member.username}" if member.username else "No Username",
+                userid=member.id,
+                chatname=message.chat.title,
+                chatid=message.chat.id,
+            )
+            await message.reply(formatted_text)
 
 @app.on_message(filters.left_chat_member & filters.group)
 async def goodbye_handler(client: Client, message: Message):
     goodbye = get_goodbye(message.chat.id)
     if not goodbye:
         return
-
+    
     msg = await client.get_messages(LOGGER_ID, goodbye["message_id"])
     if not msg:
         return
