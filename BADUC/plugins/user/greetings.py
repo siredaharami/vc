@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from pyrogram import Client, filters
 from pyrogram.types import Message
+from pyrogram.types import ChatMemberUpdated
 
 from BADUC import SUDOERS
 from BADUC.core.clients import app
