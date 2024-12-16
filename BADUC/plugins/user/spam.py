@@ -82,33 +82,41 @@ async def spamMessage(client: Client, message: Message):
 @app.on_message(bad(["dspam"]) & (filters.me | filters.user(SUDOERS)))
 async def delaySpam(client: Client, message: Message):
     if len(message.command) < 4:
-        return await message.delete()
+        await message.delete()
+        return await message.reply_text("Usage: .dspam <count> <delay> <text>")
 
     reply_to = message.reply_to_message.id if message.reply_to_message else None
     try:
-        count = int(message.command[1])
+        count = int(message.command[1])  # Number of messages to send
     except ValueError:
         await message.delete()
-        return
+        return await message.reply_text("Invalid count. Provide a valid number.")
 
     try:
-        delay = float(message.command[2])
+        delay = float(message.command[2])  # Delay between messages
     except ValueError:
         await message.delete()
-        return
+        return await message.reply_text("Invalid delay. Provide a valid number.")
 
-    to_spam = message.text.split(" ", 3)[3].strip()
+    # Message to spam
+    to_spam = " ".join(message.command[3:])
+    if not to_spam.strip():
+        await message.delete()
+        return await message.reply_text("No text provided to spam.")
+
+    # Start spamming
     event = asyncio.Event()
     task = asyncio.create_task(
         spam_text(client, message.chat.id, to_spam, count, reply_to, delay, None, event)
     )
 
+    # Track spam tasks for the chat
     if spamTask.get(message.chat.id, None):
         spamTask[message.chat.id].append(event)
     else:
         spamTask[message.chat.id] = [event]
 
-    await message.delete()
+    await message.reply_text(f"Started spamming: '{to_spam}' x {count} with {delay}s delay.")
     await task
 
 
