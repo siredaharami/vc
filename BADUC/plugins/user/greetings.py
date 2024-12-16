@@ -1,4 +1,6 @@
 from pymongo import MongoClient
+from pyrogram.types import ChatMemberUpdated, Message
+from pyrogram.enums import ChatMemberStatus
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.config import LOG_GROUP_ID as LOGGER_ID, MONGO_DB_URL
@@ -41,3 +43,21 @@ async def goodbye(client, message: Message):
     goodbye_text = format_message(GOODBYE_MESSAGE, user, message.chat)
     await message.reply_text(goodbye_text)
 
+
+# Handler for new members joining the group
+@app.on_message(filters.new_chat_members)
+async def welcome_new_member(client, message: Message):
+    new_members = message.new_chat_members
+    for member in new_members:
+        # Send a welcome message
+        await message.reply(f"Hey, {member.first_name}, welcome to this group!")
+
+# Handler for a member leaving the group
+@app.on_chat_member_updated
+async def farewell_member(client, update: ChatMemberUpdated):
+    # Use the ChatMemberStatus enum to check the member's status
+    if update.old_chat_member.status == ChatMemberStatus.MEMBER and update.new_chat_member.status == ChatMemberStatus.RESTRICTED:
+        user = update.old_chat_member.user
+        chat = update.chat
+        # Send a farewell message
+        await chat.send_message(f"Nice knowing you, {user.first_name}!")
