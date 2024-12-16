@@ -485,41 +485,37 @@ async def ngefuck(client: Client, message: Message):
     )
 
 
-__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ 3"
+__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ ₃"
 __MENU__ = """
-`.kill` **Type kill and see magic**
+`.sunset` ᴛʏᴘᴇ sᴜɴsᴇᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.bad` **Type bad and see magic**
+`.weather` ᴛʏᴘᴇ ᴡᴇᴀᴛʜᴇʀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.sunset` **Type sunset and see magic**
+`.nature` ᴛʏᴘᴇ ɴᴀᴛᴜʀᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.weather` **Type weather and see magic**
+`.fire_ice` ᴛʏᴘᴇ ғɪʀᴇ_ɪᴄᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.nature` **Type nature and see magic**
+`.space` ᴛʏᴘᴇ sᴘᴀᴄᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.fire_ice` **Type fire_ice and see magic**
+`.underwater` ᴛʏᴘᴇ ᴜɴᴅᴇʀᴡᴀᴛᴇʀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.space` **Type space and see magic**
+`.fantasy` ᴛʏᴘᴇ ғᴀɴᴛᴀsʏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.underwater` **Type underwater and see magic**
+`.game` ᴛʏᴘᴇ ɢᴀᴍᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.fantasy` **Type fantasy and see magic**
+`.space_exploration` ᴛʏᴘᴇ sᴘᴀᴄᴇ_ᴇxᴘʟᴏʀᴀᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.game` **Type game and see magic**
+`.superhero` ᴛʏᴘᴇ sᴜᴘᴇʀʜᴇʀᴏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.space_exploration` **Type space_exploration and see magic**
+`.alarm` ᴛʏᴘᴇ ᴀʟᴀʀᴍ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.superhero` **Type superhero and see magic**
+`.lights` ᴛʏᴘᴇ ʟɪɢʜᴛs ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.alarm` **Type alarm and see magic**
+`.warning` ᴛʏᴘᴇ ᴡᴀʀɴɪɴɢ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.lights` **Type lights and see magic**
+`.badd` ᴛʏᴘᴇ ʙᴀᴅᴅ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.warning` **Type warning and see magic**
+`.shizu` ᴛʏᴘᴇ sʜɪᴢᴜ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.badd` **Type badd and see magic**
-
-`.shizu` **Type shizu and see magic**
-
-`.hours` **Type hours and see magic**
+`.hours` ᴛʏᴘᴇ ʜᴏᴜʀs ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 """
