@@ -425,25 +425,3 @@ async def demote_user(client, message):
         if user_to_demote.id in admin_ids:
             await message.reply(f"User {user_to_demote.mention} is still in the admin list.")
             
-            
-@app.on_message(filters.command("alldemote") & (filters.me | filters.user(SUDOERS)))
-async def all_demote(client, message):
-    try:
-        # Assuming you want to demote all admins or a certain set of users
-        chat = message.chat.id
-        admins = await client.get_chat_members(chat, filter="administrators")
-
-        for admin in admins:
-            user_to_demote = admin.user
-            if user_to_demote.id != client.id:  # Avoid demoting the bot itself
-                await client.promote_chat_member(
-                    chat, user_to_demote.id, can_change_info=False,
-                    can_invite_users=False, can_pin_messages=False,
-                    can_post_messages=False, can_add_web_page_previews=False
-                )
-                await message.reply(f"User {user_to_demote.mention} has been demoted.")
-        
-        await message.reply("All possible admins have been demoted.")
-
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
