@@ -5,6 +5,7 @@ from BADUC.core.command import *
 from pyrogram import Client
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction
+from pyrogram import Client, filters
 
 from asyncio import sleep
 
