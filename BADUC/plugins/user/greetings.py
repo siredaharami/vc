@@ -204,20 +204,17 @@ async def welcomehandler(client: Client, message: Message):
         return
 
     msg = await client.get_messages(LOGGER_ID, welcome[2])
-    if message.media:
-        text = message.caption if message.caption else None
-    else:
-        text = message.text if message.text else None
+    if not msg:
+        return await message.edit("Welcome message not found.")
 
+    # Handle text and media
+    text = message.text if message.text else message.caption
     if text:
-        first = message.new_chat_members[0].first_name
-        last = (
-            message.new_chat_members[0].last_name
-            if message.new_chat_members[0].last_name
-            else ""
-        )
-        mention = message.new_chat_members[0].mention
-        username = message.new_chat_members[0].username
+        first = message.new_chat_members[0].first_name or "User"
+        last = message.new_chat_members[0].last_name or ""
+        mention = message.new_chat_members[0].mention or ""
+        username = message.new_chat_members[0].username or mention
+
         text = text.format(
             first=first,
             last=last,
@@ -235,13 +232,13 @@ async def welcomehandler(client: Client, message: Message):
         reply_to_message_id=message.id,
     )
 
+    # Update the greetings cache
     if message.chat.id in GREETINGS_CACHE["welcome"]:
-        msg: Message = GREETINGS_CACHE.get("welcome", {}).get(message.chat.id)
-        await msg.delete()
-        GREETINGS_CACHE["welcome"][message.chat.id] = to_del
-    else:
-        GREETINGS_CACHE["welcome"][message.chat.id] = to_del
+        prev_msg: Message = GREETINGS_CACHE["welcome"].get(message.chat.id)
+        if prev_msg:
+            await prev_msg.delete()
 
+    GREETINGS_CACHE["welcome"][message.chat.id] = to_del
 
 @app.on_message(filters.left_chat_member & filters.group)
 async def goodbyehandler(client: Client, message: Message):
@@ -253,20 +250,17 @@ async def goodbyehandler(client: Client, message: Message):
         return
 
     msg = await client.get_messages(LOGGER_ID, goodbye[2])
-    if message.media:
-        text = message.caption if message.caption else None
-    else:
-        text = message.text if message.text else None
+    if not msg:
+        return await message.edit("Goodbye message not found.")
 
+    # Handle text and media
+    text = message.text if message.text else message.caption
     if text:
-        first = message.new_chat_members[0].first_name
-        last = (
-            message.new_chat_members[0].last_name
-            if message.new_chat_members[0].last_name
-            else ""
-        )
-        mention = message.new_chat_members[0].mention
-        username = message.new_chat_members[0].username
+        first = message.new_chat_members[0].first_name or "User"
+        last = message.new_chat_members[0].last_name or ""
+        mention = message.new_chat_members[0].mention or ""
+        username = message.new_chat_members[0].username or mention
+
         text = text.format(
             first=first,
             last=last,
@@ -284,9 +278,10 @@ async def goodbyehandler(client: Client, message: Message):
         reply_to_message_id=message.id,
     )
 
+    # Update the greetings cache
     if message.chat.id in GREETINGS_CACHE["goodbye"]:
-        msg: Message = GREETINGS_CACHE.get("goodbye", {}).get(message.chat.id)
-        await msg.delete()
-        GREETINGS_CACHE["goodbye"][message.chat.id] = to_del
-    else:
-        GREETINGS_CACHE["goodbye"][message.chat.id] = to_del
+        prev_msg: Message = GREETINGS_CACHE["goodbye"].get(message.chat.id)
+        if prev_msg:
+            await prev_msg.delete()
+
+    GREETINGS_CACHE["goodbye"][message.chat.id] = to_del
