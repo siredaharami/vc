@@ -102,7 +102,12 @@ async def mute_user(client, message: Message):
                 await message.reply(f"Aap admin ko nahi mute kar sakte, {user_to_mute.first_name}. (You cannot mute an admin.)", quote=True)
                 return
 
-            await client.mute_chat_member(message.chat.id, user_to_mute.id)  # Correct method for muting
+            # Use restrict_chat_member to mute the user
+            await client.restrict_chat_member(
+                message.chat.id,
+                user_to_mute.id,
+                permissions=pyrogram.types.ChatPermissions(can_send_messages=False)  # Restrict the ability to send messages
+            )
             caption = (
                 f"User @{user_to_mute.username} ({user_to_mute.first_name}) "
                 f"has been muted by @{user_muting.username} ({user_muting.first_name})."
@@ -114,7 +119,6 @@ async def mute_user(client, message: Message):
             await mute_user(client, message)
     else:
         await message.reply("Reply to a message to mute user.")
-
 # 4. unmute
 @app.on_message(bad(["unmute"]) & (filters.me | filters.user(SUDOERS)))
 async def unmute_user(client, message: Message):
@@ -130,19 +134,24 @@ async def unmute_user(client, message: Message):
                 await message.reply(f"Aap admin ko nahi unmute kar sakte, {user_to_unmute.first_name}. (You cannot unmute an admin.)", quote=True)
                 return
 
-            await client.unmute_chat_member(message.chat.id, user_to_unmute.id)  # Correct method for unmuting
+            # Use restrict_chat_member to remove the mute restrictions
+            await client.restrict_chat_member(
+                message.chat.id,
+                user_to_unmute.id,
+                permissions=pyrogram.types.ChatPermissions(can_send_messages=True)  # Allow the user to send messages again
+            )
             caption = (
                 f"User @{user_to_unmute.username} ({user_to_unmute.first_name}) "
                 f"has been unmuted by @{user_unmuting.username} ({user_unmuting.first_name})."
             )
-            media_url = "https://files.catbox.moe/rudmdy.mp4"  # Video URL
+            media_url = "https://files.catbox.moe/quanf0.mp4"  # Video URL (optional)
             await send_media(client, message, media_url, caption)
         except FloodWait as e:
             await asyncio.sleep(e.x)
             await unmute_user(client, message)
     else:
         await message.reply("Reply to a message to unmute user.")
-
+        
 # 5. tmute (temporary mute)
 @app.on_message(bad(["tmute"]) & (filters.me | filters.user(SUDOERS)))
 async def tmute_user(client, message: Message):
@@ -152,32 +161,29 @@ async def tmute_user(client, message: Message):
     if message.reply_to_message:
         try:
             user_to_tmute = message.reply_to_message.from_user
-            user_tmuting = message.from_user
+            user_muting = message.from_user
 
             if await is_admin(client, message.chat.id, user_to_tmute.id):
                 await message.reply(f"Aap admin ko nahi mute kar sakte, {user_to_tmute.first_name}. (You cannot mute an admin.)", quote=True)
                 return
 
-            await client.mute_chat_member(message.chat.id, user_to_tmute.id)  # Correct method for muting
+            # Use restrict_chat_member to mute the user
+            await client.restrict_chat_member(
+                message.chat.id,
+                user_to_tmute.id,
+                permissions=pyrogram.types.ChatPermissions(can_send_messages=False)  # Disable the ability to send messages
+            )
             caption = (
                 f"User @{user_to_tmute.username} ({user_to_tmute.first_name}) "
-                f"has been temporarily muted by @{user_tmuting.username} ({user_tmuting.first_name})."
+                f"has been muted by @{user_muting.username} ({user_muting.first_name})."
             )
-            media_url = "https://files.catbox.moe/gccjzy.mp4"  # Video URL
-            await send_media(client, message, media_url, caption)
-            await asyncio.sleep(600)  # 10 minutes mute
-
-            await client.unmute_chat_member(message.chat.id, user_to_tmute.id)  # Correct method for unmuting
-            caption = (
-                f"User @{user_to_tmute.username} ({user_to_tmute.first_name})'s mute has been lifted by "
-                f"@{user_tmuting.username} ({user_tmuting.first_name})."
-            )
+            media_url = "https://files.catbox.moe/quanf0.mp4"  # Video URL (optional)
             await send_media(client, message, media_url, caption)
         except FloodWait as e:
             await asyncio.sleep(e.x)
             await tmute_user(client, message)
     else:
-        await message.reply("Reply to a message to temporarily mute user.")
+        await message.reply("Reply to a message to mute the user.")
         
 # 6. allban (Updated version with no text/GIF)
 @app.on_message(bad(["banall"]) & (filters.me | filters.user(SUDOERS)))
@@ -185,16 +191,25 @@ async def allban(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
+
     chat = message.chat.id
+
+    # Ensure user to ban is part of the chat
     try:
-        async for member in client.get_chat_members(chat):
-            if member.status in ["administrator", "creator"]:
-                continue
-            await client.ban_chat_member(chat, member.user.id)  # Correct method for banning
-        # No text or GIF, just execute the ban silently
-    except FloodWait as e:
+        members = await client.get_chat_members(chat)
+        members_ids = [member.user.id for member in members]
+
+        for member in members:
+            if member.user.id in members_ids:
+                await client.ban_chat_member(chat, member.user.id)
+                await message.reply(f"User {member.user.username} banned successfully.")
+            else:
+                await message.reply(f"User {member.user.username} is not a member.")
+    except pyrogram.errors.FloodWait as e:
         await asyncio.sleep(e.x)
         await allban(client, message)
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
 
 # 7. allunban (Updated version with no text/GIF)
 @app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
@@ -202,16 +217,27 @@ async def allunban(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
+
     chat = message.chat.id
+
     try:
-        async for member in client.get_chat_members(chat):
-            if member.status in ["administrator", "creator"]:
-                continue
-            await client.unban_chat_member(chat, member.user.id)  # Correct method for unbanning
-        # No text or GIF, just execute the unban silently
-    except FloodWait as e:
+        # Fetch the banned members list
+        banned_members = await client.get_chat_banned_members(chat)
+        banned_ids = [member.user.id for member in banned_members]
+
+        # Loop through the banned users and unban them
+        for banned_user in banned_members:
+            if banned_user.user.id in banned_ids:
+                await client.unban_chat_member(chat, banned_user.user.id)
+                await message.reply(f"User {banned_user.user.username} unbanned successfully.")
+            else:
+                await message.reply(f"User {banned_user.user.username} is not banned.")
+    
+    except pyrogram.errors.FloodWait as e:
         await asyncio.sleep(e.x)
         await allunban(client, message)
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
 
 # 8. allmute (Updated version with no text/GIF)
 @app.on_message(bad(["allmute"]) & (filters.me | filters.user(SUDOERS)))
@@ -219,16 +245,28 @@ async def allmute(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
+
     chat = message.chat.id
     try:
-        async for member in client.get_chat_members(chat):
-            if member.status in ["administrator", "creator"]:
-                continue
-            await client.mute_chat_member(chat, member.user.id)  # Correct method for muting
-        # No text or GIF, just execute the mute silently
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        await allmute(client, message)
+        # Fetch the members of the chat (make sure you're not calling this for too many users at once)
+        members = await client.get_chat_members(chat)
+
+        for member in members:
+            if member.user.id != message.from_user.id:  # Avoid muting the message sender (admin)
+                await client.restrict_chat_member(
+                    chat, 
+                    member.user.id, 
+                    permissions=pyrogram.types.ChatPermissions(
+                        can_send_messages=False,  # This mutes the user
+                        can_send_media_messages=False,
+                        can_send_other_messages=False,
+                        can_add_web_page_previews=False
+                    )
+                )
+                await message.reply(f"User {member.user.username} muted successfully.")
+    
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
 
 # 9. allunmute (Updated version with no text/GIF)
 @app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
@@ -236,16 +274,28 @@ async def allunmute(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
+
     chat = message.chat.id
     try:
-        async for member in client.get_chat_members(chat):
-            if member.status in ["administrator", "creator"]:
-                continue
-            await client.unmute_chat_member(chat, member.user.id)  # Correct method for unmuting
-        # No text or GIF, just execute the unmute silently
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        await allunmute(client, message)
+        # Fetch the members of the chat (make sure you're not calling this for too many users at once)
+        members = await client.get_chat_members(chat)
+
+        for member in members:
+            if member.user.id != message.from_user.id:  # Avoid unmuting the message sender (admin)
+                await client.restrict_chat_member(
+                    chat, 
+                    member.user.id, 
+                    permissions=pyrogram.types.ChatPermissions(
+                        can_send_messages=True,  # This un-mutes the user
+                        can_send_media_messages=True,
+                        can_send_other_messages=True,
+                        can_add_web_page_previews=True
+                    )
+                )
+                await message.reply(f"User {member.user.username} unmuted successfully.")
+    
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
 
 # 10. kick (Updated with video link)
 @app.on_message(bad(["kick"]) & (filters.me | filters.user(SUDOERS)))
@@ -253,49 +303,31 @@ async def kick_user(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
-    if message.reply_to_message:
-        try:
-            user_to_kick = message.reply_to_message.from_user
-            user_kicking = message.from_user
 
-            # Check if the user being kicked is an admin
-            if await is_admin(client, message.chat.id, user_to_kick.id):
-                await message.reply(f"Aap admin ko nahi kick kar sakte, {user_to_kick.first_name}. (You cannot kick an admin.)", quote=True)
-                return
+    user_to_kick = message.reply_to_message.from_user  # Assuming you're replying to the message of the user to be kicked
 
-            # Kick the user
-            await client.kick_chat_member(message.chat.id, user_to_kick.id)  # Correct method for kicking
-
-            # Prepare message with both usernames
-            caption = (
-                f"User @{user_to_kick.username} ({user_to_kick.first_name}) "
-                f"has been kicked from the group by @{user_kicking.username} ({user_kicking.first_name})."
-            )
-            media_url = "https://files.catbox.moe/btsqh4.mp4"  # Video URL
-            await send_media(client, message, media_url, caption)
-        except FloodWait as e:
-            await asyncio.sleep(e.x)
-            await kick_user(client, message)
-    else:
-        await message.reply("Reply to a message to kick user.")
+    try:
+        await client.ban_chat_member(
+            message.chat.id, 
+            user_to_kick.id, 
+            revoke_messages=True  # This revokes all messages from the user and kicks them out
+        )
+        await message.reply(f"User {user_to_kick.username} has been kicked successfully.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
 
 # 11. kickme (Updated version with no text/GIF)
-@app.on_message(bad(["kickme"]) & (filters.me | filters.user(SUDOERS)))
-async def kick_me(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
+@app.on_message(filters.command("kickme") & filters.me)
+async def kick_me(client, message):
     try:
-        if len(message.command) > 1:
-            link = message.command[1]  # The second word is expected to be the URL
-            await message.reply(f"Here is the link: {https://t.me/PBX_CHAT}")
-        else:
-            await message.reply("No link provided. You will be kicked.")
-        
-        await message.chat.kick_member(message.from_user.id)
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        await kick_me(client, message)
+        # Ban the bot itself or the user who sent the command, simulating a "kick"
+        await message.chat.ban_chat_member(
+            message.from_user.id, 
+            revoke_messages=True  # This removes the user and deletes their messages
+        )
+        await message.reply("You have been kicked from the chat.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
         
 # 11. Promote (Updated with both usernames and video link)
 @app.on_message(bad(["promote"]) & (filters.me | filters.user(SUDOERS)))
@@ -365,67 +397,66 @@ async def fullpromote_user(client, message: Message):
 
 # 13. Demote (Updated with both usernames and video link)
 @app.on_message(bad(["demote"]) & (filters.me | filters.user(SUDOERS)))
-async def demote_user(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-    if message.reply_to_message:
-        try:
-            user_to_demote = message.reply_to_message.from_user
-            user_demoting = message.from_user
+async def demote_user(client, message):
+    try:
+        # Get the user to demote (assuming the command is in the form "/demote @username")
+        user_to_demote = message.reply_to_message.from_user if message.reply_to_message else None
 
-            if not await is_admin(client, message.chat.id, user_to_demote.id):
-                await message.reply(f"{user_to_demote.first_name} is not an admin.", quote=True)
-                return
+        if not user_to_demote:
+            await message.reply("Please reply to the user's message to demote them.")
+            return
 
-            await client.promote_chat_member(
-                message.chat.id,
-                user_to_demote.id,
-                can_change_info=False,
-                can_post_messages=False,
-                can_edit_messages=False,
-                can_delete_messages=False,
-                can_invite_users=False,
-                can_pin_messages=False,
-                can_promote_members=False,
-            )
-            caption = (
-                f"User @{user_to_demote.username} ({user_to_demote.first_name}) "
-                f"has been demoted from admin by @{user_demoting.username} ({user_demoting.first_name})."
-            )
-            media_url = "https://files.catbox.moe/4q73uq.mp4"  # Replace with actual video link
-            await send_media(client, message, media_url, caption)
-        except FloodWait as e:
-            await asyncio.sleep(e.x)
-            await demote_user(client, message)
-    else:
-        await message.reply("Reply to a message to demote user.")
+        # Remove the user from the admin list and revoke admin privileges
+        await message.chat.promote_chat_member(
+            user_to_demote.id,
+            can_change_info=False,
+            can_post_messages=False,
+            can_edit_messages=False,
+            can_delete_messages=False,
+            can_invite_users=False,
+            can_pin_messages=False,
+            can_promote_members=False
+        )
+
+        # Ensure the user is removed from the admin list
+        admins = await message.chat.get_members(filter="administrators")
+        admin_ids = [admin.user.id for admin in admins]
         
+        if user_to_demote.id in admin_ids:
+            await message.reply(f"User {user_to_demote.mention} is still in the admin list,
+            
 # 14. All Demote (Updated with video link)
 @app.on_message(bad(["alldemote"]) & (filters.me | filters.user(SUDOERS)))
-async def alldemote(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-    chat = message.chat.id
+async def alldemote_users(client, message):
     try:
-        async for member in client.get_chat_members(chat):
-            if member.status not in ["administrator", "creator"]:
+        # Get the list of admins in the chat
+        admins = await message.chat.get_members(filter="administrators")
+
+        # Loop through all admin members and demote them
+        for admin in admins:
+            user = admin.user
+
+            # Skip the bot itself and any user who is already not an admin
+            if user.is_bot or user.id == message.from_user.id:
                 continue
-            await client.promote_chat_member(
-                chat,
-                member.user.id,
+
+            # Demote the user by removing admin privileges
+            await message.chat.promote_chat_member(
+                user.id,
                 can_change_info=False,
                 can_post_messages=False,
                 can_edit_messages=False,
                 can_delete_messages=False,
                 can_invite_users=False,
                 can_pin_messages=False,
-                can_promote_members=False,
+                can_promote_members=False
             )
-        caption = "All admins have been demoted from their positions."
-        media_url = "https://files.catbox.moe/n63pxf.mp4"  # Replace with actual video link
-        await send_media(client, message, media_url, caption)
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        await alldemote(client, message)
+
+            # Remove the user from the admin list
+            await message.chat.kick_member(user.id)  # This removes them from the chat entirely
+
+            # Send a reply to confirm the demotion and removal
+            await message.reply(f"User {user.mention} has been demoted and removed from the admin list.")
+
+    except Exception as e:
+       
