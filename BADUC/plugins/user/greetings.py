@@ -4,6 +4,7 @@ from pyrogram.types import Message
 
 from BADUC import SUDOERS
 from BADUC.core.clients import app
+from BADUC.core.config import LOG_GROUP_ID as LOGGER_ID
 from BADUC.core.command import *
 
 
@@ -118,7 +119,7 @@ GREETINGS_FORMATTINGS = """
 
 @app.on_message(bad(["greetings"]) & (filters.me | filters.user(SUDOERS)))
 async def greetingsformat(_, message: Message):
-    await app.edit(message, GREETINGS_FORMATTINGS)
+    await message.edit(GREETINGS_FORMATTINGS)
 
 
 @app.on_message(bad(["welcome"]) & (filters.me | filters.user(SUDOERS)))
@@ -126,25 +127,25 @@ async def getwelcome(client: Client, message: Message):
     welcome = get_welcome(client.me.id, message.chat.id)
 
     if not welcome:
-        return await app.edit(message, "No welcome message in this chat.")
+        return await message.edit("No welcome message in this chat.")
 
-    msg = await client.get_messages(Config.LOGGER_ID, welcome[2])
+    msg = await client.get_messages(LOGGER_ID, welcome[2])
 
     await msg.copy(message.chat.id, reply_to_message_id=message.id)
-    await app.edit(message, "Welcome message sent.")
+    await message.edit("Welcome message sent.")
 
 
 @app.on_message(bad(["setwelcome"]) & (filters.me | filters.user(SUDOERS)))
 async def setwelcome(client: Client, message: Message):
     if not message.reply_to_message:
-        return await app.edit(
-            message, "Reply to a message to set it as welcome message."
+        return await message.edit(
+            "Reply to a message to set it as welcome message."
         )
 
-    msg = await message.reply_to_message.forward(Config.LOGGER_ID)
+    msg = await message.reply_to_message.forward(LOGGER_ID)
     set_welcome(client.me.id, message.chat.id, msg.id)
 
-    await app.delete(message, f"**Welcome message saved for** {message.chat.title}")
+    await message.delete()
     await msg.reply_text(
         f"Welcome message set for {message.chat.title}({message.chat.id})\n\n**DO NOT DELETE THE REPLIED MESSAGE!!!**"
     )
@@ -153,9 +154,9 @@ async def setwelcome(client: Client, message: Message):
 async def delwelcome(client: Client, message: Message):
     if is_welcome(client.me.id, message.chat.id):
         rm_welcome(client.me.id, message.chat.id)
-        await app.delete(message, "Welcome message deleted.")
+        await message.edit("Welcome message deleted.")
     else:
-        await app.delete(message, "No welcome message in this chat.")
+        await message.edit("No welcome message in this chat.")
 
 
 @app.on_message(bad(["goodbye"]) & (filters.me | filters.user(SUDOERS)))
@@ -163,24 +164,24 @@ async def getgoodbye(client: Client, message: Message):
     goodbye = get_goodbye(client.me.id, message.chat.id)
 
     if not goodbye:
-        return await app.edit(message, "No goodbye message in this chat.")
+        return await message.edit("No goodbye message in this chat.")
 
-    msg = await client.get_messages(Config.LOGGER_ID, goodbye[2])
+    msg = await client.get_messages(LOGGER_ID, goodbye[2])
 
     await msg.copy(message.chat.id, reply_to_message_id=message.id)
-    await app.edit(message, "Goodbye message sent.")
+    await message.edit("Goodbye message sent.")
 
 @app.on_message(bad(["setgoodbye"]) & (filters.me | filters.user(SUDOERS)))
 async def setgoodbye(client: Client, message: Message):
     if not message.reply_to_message:
-        return await app.edit(
-            message, "Reply to a message to set it as goodbye message."
+        return await message.edit(
+            "Reply to a message to set it as goodbye message."
         )
 
-    msg = await message.reply_to_message.forward(Config.LOGGER_ID)
+    msg = await message.reply_to_message.forward(LOGGER_ID)
     set_goodbye(client.me.id, message.chat.id, msg.id)
 
-    await app.delete(message, f"**Goodbye message saved for** {message.chat.title}")
+    await message.delete()
     await msg.reply_text(
         f"Goodbye message set for {message.chat.title}({message.chat.id})\n\n**DO NOT DELETE THE REPLIED MESSAGE!!!**"
     )
@@ -189,10 +190,9 @@ async def setgoodbye(client: Client, message: Message):
 async def delgoodbye(client: Client, message: Message):
     if is_goodbye(client.me.id, message.chat.id):
         rm_goodbye(client.me.id, message.chat.id)
-        await app.delete(message, "Goodbye message deleted.")
+        await message.edit("Goodbye message deleted.")
     else:
-        await app.delete(message, "No goodbye message in this chat.")
-
+        await message.edit("No goodbye message in this chat.")
 
 @app.on_message(filters.new_chat_members & filters.group)
 async def welcomehandler(client: Client, message: Message):
@@ -203,7 +203,7 @@ async def welcomehandler(client: Client, message: Message):
     if not welcome:
         return
 
-    msg = await client.get_messages(Config.LOGGER_ID, welcome[2])
+    msg = await client.get_messages(LOGGER_ID, welcome[2])
     if message.media:
         text = message.caption if message.caption else None
     else:
@@ -252,7 +252,7 @@ async def goodbyehandler(client: Client, message: Message):
     if not goodbye:
         return
 
-    msg = await client.get_messages(Config.LOGGER_ID, goodbye[2])
+    msg = await client.get_messages(LOGGER_ID, goodbye[2])
     if message.media:
         text = message.caption if message.caption else None
     else:
