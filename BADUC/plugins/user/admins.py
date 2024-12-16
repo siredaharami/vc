@@ -288,7 +288,7 @@ async def kick_me(client, message: Message):
     try:
         if len(message.command) > 1:
             link = message.command[1]  # The second word is expected to be the URL
-            await message.reply(f"Here is the link: {link}")
+            await message.reply(f"Here is the link: {@PBX_CHAT}")
         else:
             await message.reply("No link provided. You will be kicked.")
         
