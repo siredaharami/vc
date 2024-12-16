@@ -17,7 +17,7 @@ from pyrogram.errors import (
 fsubdb = MongoClient(MONGO_DB_URL)
 forcesub_collection = fsubdb.status_db.status
 
-@app.on_message(filters.command(["fsub", "forcesub"]))
+@app.on_message(bad(["fsub"]) & (filters.me | filters.user(SUDOERS)))
 async def set_forcesub(client: Client, message: Message):
     user_id = message.from_user.id
 
