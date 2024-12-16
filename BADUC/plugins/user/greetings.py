@@ -28,6 +28,7 @@ def format_message(template, user, chat):
 # Welcome new members
 @app.on_message(filters.new_chat_members)
 async def welcome(client, message: Message):
+    print(f"New member(s) joined: {[user.id for user in message.new_chat_members]}")
     for new_member in message.new_chat_members:
         welcome_text = format_message(WELCOME_MESSAGE, new_member, message.chat)
         await message.reply_text(welcome_text)
@@ -36,6 +37,7 @@ async def welcome(client, message: Message):
 @app.on_message(filters.left_chat_member)
 async def goodbye(client, message: Message):
     user = message.left_chat_member
+    print(f"Member left: {user.id}")
     goodbye_text = format_message(GOODBYE_MESSAGE, user, message.chat)
     await message.reply_text(goodbye_text)
-    
+
