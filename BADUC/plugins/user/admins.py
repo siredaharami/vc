@@ -42,7 +42,7 @@ async def ban_user(client, message: Message):
                 return
             await client.ban_chat_member(message.chat.id, user_to_ban.id)  # Correct method for banning
             caption = f"User {user_to_ban.first_name} has been banned."
-            media_url = "https://files.catbox.moe/43eyt0.mp4"  # Video URL
+            media_url = "https://files.catbox.moe/btsqh4.gif"  # Video URL
             await send_media(client, message, media_url, caption)
         except FloodWait as e:
             await asyncio.sleep(e.x)
