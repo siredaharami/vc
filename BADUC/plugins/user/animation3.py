@@ -46,7 +46,7 @@ async def _wrap_edit(message, text: str):
 
 async def phase1(message):
     """Big scroll"""
-    BIG_SCROLL = "🧡💛💚💙💜🖤🤎"
+    BIG_SCROLL = "🧡💛💚💙💜🖤🩷"
     await _wrap_edit(message, joined_heart)
     for heart in BIG_SCROLL:
         await _wrap_edit(message, joined_heart.replace(R, heart))
@@ -55,7 +55,7 @@ async def phase1(message):
 
 async def phase2(message):
     """Per-heart randomiser"""
-    ALL = ["❤️"] + list("🧡💛💚💙💜🤎🖤")  # don't include white heart
+    ALL = ["❤️"] + list("🧡💛💚💙💜🩷🖤")  # don't include white heart
 
     format_heart = joined_heart.replace(R, "{}")
     for _ in range(5):
@@ -295,126 +295,6 @@ async def superhero_fight(client: Client, message: Message):
         await asyncio.sleep(animation_interval)
         await message.edit(animation_chars[i % 14])
 
-@app.on_message(bad(["firefire"]) & (filters.me | filters.user(SUDOERS)))
-async def fire_explosion(client: Client, message: Message):
-    if message.forward_from:
-        return
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(1)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(1)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(2)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n🔥🔥🔥🔥 \n")
-    await asyncio.sleep(1)
-    await message.edit("💥🔥💥💥 \n💥🔥💥💥 \n💥🔥💥💥 \n💥🔥💥💥 \n💥🔥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥💥🔥🔥 \n🔥💥🔥🔥 \n🔥💥🔥🔥 \n🔥💥🔥🔥 \n🔥💥🔥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("💥🔥💥🔥 \n💥🔥💥🔥 \n💥🔥💥🔥 \n💥🔥💥🔥 \n💥🔥💥🔥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥💥💥💥💥 \n🔥💥💥💥💥 \n🔥💥💥💥💥 \n🔥💥💥💥💥 \n🔥💥💥💥💥 \n")
-    await asyncio.sleep(1)
-    await message.edit("🔥🔥🔥💥💥💥💥 \n🔥🔥🔥💥💥💥💥 \n🔥🔥🔥💥💥💥💥 \n🔥🔥🔥💥💥💥💥 \n🔥🔥🔥💥💥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🔥🔥🔥🔥💥💥💥💥 \n🔥🔥🔥🔥💥💥💥💥 \n🔥🔥🔥🔥💥💥💥💥 \n🔥🔥🔥🔥💥💥💥💥 \n🔥🔥🔥🔥💥💥💥💥 \n")
-    await asyncio.sleep(1)
-    await message.edit("🔥💥💥💥💥💥💥💥🔥 \n🔥💥💥💥💥💥💥🔥🔥 \n🔥💥💥💥💥💥🔥🔥🔥 \n🔥💥💥💥💥🔥🔥🔥🔥 \n🔥💥💥💥🔥🔥🔥🔥🔥 \n")
-    await asyncio.sleep(1)
-    await message.edit("`🔥 The fire explosion has occurred! 🔥💥`")
-    await asyncio.sleep(2)
-
-@app.on_message(bad(["earthquake"]) & (filters.me | filters.user(SUDOERS)))
-async def earthquake_animation(client: Client, message: Message):
-    if message.forward_from:
-        return
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(1)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(1)
-    await message.edit("💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n")
-    await asyncio.sleep(1)
-    await message.edit("💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n💥💥💥💥 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n🌍🌍🌍🌍 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("`🌍 Earthquake detected! 💥💥💥`")
-    await asyncio.sleep(2)
-
-@app.on_message(bad(["tornado"]) & (filters.me | filters.user(SUDOERS)))
-async def tornado_animation(client: Client, message: Message):
-    if message.forward_from:
-        return
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(1)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n🌪️🌪️🌪️🌪️ \n")
-    await asyncio.sleep(0.5)
-    await message.edit("💨💨💨💨 \n💨💨💨💨 \n💨💨💨💨 \n💨💨💨💨 \n💨💨💨💨 \n")
-    await asyncio.sleep(1)
-    await message.edit("💥💨💨💥 \n💨💥💨💨 \n💨💨💨💨 \n💨💨💨💨 \n💨💨💨💨 \n")
-    await asyncio.sleep(0.5)
-    await message.edit("🌪️💨💥💨 \n💨💨💥💨 \n💨💨💨💨 \n💨💨💨💨 \n💨💨💨💨 \n")
-    await asyncio.sleep(1)
-    await message.edit("`🌪️ Tornado has struck! 💨💥`")
-    await asyncio.sleep(2)
 
 @app.on_message(bad(["alarm"]) & (filters.me | filters.user(SUDOERS)))
 async def alarm_animation(client: Client, message: Message):
