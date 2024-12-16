@@ -16,7 +16,6 @@ from BADUC.database.data import *
 
 ACTIVATE_RLIST = []
 
-
 @app.on_message(bad(["replyraid"]) & (filters.me | filters.user(SUDOERS)))
 async def rr(client: Client, message: Message):
     r = await message.edit_text("**Processing**")
@@ -62,7 +61,6 @@ async def drr(client: Client, message: Message):
     ACTIVATE_RLIST.remove(user.id)
     await r.edit(f"**Reply Raid has Been Removed {user.first_name}, enjoy!**")
 
-
 @app.on_message(filters.incoming)
 async def watch_raids(client: Client, message: Message):
     try:
@@ -74,26 +72,18 @@ async def watch_raids(client: Client, message: Message):
         userr = message.from_user
         mention = f"[{userr.first_name}](tg://user?id={userr.id})"
         raid = f"{mention} {choice(RAID)}"
-        if int(user) in VERIFIED_USERS:
+        
+        # Skip if user is verified or sudo, or if the message is in the specified group
+        if int(user) in VERIFIED_USERS or int(user) in SUDO_USER or int(message.chat.id) in GROUP:
             return
-        elif int(user) in SUDO_USER:
-            return
-        if int(message.chat.id) in GROUP:
-            return
-        try:
-            if not message.from_user.id in ACTIVATE_RLIST:
-                return
-        except AttributeError:
-            return
-        try:
-            if message.from_user.id in ACTIVATE_RLIST:
-                await message.reply_text(raid)
-        except Exception as a:
-            print(f"An error occurred (a): {str(a)}")
-    except Exception as b:
-        print(f"An error occurred (b): {str(b)}")
-
-  # REPLYRAID 
+        
+        # Ensure the user is in ACTIVATE_RLIST before proceeding
+        if int(user) in ACTIVATE_RLIST:
+            await message.reply_text(raid)
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        
+# REPLYRAID 
 
 @app.on_message(bad(["dmraid"]) & (filters.me | filters.user(SUDOERS)))
 async def draid(Client: Client, m: Message):  
