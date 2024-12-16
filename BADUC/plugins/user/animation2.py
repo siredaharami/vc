@@ -247,55 +247,55 @@ async def gunid(client: Client, message: Message):
 "⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿\n"
  )
     
-__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ2"
+__NAME__ = "ᴀɴɪᴍᴀᴛɪᴏɴ ₂"
 __MENU__ = """
-`.dead` **Type dead and see magic**
+`.dead` ᴛʏᴘᴇ dᴇᴀᴅ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.dlove` **Type dlove and see magic**
+`.dlove` ᴛʏᴘᴇ dʟᴏᴠᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.rocket` **Type rocket and see magic**
+`.rocket` ᴛʏᴘᴇ ʀᴏᴄᴋᴇᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.drugs` **Type drugs and see magic**
+`.drugs` ᴛʏᴘᴇ dʀᴜɢs ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.run` **Type run and see magic**
+`.run` ᴛʏᴘᴇ ʀᴜɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.thumb` **Type thumb and see magic**
+`.thumb` ᴛʏᴘᴇ ᴛʜᴜᴍʙ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.tank` **Type tank and see magic**
+`.tank` ᴛʏᴘᴇ ᴛᴀɴᴋ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.cat` **Type cat and see magic**
+`.cat` ᴛʏᴘᴇ ᴄᴀᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.nolove` **Type nolove and see magic**
+`.nolove` ᴛʏᴘᴇ nᴏʟᴏᴠᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.peg` **Type peg and see magic**
+`.peg` ᴛʏᴘᴇ ᴘᴇɢ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.scam` **Type scam and see magic**
+`.scam` ᴛʏᴘᴇ sᴄᴀᴍ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.ror` **Type ror and see magic**
+`.ror` ᴛʏᴘᴇ ʀᴏʀ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.plain` **Type plain and see magic**
+`.plain` ᴛʏᴘᴇ ᴘʟᴀɪɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.mp3` **Type mp3 and see magic**
+`.mp3` ᴛʏᴘᴇ ᴍᴘ3 ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.snake` **Type snake and see magic**
+`.snake` ᴛʏᴘᴇ sɴᴀᴋᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.mc` **Type mc and see magic**
+`.mc` ᴛʏᴘᴇ ᴍᴄ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.nikal` **Type nikal and see magic**
+`.nikal` ᴛʏᴘᴇ nɪᴋᴀʟ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.gm` **Type gm and see magic**
+`.gm` ᴛʏᴘᴇ ɢᴍ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.goodmorning` **Type goodmorning and see magic**
+`.goodmorning` ᴛʏᴘᴇ ɢᴏᴏᴅᴍᴏʀɴɪɴɢ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.gn` **Type gn and see magic**
+`.gn` ᴛʏᴘᴇ ɢɴ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.goodnight` **Type goodnight and see magic**
+`.goodnight` ᴛʏᴘᴇ ɢᴏᴏᴅɴɪɢʜᴛ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.Pikachu` **Type Pikachu and see magic**
+`.Pikachu` ᴛʏᴘᴇ ᴘɪᴋᴀᴄʜᴜ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.bully` **Type bully and see magic**
+`.bully` ᴛʏᴘᴇ ʙᴜʟʟʏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.cuddle` **Type cuddle and see magic**
+`.cuddle` ᴛʏᴘᴇ ᴄᴜᴅᴅʟᴇ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 
-`.cry` **Type cry and see magic**
+`.cry` ᴛʏᴘᴇ ᴄʀʏ ᴀɴᴅ sᴇᴇ ᴍᴀɢɪᴄ.
 """
