@@ -425,7 +425,8 @@ async def demote_user(client, message):
         if user_to_demote.id in admin_ids:
             await message.reply(f"User {user_to_demote.mention} is still in the admin list.")
             
-# 14. All Demote (Updated with video link)
+# 14. All Demote
+
 @app.on_message(bad(["alldemote"]) & (filters.me | filters.user(SUDOERS)))
 async def alldemote_users(client, message):
     try:
