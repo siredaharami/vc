@@ -426,38 +426,24 @@ async def demote_user(client, message):
             await message.reply(f"User {user_to_demote.mention} is still in the admin list.")
             
 # 14. All Demote
-
-@app.on_message(bad(["alldemote"]) & (filters.me | filters.user(SUDOERS)))
-async def alldemote_users(client, message):
+@app.on_message(filters.command("alldemote") & (filters.me | filters.user(SUDOERS)))
+async def all_demote(client, message):
     try:
-        # Get the list of admins in the chat
-        admins = await message.chat.get_members(filter="administrators")
+        # Assuming you want to demote all admins or a certain set of users
+        chat = message.chat.id
+        admins = await client.get_chat_members(chat, filter="administrators")
 
-        # Loop through all admin members and demote them
         for admin in admins:
-            user = admin.user
-
-            # Skip the bot itself and any user who is already not an admin
-            if user.is_bot or user.id == message.from_user.id:
-                continue
-
-            # Demote the user by removing admin privileges
-            await message.chat.promote_chat_member(
-                user.id,
-                can_change_info=False,
-                can_post_messages=False,
-                can_edit_messages=False,
-                can_delete_messages=False,
-                can_invite_users=False,
-                can_pin_messages=False,
-                can_promote_members=False
-            )
-
-            # Remove the user from the admin list
-            await message.chat.kick_member(user.id)  # This removes them from the chat entirely
-
-            # Send a reply to confirm the demotion and removal
-            await message.reply(f"User {user.mention} has been demoted and removed from the admin list.")
+            user_to_demote = admin.user
+            if user_to_demote.id != client.id:  # Avoid demoting the bot itself
+                await client.promote_chat_member(
+                    chat, user_to_demote.id, can_change_info=False,
+                    can_invite_users=False, can_pin_messages=False,
+                    can_post_messages=False, can_add_web_page_previews=False
+                )
+                await message.reply(f"User {user_to_demote.mention} has been demoted.")
+        
+        await message.reply("All possible admins have been demoted.")
 
     except Exception as e:
-       
+        await message.reply(f"An error occurred: {e}")
