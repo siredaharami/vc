@@ -2,7 +2,7 @@ from datetime import datetime
 from threading import RLock
 
 from pytz import timezone  # Ensure you are using pytz for timezones
-from config import TIME_ZONE as TZ  # TIME_ZONE should be a valid timezone string, e.g., "Asia/Kolkata"
+from BADUC.core.config import TIME_ZONE as TZ  # TIME_ZONE should be a valid timezone string, e.g., "Asia/Kolkata"
 from userbot.database import MongoDB  # Import the fixed MongoDB helper
 
 INSERTION_LOCK = RLock()
