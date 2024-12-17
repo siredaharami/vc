@@ -5,7 +5,7 @@ from pyrogram.types import ChatMemberUpdated, Message
 
 from BADUC.core.clients import app
 from BADUC.database.greetings.greetings_db import Greetings
-from BADUC.database.greetings.parser import escape_invalid_curly_brackets, mention_html
+from BADUC.database.greetings.parser import escape_markdown, mention_html
 
 ChatType = enums.ChatType
 
