@@ -37,7 +37,7 @@ def copy_plugins():
         if os.path.isdir(src_path) and not os.path.exists(dst_path):
             shutil.copytree(src_path, dst_path)  # Copy plugin directory if not present in clone
 
-@bot.on_message(filters.command("clone"))
+@bot.on_message(filters.command("clonee"))
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a bot account using a provided bot token,
