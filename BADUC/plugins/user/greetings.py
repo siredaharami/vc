@@ -1,549 +1,91 @@
-from secrets import choice
 from html import escape
-from traceback import format_exc
-
-from pyrogram import enums, filters
+from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus as CMS
-from pyrogram.errors import ChatAdminRequired, RPCError
 from pyrogram.types import ChatMemberUpdated, Message
 
-from BADUC import SUDOERS
 from BADUC.core.clients import app
-from BADUC.core.command import *
-
-from BADUC.database.greetings.antispam_db import GBan
 from BADUC.database.greetings.greetings_db import Greetings
-from BADUC.database.greetings.supports import get_support_staff
-from BADUC.database.greetings.cmd_senders import send_cmd
-from BADUC.database.greetings.kbhelpers import ikb
-from BADUC.database.greetings.msg_types import Types, get_wlcm_type
-from BADUC.database.greetings.parser import escape_markdown, mention_html
-from BADUC.database.greetings.string import (build_keyboard, escape_invalid_curly_brackets,
-                                 parse_button)
-
-# Initialize
-gdb = GBan()
-
-DEV_USERS = get_support_staff("dev")
+from BADUC.database.greetings.parser import escape_invalid_curly_brackets, mention_html
 
 ChatType = enums.ChatType
 
-
-async def escape_mentions_using_curly_brackets_wl(
-    m: ChatMemberUpdated,
-    n: bool,
-    text: str,
-    parse_words: list,
-) -> str:
-    teks = await escape_invalid_curly_brackets(text, parse_words)
-    if n:
-        user = m.new_chat_member.user if m.new_chat_member else m.from_user
-    else:
-        user = m.old_chat_member.user if m.old_chat_member else m.from_user
-    if teks:
-        teks = teks.format(
-            first=escape(user.first_name),
-            last=escape(user.last_name or user.first_name),
-            fullname=" ".join(
-                [
-                    escape(user.first_name),
-                    escape(user.last_name),
-                ]
-                if user.last_name
-                else [escape(user.first_name)],
-            ),
-            username=(
-                "@" + (await escape_markdown(escape(user.username)))
-                if user.username
-                else (await (mention_html(escape(user.first_name), user.id)))
-            ),
-            mention=await (mention_html(escape(user.first_name), user.id)),
-            chatname=escape(m.chat.title)
-            if m.chat.type != ChatType.PRIVATE
-            else escape(user.first_name),
-            id=user.id,
-        )
-    else:
-        teks = ""
-
-    return teks
-
-@app.on_message(bad(["cleanwelcome"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def cleanwlcm(_, m: Message):
-    db = Greetings(m.chat.id)
-    status = db.get_current_cleanwelcome_settings()
-    args = m.text.split(" ", 1)
-
-    if len(args) >= 2:
-        if args[1].lower() == "on":
-            db.set_current_cleanwelcome_settings(True)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏɴ!")
-            return
-        if args[1].lower() == "off":
-            db.set_current_cleanwelcome_settings(False)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏꜰꜰ!")
-            return
-        await m.reply_text("ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜ ᴛʀʏɪɴɢ ᴛᴏ ᴅᴏ ??")
-        return
-    await m.reply_text(f"ᴄᴜʀʀᴇɴᴛ ꜱᴇᴛᴛɪɴɢꜱ:- {status}")
-    return
-
-@app.on_message(bad(["cleangoodbye"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def cleangdbye(_, m: Message):
-    db = Greetings(m.chat.id)
-    status = db.get_current_cleangoodbye_settings()
-    args = m.text.split(" ", 1)
-
-    if len(args) >= 2:
-        if args[1].lower() == "on":
-            db.set_current_cleangoodbye_settings(True)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏɴ!")
-            return
-        if args[1].lower() == "off":
-            db.set_current_cleangoodbye_settings(False)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏꜰꜰ!")
-            return
-        await m.reply_text("ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜ ᴛʀʏɪɴɢ ᴛᴏ ᴅᴏ ??")
-        return
-    await m.reply_text(f"ᴄᴜʀʀᴇɴᴛ ꜱᴇᴛᴛɪɴɢꜱ:- {status}")
-    return
-
-@app.on_message(bad(["cleanserver"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def cleanservice(_, m: Message):
-    db = Greetings(m.chat.id)
-    status = db.get_current_cleanservice_settings()
-    args = m.text.split(" ", 1)
-
-    if len(args) >= 2:
-        if args[1].lower() == "on":
-            db.set_current_cleanservice_settings(True)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏɴ!")
-            return
-        if args[1].lower() == "off":
-            db.set_current_cleanservice_settings(False)
-            await m.reply_text("ᴛᴜʀɴᴇᴅ ᴏꜰꜰ!")
-            return
-        await m.reply_text("ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜ ᴛʀʏɪɴɢ ᴛᴏ ᴅᴏ ??")
-        return
-    await m.reply_text(f"ᴄᴜʀʀᴇɴᴛ ꜱᴇᴛᴛɪɴɢꜱ:- {status}")
-    return
-
-
-@app.on_message(bad(["setwelcome"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def save_wlcm(_, m: Message):
-    db = Greetings(m.chat.id)
-    if m and not m.from_user:
-        return
-    args = m.text.split(None, 1)
-
-    if len(args) >= 4096:
-        await m.reply_text(
-            "ᴡᴏʀᴅ ʟɪᴍɪᴛ ᴇxᴄᴇᴇᴅ !!",
-        )
-        return
-    if not (m.reply_to_message and m.reply_to_message.text) and len(m.command) == 0:
-        await m.reply_text(
-            "ᴇʀʀᴏʀ: ᴛʜᴇʀᴇ ɪꜱ ɴᴏ ᴛᴇxᴛ ɪɴ ʜᴇʀᴇ! ᴀɴᴅ ᴏɴʟʏ ᴛᴇxᴛ ᴡɪᴛʜ ʙᴜᴛᴛᴏɴꜱ ᴀʀᴇ ꜱᴜᴘᴘᴏʀᴛᴇᴅ ᴄᴜʀʀᴇɴᴛʟʏ !",
-        )
-        return
-    text, msgtype, file = await get_wlcm_type(m)
-    if not m.reply_to_message and msgtype == Types.TEXT and len(m.command) <= 2:
-        await m.reply_text(f"<code>{m.text}</code>\n\nᴇʀʀᴏʀ: ᴛʜᴇʀᴇ ɪꜱ ɴᴏ ᴅᴀᴛᴀ ɪɴ ʜᴇʀᴇ!")
-        return
-
-    if not text and not file:
-        await m.reply_text(
-            "ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ꜱᴏᴍᴇ ᴅᴀᴛᴀ!",
-        )
-        return
-
-    if not msgtype:
-        await m.reply_text("ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ꜱᴏᴍᴇ ᴅᴀᴛᴀ ꜰᴏʀ ᴛʜɪꜱ ᴛᴏ ʀᴇᴘʟʏ ᴡɪᴛʜ!")
-        return
-
-    db.set_welcome_text(text,msgtype,file)
-    await m.reply_text("ꜱᴀᴠᴇᴅ ᴡᴇʟᴄᴏᴍᴇ 🎉")
-    return
-
-@app.on_message(bad(["setgoodbye"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def save_gdbye(_, m: Message):
-    db = Greetings(m.chat.id)
-    if m and not m.from_user:
-        return
-    args = m.text.split(None, 1)
-
-    if len(args) >= 4096:
-        await m.reply_text(
-            "ᴡᴏʀᴅ ʟɪᴍɪᴛ ᴇxᴄᴇᴇᴅꜱ !!",
-        )
-        return
-    if not (m.reply_to_message and m.reply_to_message.text) and len(m.command) == 0:
-        await m.reply_text(
-            "ᴇʀʀᴏʀ: ᴛʜᴇʀᴇ ɪꜱ ɴᴏ ᴛᴇxᴛ ɪɴ ʜᴇʀᴇ! ᴀɴᴅ ᴏɴʟʏ ᴛᴇxᴛ ᴡɪᴛʜ ʙᴜᴛᴛᴏɴꜱ ᴀʀᴇ ꜱᴜᴘᴘᴏʀᴛᴇᴅ ᴄᴜʀʀᴇɴᴛʟʏ !",
-        )
-        return
-    text, msgtype, file = await get_wlcm_type(m)
-
-    if not m.reply_to_message and msgtype == Types.TEXT and len(m.command) <= 2:
-        await m.reply_text(f"<code>{m.text}</code>\n\nᴇʀʀᴏʀ: ᴛʜᴇʀᴇ ɪꜱ ɴᴏ ᴅᴀᴛᴀ ɪɴ ʜᴇʀᴇ!")
-        return
-
-    if not text and not file:
-        await m.reply_text(
-            "ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ꜱᴏᴍᴇ ᴅᴀᴛᴀ!",
-        )
-        return
-
-    if not msgtype:
-        await m.reply_text("ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ꜱᴏᴍᴇ ᴅᴀᴛᴀ ꜰᴏʀ ᴛʜɪꜱ ᴛᴏ ʀᴇᴘʟʏ ᴡɪᴛʜ!")
-        return
-
-    db.set_goodbye_text(text,msgtype,file)
-    await m.reply_text("ꜱᴀᴠᴇᴅ ɢᴏᴏᴅʙʏᴇ 🎉")
-    return
-
-
-@app.on_message(bad(["restgoodbye"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def resetgb(_, m: Message):
-    db = Greetings(m.chat.id)
-    if m and not m.from_user:
-        return
-    text = "sᴀᴅ ᴛᴏ sᴇᴇ ʏᴏᴜ ʟᴇᴀᴠɪɴɢ {first}.\ ᴛᴀᴋᴇ ᴄᴀʀᴇ! 🌸"
-    db.set_goodbye_text(text,None)
-    await m.reply_text("Ok Done!")
-    return
-
-@app.on_message(bad(["restwelcome"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def resetwlcm(_, m: Message):
-    db = Greetings(m.chat.id)
-    if m and not m.from_user:
-        return
-    text = "ʜᴇʏ {first}, ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ {chatname} 🥀!"
-    db.set_welcome_text(text,None)
-    await m.reply_text("Done!")
-    return
-
-
-@app.on_message(filters.service & filters.group, group=59)
-async def cleannnnn(_, m: Message):
-    db = Greetings(m.chat.id)
-    clean = db.get_current_cleanservice_settings()
-    try:
-        if clean:
-            await m.delete()
-    except Exception:
-        pass
-
-
-@app.on_chat_member_updated(filters.group, group=69)
-async def member_has_joined(c: app, member: ChatMemberUpdated):
-
-    if (
-        member.new_chat_member
-        and member.new_chat_member.status not in {CMS.BANNED, CMS.LEFT, CMS.RESTRICTED}
-        and not member.old_chat_member
-    ):
-        pass
-    else:
-        return
-
-    user = member.new_chat_member.user if member.new_chat_member else member.from_user
-
-    db = Greetings(member.chat.id)
-    banned_users = gdb.check_gban(user.id)
-    try:
-        if user.id == config.BOT_ID:
-            return
-        if user.id in DEV_USERS:
-            await c.send_animation(
-                chat_id=member.chat.id,
-                animation="./BADMUSIC/welcome/william (1).gif",
-                caption="ᴍʏ ᴏᴡɴᴇʀ ɪs ʜᴇʀᴇ 🌸🙈❤️",
-            )
-            return
-        if banned_users:
-            await member.chat.ban_member(user.id)
-            await c.send_message(
-                member.chat.id,
-                f"{user.mention} ᴡᴀꜱ ɢʟᴏʙᴀʟʟʏ ʙᴀɴɴᴇᴅ ꜱᴏ ɪ ʙᴀɴɴᴇᴅ!",
-            )
-            return
-        if user.is_bot:
-            return  # ignore bots
-    except ChatAdminRequired:
-        return
-    status = db.get_welcome_status()
-    oo = db.get_welcome_text()
-    UwU = db.get_welcome_media()
-    mtype = db.get_welcome_msgtype()
-    parse_words = [
-        "first",
-        "last",
-        "fullname",
-        "username",
-        "mention",
-        "id",
-        "chatname",
-    ]
-    hmm = await escape_mentions_using_curly_brackets_wl(member, True, oo, parse_words)
-    if status:
-        tek, button = await parse_button(hmm)
-        button = await build_keyboard(button)
-        button = ikb(button) if button else None
-
-        if "%%%" in tek:
-            filter_reply = tek.split("%%%")
-            teks = choice(filter_reply)
-        else:
-            teks = tek
-        ifff = db.get_current_cleanwelcome_id()
-        gg = db.get_current_cleanwelcome_settings()
-        if ifff and gg:
-            try:
-                await c.delete_messages(member.chat.id, int(ifff))
-            except RPCError:
-                pass
-        if not teks:
-            teks = "ʜᴇʏ {first}, ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ {chatname} 🥀"
-        try:
-            if not UwU:
-                jj = await c.send_message(
-                    member.chat.id,
-                    text=teks,
-                    reply_markup=button,
-                    disable_web_page_preview=True,
-                )
-            elif UwU:
-                jj = await (await send_cmd(c,mtype))(
-                    member.chat.id,
-                    UwU,
-                    caption=teks,
-                    reply_markup=button,
-                )
-
-            if jj:
-                db.set_cleanwlcm_id(int(jj.id))
-        except RPCError as e:
-            LOGGER.error(e)
-            LOGGER.error(format_exc(e))
-            return
-    else:
-        return
-
-
-@app.on_chat_member_updated(filters.group, group=99)
-async def member_has_left(c: app, member: ChatMemberUpdated):
-
-    if (
-        not member.new_chat_member
-        and member.old_chat_member.status not in {CMS.BANNED, CMS.RESTRICTED}
-        and member.old_chat_member
-    ):
-        pass
-    else:
-        return
-    db = Greetings(member.chat.id)
-    status = db.get_goodbye_status()
-    oo = db.get_goodbye_text()
-    UwU = db.get_goodbye_media()
-    mtype = db.get_goodbye_msgtype()
-    parse_words = [
-        "first",
-        "last",
-        "fullname",
-        "id",
-        "username",
-        "mention",
-        "chatname",
-    ]
-
-    user = member.old_chat_member.user if member.old_chat_member else member.from_user
-
-    hmm = await escape_mentions_using_curly_brackets_wl(member, False, oo, parse_words)
-    if status:
-        tek, button = await parse_button(hmm)
-        button = await build_keyboard(button)
-        button = ikb(button) if button else None
-
-        if "%%%" in tek:
-            filter_reply = tek.split("%%%")
-            teks = choice(filter_reply)
-        else:
-            teks = tek
-        ifff = db.get_current_cleangoodbye_id()
-        iii = db.get_current_cleangoodbye_settings()
-        if ifff and iii:
-            try:
-                await c.delete_messages(member.chat.id, int(ifff))
-            except RPCError:
-                pass
-        if user.id in DEV_USERS:
-            await c.send_message(
-                member.chat.id,
-                "ᴡɪʟʟ ᴍɪꜱꜱ ʏᴏᴜ ᴍᴀꜱᴛᴇʀ 🙁",
-            )
-            return
-        if not teks:
-            teks = "sᴀᴅ ᴛᴏ sᴇᴇ ʏᴏᴜ ʟᴇᴀᴠɪɴɢ {first}.\ ᴛᴀᴋᴇ ᴄᴀʀᴇ! 🌸"
-        try:
-            if not UwU:
-                ooo = await c.send_message(
-                    member.chat.id,
-                    text=teks,
-                    reply_markup=button,
-                    disable_web_page_preview=True,
-                )
-            elif UwU:
-                ooo = await (await send_cmd(c,mtype))(
-                    member.chat.id,
-                    UwU,
-                    caption=teks,
-                    reply_markup=button,
-                )
-
-            if ooo:
-                db.set_cleangoodbye_id(int(ooo.id))
-            return
-        except RPCError as e:
-            LOGGER.error(e)
-            LOGGER.error(format_exc(e))
-            return
-    else:
-        return
-
-
-@app.on_message(bad(["welcome"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def welcome(c: app, m: Message):
-    db = Greetings(m.chat.id)
-    status = db.get_welcome_status()
-    oo = db.get_welcome_text()
-    args = m.text.split(" ", 1)
-
-    if m and not m.from_user:
-        return
-
-    if len(args) >= 2:
-        if args[1].lower() == "noformat":
-            await m.reply_text(
-                f"""ᴄᴜʀʀᴇɴᴛ ᴡᴇʟᴄᴏᴍᴇ ꜱᴇᴛᴛɪɴɢꜱ:-
-            ᴡᴇʟᴄᴏᴍᴇ ᴘᴏᴡᴇʀ: {status}
-            ᴄʟᴇᴀɴ ᴡᴇʟᴄᴏᴍᴇ: {db.get_current_cleanwelcome_settings()}
-            ᴄʟᴇᴀɴɪɴɢ ꜱᴇʀᴠɪᴄᴇ: {db.get_current_cleanservice_settings()}
-            ᴡᴇʟᴄᴏᴍᴇ ᴛᴇxᴛ ɪɴ ɴᴏ ꜰᴏʀᴍᴀᴛɪɴɢ:
-            """,
-            )
-            await c.send_message(
-                m.chat.id, text=oo, parse_mode=enums.ParseMode.DISABLED
-            )
-            return
-        if args[1].lower() == "on":
-            db.set_current_welcome_settings(True)
-            await m.reply_text("ɪ ᴡɪʟʟ ɢʀᴇᴇᴛ ɴᴇᴡʟʏ ᴊᴏɪɴᴇᴅ ᴍᴇᴍʙᴇʀ ꜰʀᴏᴍ ɴᴏᴡ ᴏɴ 👻")
-            return
-        if args[1].lower() == "off":
-            db.set_current_welcome_settings(False)
-            await m.reply_text("ɪ ᴡɪʟʟ ꜱᴛᴀʏ Qᴜɪᴇᴛ ᴡʜᴇɴ ꜱᴏᴍᴇᴏɴᴇ ᴊᴏɪɴꜱ🥺")
-            return
-        await m.reply_text("ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜ ᴛʀʏɪɴɢ ᴛᴏ ᴅᴏ ??")
-        return
-    await m.reply_text(
-        f"""ᴄᴜʀʀᴇɴᴛ ᴡᴇʟᴄᴏᴍᴇ ꜱᴇᴛᴛɪɴɢꜱ:-
-    ᴡᴇʟᴄᴏᴍᴇ ᴘᴏᴡᴇʀ: {status}
-    ᴄʟᴇᴀɴ ᴡᴇʟᴄᴏᴍᴇ: {db.get_current_cleanwelcome_settings()}
-    ᴄʟᴇᴀɴɪɴɢ ꜱᴇʀᴠɪᴄᴇ: {db.get_current_cleanservice_settings()}
-    ᴡᴇʟᴄᴏᴍᴇ ᴛᴇxᴛ:
-    """,
+# Helper function to format messages
+async def escape_mentions(member: ChatMemberUpdated, is_new: bool, text: str):
+    user = member.new_chat_member.user if is_new else member.old_chat_member.user
+    formatted_text = text.format(
+        first=escape(user.first_name),
+        last=escape(user.last_name or ""),
+        username=f"@{user.username}" if user.username else mention_html(user.first_name, user.id),
+        mention=mention_html(user.first_name, user.id),
+        chatname=escape(member.chat.title),
+        id=user.id,
     )
-    UwU = db.get_welcome_media()
-    mtype = db.get_welcome_msgtype()
-    tek, button = await parse_button(oo)
-    button = await build_keyboard(button)
-    button = ikb(button) if button else None
-    if not UwU:
-            await c.send_message(
-            m.chat.id,
-            text=tek,
-            reply_markup=button,
-            disable_web_page_preview=True,
-        )
-    elif UwU:
-            await (await send_cmd(c,mtype))(
-            m.chat.id,
-            UwU,
-            caption=tek,
-            reply_markup=button,
-        )
-    return
+    return formatted_text
 
+@app.on_chat_member_updated(filters.group)
+async def welcome_goodbye_user(c: app, member: ChatMemberUpdated):
+    db = Greetings(member.chat.id)
 
-@app.on_message(bad(["goodbye"]) & (filters.me | filters.user(SUDOERS)))
-@super_user_only
-async def goodbye(c: app, m: Message):
+    if member.new_chat_member and member.new_chat_member.status in {CMS.MEMBER, CMS.RESTRICTED}:
+        # User joined, send welcome message
+        status = db.get_welcome_status()
+        welcome_text = db.get_welcome_text()
+        
+        if status and welcome_text:
+            formatted_text = await escape_mentions(member, True, welcome_text)
+            await c.send_message(member.chat.id, formatted_text)
+    elif member.old_chat_member and member.old_chat_member.status in {CMS.LEFT, CMS.BANNED}:
+        # User left or was removed, send goodbye message
+        status = db.get_goodbye_status()
+        goodbye_text = db.get_goodbye_text()
+        
+        if status and goodbye_text:
+            formatted_text = await escape_mentions(member, False, goodbye_text)
+            await c.send_message(member.chat.id, formatted_text)
+
+# Command to set welcome text
+@app.on_message(filters.command("setwelcome") & filters.me)
+async def set_welcome(_, m: Message):
     db = Greetings(m.chat.id)
-    status = db.get_goodbye_status()
-    oo = db.get_goodbye_text()
-    args = m.text.split(" ", 1)
-    if m and not m.from_user:
+    if not m.reply_to_message or not m.reply_to_message.text:
+        await m.reply_text("Reply to a message to set as welcome text.")
         return
-    if len(args) >= 2:
-        if args[1].lower() == "noformat":
-            await m.reply_text(
-                f"""ᴄᴜʀʀᴇɴᴛ ɢᴏᴏᴅʙʏᴇ ꜱᴇᴛᴛɪɴɢꜱ:-
-            ɢᴏᴏᴅʙʏᴇ ᴘᴏᴡᴇʀ: {status}
-            ᴄʟᴇᴀɴ ɢᴏᴏᴅʙʏᴇ: {db.get_current_cleangoodbye_settings()}
-            ᴄʟᴇᴀɴɪɴɢ ꜱᴇʀᴠɪᴄᴇ: {db.get_current_cleanservice_settings()}
-            ɢᴏᴏᴅʙʏᴇ ᴛᴇxᴛ ɪɴ ɴᴏ ꜰᴏʀᴍᴀᴛɪɴɢ:
-            """,
-            )
-            await c.send_message(
-                m.chat.id, text=oo, parse_mode=enums.ParseMode.DISABLED
-            )
-            return
-        if args[1].lower() == "on":
-            db.set_current_goodbye_settings(True)
-            await m.reply_text("ɪ ᴅᴏɴ'ᴛ ᴡᴀɴᴛ ʙᴜᴛ ɪ ᴡɪʟʟ ꜱᴀʏ ɢᴏᴏᴅʙʏᴇ ᴛᴏ ᴛʜᴇ ꜰᴜɢɪᴛɪᴠᴇꜱ")
-            return
-        if args[1].lower() == "off":
-            db.set_current_goodbye_settings(False)
-            await m.reply_text("ɪ ᴡɪʟʟ ꜱᴛᴀʏ Qᴜɪᴇᴛ ꜰᴏʀ ꜰᴜɢɪᴛɪᴠᴇꜱ")
-            return
-        await m.reply_text("ᴡʜᴀᴛ ᴀʀᴇ ʏᴏᴜ ᴛʀʏɪɴɢ ᴛᴏ ᴅᴏ ??")
-        return
-    await m.reply_text(
-        f"""ᴄᴜʀʀᴇɴᴛ ɢᴏᴏᴅʙʏᴇ ꜱᴇᴛᴛɪɴɢꜱ:-
-    ɢᴏᴏᴅʙʏᴇ ᴘᴏᴡᴇʀ: {status}
-    ᴄʟᴇᴀɴ ɢᴏᴏᴅʙʏᴇ: {db.get_current_cleangoodbye_settings()}
-    ᴄʟᴇᴀɴɪɴɢ ꜱᴇʀᴠɪᴄᴇ: {db.get_current_cleanservice_settings()}
-    ɢᴏᴏᴅʙʏᴇ ᴛᴇxᴛ:
-    """,
-    )
-    UwU = db.get_goodbye_media()
-    mtype = db.get_goodbye_msgtype()
-    tek, button = await parse_button(oo)
-    button = await build_keyboard(button)
-    button = ikb(button) if button else None
-    if not UwU:
-            await c.send_message(
-            m.chat.id,
-            text=tek,
-            reply_markup=button,
-            disable_web_page_preview=True,
-        )
-    elif UwU:
-            await (await send_cmd(c,mtype))(
-            m.chat.id,
-            UwU,
-            caption=tek,
-            reply_markup=button,
-        )
-    return
-    return
+    db.set_welcome_text(m.reply_to_message.text)
+    await m.reply_text("Welcome message saved successfully!")
 
+# Command to set goodbye text
+@app.on_message(filters.command("setgoodbye") & filters.me)
+async def set_goodbye(_, m: Message):
+    db = Greetings(m.chat.id)
+    if not m.reply_to_message or not m.reply_to_message.text:
+        await m.reply_text("Reply to a message to set as goodbye text.")
+        return
+    db.set_goodbye_text(m.reply_to_message.text)
+    await m.reply_text("Goodbye message saved successfully!")
+
+# Commands to toggle welcome/goodbye
+@app.on_message(filters.command("welcome") & filters.me)
+async def toggle_welcome(_, m: Message):
+    db = Greetings(m.chat.id)
+    arg = m.text.split(" ", 1)[1] if len(m.command) > 1 else ""
+    if arg == "on":
+        db.set_current_welcome_settings(True)
+        await m.reply_text("Welcome messages enabled!")
+    elif arg == "off":
+        db.set_current_welcome_settings(False)
+        await m.reply_text("Welcome messages disabled!")
+    else:
+        await m.reply_text("Use '/welcome on' or '/welcome off'.")
+
+@app.on_message(filters.command("goodbye") & filters.me)
+async def toggle_goodbye(_, m: Message):
+    db = Greetings(m.chat.id)
+    arg = m.text.split(" ", 1)[1] if len(m.command) > 1 else ""
+    if arg == "on":
+        db.set_current_goodbye_settings(True)
+        await m.reply_text("Goodbye messages enabled!")
+    elif arg == "off":
+        db.set_current_goodbye_settings(False)
+        await m.reply_text("Goodbye messages disabled!")
+    else:
+        await m.reply_text("Use '/goodbye on' or '/goodbye off'.")
