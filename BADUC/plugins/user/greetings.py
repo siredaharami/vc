@@ -20,7 +20,6 @@ from BADUC.database.greetings.msg_types import Types, get_wlcm_type
 from BADUC.database.greetings.parser import escape_markdown, mention_html
 from BADUC.database.greetings.string import (build_keyboard, escape_invalid_curly_brackets,
                                  parse_button)
-import config
 
 # Initialize
 gdb = GBan()
