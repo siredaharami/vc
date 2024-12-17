@@ -1,5 +1,6 @@
-from BADMUSIC import app
-from BADMUSIC.utils.welcome.msg_types import Types
+from BADUC import SUDOERS
+from BADUC.core.clients import app
+from BADUC.database.greetings.msg_types import Types
 
 
 async def send_cmd(client: app, msgtype: int):
