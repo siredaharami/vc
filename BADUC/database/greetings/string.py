@@ -6,8 +6,8 @@ from typing import List
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, Message
 
-from BADMUSIC import TIME_ZONE
-from BADMUSIC.utils.welcome.parser import escape_markdown
+from BADUC import TIME_ZONE
+from BADUC.database.greetings.parser import escape_markdown
 
 BTN_URL_REGEX = compile_re(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
 
