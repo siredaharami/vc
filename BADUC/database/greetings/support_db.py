@@ -1,7 +1,7 @@
 from threading import RLock
 
-from BADMUSIC import LOGGER
-from BADMUSIC.utils.welcome import MongoDB
+from BADUC.core.logger import LOGGER
+from BADUC.database.greetings import MongoDB
 
 INSERTION_LOCK = RLock()
 
