@@ -1,5 +1,7 @@
 import os
 import time
+import pytz
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from .core.config import *
 from .core.config import MONGO_DB_URL
 from platform import python_version
@@ -17,7 +19,9 @@ spam_chats = []
 SUDOERS = SUDOERS
 SUDOERS.append(OWNER_ID)
 
-
+#time zone
+TIME_ZONE = pytz.timezone(TIME_ZONE)
+scheduler = AsyncIOScheduler(timezone=TIME_ZONE)
 
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
