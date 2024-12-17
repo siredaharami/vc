@@ -11,31 +11,31 @@ import shutil
 CLONE_DATA_FILE = "clone_data.json"
 PLUGINS_DIR = "BADUC/plugins/clone2"
 
-# Helper function to load clone data from file
+# Helper function to load clone data
 def load_clone_data():
     if os.path.exists(CLONE_DATA_FILE):
         with open(CLONE_DATA_FILE, "r") as file:
             return json.load(file)
     return {}
 
-# Helper function to save clone data to file
+# Helper function to save clone data
 def save_clone_data(data):
     with open(CLONE_DATA_FILE, "w") as file:
         json.dump(data, file)
 
-# Ensure that the plugin directory exists
+# Ensure the plugin directory exists
 def ensure_plugin_directory():
     if not os.path.exists(PLUGINS_DIR):
         os.makedirs(PLUGINS_DIR)
 
 # Function to copy plugins into the clone directory
 def copy_plugins():
-    source_plugin_dir = "BADUC/plugins/clone2"  # Main plugin directory
+    source_plugin_dir = "BADUC/plugins/clone2"
     for plugin in os.listdir(source_plugin_dir):
         src_path = os.path.join(source_plugin_dir, plugin)
         dst_path = os.path.join(PLUGINS_DIR, plugin)
         if os.path.isdir(src_path) and not os.path.exists(dst_path):
-            shutil.copytree(src_path, dst_path)  # Copy plugin directory if not present in clone
+            shutil.copytree(src_path, dst_path)
 
 @bot.on_message(filters.command("clonee"))
 async def clone(bot: Client, msg: Message):
@@ -50,40 +50,39 @@ async def clone(bot: Client, msg: Message):
     bot_token = msg.command[1]
     clone_data = load_clone_data()
 
-    # Check if this token already exists
     if bot_token in clone_data:
         await msg.reply("This bot has already been cloned!")
         return
     
     try:
         reply_msg = await msg.reply("Please wait... Setting up the bot and loading plugins. 🔄")
-        
-        # Ensure the plugin directory exists
+
+        # Ensure plugin directory
         ensure_plugin_directory()
-        
-        # Copy plugins if they are not already present in the cloned directory
         copy_plugins()
 
-        # Initialize the bot client with the provided bot token
+        # Initialize bot client
         client = Client(
             name="ClonedBot",
+            api_id=API_ID,       # Add API ID here
+            api_hash=API_HASH,   # Add API Hash here
             bot_token=bot_token,
-            plugins=dict(root=PLUGINS_DIR)  # Load plugins from the specific directory
+            plugins=dict(root=PLUGINS_DIR)
         )
 
-        # Start the client and fetch bot details
+        # Start client and fetch bot details
         await client.start()
         bot_info = await client.get_me()
 
-        # Save the cloned bot info
+        # Save bot clone info
         clone_data[bot_token] = {
             "bot_id": bot_info.id,
             "bot_username": bot_info.username,
-            "plugins": os.listdir(PLUGINS_DIR)  # List the loaded plugins
+            "plugins": os.listdir(PLUGINS_DIR)
         }
         save_clone_data(clone_data)
 
-        # Notify the bot owner
+        # Notify owner
         owner_msg = f"New bot clone created:\n\n" \
                     f"**Bot Username:** @{bot_info.username}\n" \
                     f"**Bot ID:** {bot_info.id}\n" \
@@ -92,32 +91,26 @@ async def clone(bot: Client, msg: Message):
 
         # Success message
         success_msg = (
-            f"✅ Successfully cloned the bot and loaded plugins!\n\n"
+            f"✅ Bot cloned successfully!\n\n"
             f"🤖 **Bot Username:** @{bot_info.username}\n"
             f"🆔 **Bot ID:** {bot_info.id}\n"
-            f"**Plugins Loaded:** {', '.join(os.listdir(PLUGINS_DIR))}\n\n"
-            f"Enjoy using your cloned bot. 🚀"
+            f"**Plugins Loaded:** {', '.join(os.listdir(PLUGINS_DIR))}"
         )
         await reply_msg.edit(success_msg)
 
-        # Keep the cloned bot running
+        # Keep bot running
         print("Cloned bot session running. Press Ctrl+C to stop.")
         await idle()
 
     except Exception as e:
-        error_msg = f"❌ **ERROR:** `{str(e)}`\nPlease check your bot token or plugins."
+        error_msg = f"❌ **ERROR:** `{str(e)}`\nPlease check your bot token, API ID, or API Hash."
         await msg.reply(error_msg)
-    
     finally:
         if client.is_connected:
             await client.stop()
 
 @bot.on_message(filters.command("list"))
-@super_user_only
 async def clone_list(bot: Client, msg: Message):
-    """
-    List all cloned bot accounts.
-    """
     clone_data = load_clone_data()
     if not clone_data:
         await msg.reply("No bot clones available.")
@@ -132,9 +125,6 @@ async def clone_list(bot: Client, msg: Message):
 @bot.on_message(filters.command("delete"))
 @super_user_only
 async def clone_delete(bot: Client, msg: Message):
-    """
-    Delete a cloned bot.
-    """
     if len(msg.command) < 2:
         await msg.reply("Usage: `/delete <bot_token>`\nProvide the bot token to delete.")
         return
@@ -146,13 +136,8 @@ async def clone_delete(bot: Client, msg: Message):
         await msg.reply("Bot clone not found!")
         return
     
-    # Remove the bot clone
     del clone_data[bot_token]
     save_clone_data(clone_data)
 
     await msg.reply(f"Cloned bot with token `{bot_token}` has been deleted.")
-
-    # Notify the bot owner
-    deletion_msg = f"Cloned bot deleted:\n\n" \
-                   f"**Bot Token:** {bot_token}"
-    await bot.send_message(OWNER_ID, deletion_msg)
+    await bot.send_message(OWNER_ID, f"Bot clone deleted: `{bot_token}`")
