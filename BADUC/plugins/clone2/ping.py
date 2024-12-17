@@ -3,7 +3,7 @@ from pyrogram import Client, filters
 from datetime import datetime
 
 # Ping command ka handler
-@bot.on_message(filters.command("ping"))
+@Client.on_message(filters.command("ping"))
 async def ping_command(client, message):
     start_time = datetime.now()  # Start time
     response = await message.reply_text("🏓 Pong!")
