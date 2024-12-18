@@ -2,6 +2,7 @@ import pyrogram
 from pyrogram import Client, filters
 from datetime import datetime, timedelta
 from pyrogram.types import Message
+from BADUC.database.misc import extract_user
 from pyrogram.errors import FloodWait
 import asyncio
 
