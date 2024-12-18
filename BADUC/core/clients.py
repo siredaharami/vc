@@ -21,7 +21,7 @@ from .logger import LOGGER
 
 BOT_VERSION = "3.0.0"  # Define your bot version here
 BOTFATHER_USERNAME = "BotFather"  # BotFather username
-BOT_INLINE_PLACEHOLDER = "BaduserBot"  # Inline Placeholder
+BOT_INLINE_PLACEHOLDER = "ʙᴀᴅᴜꜱᴇʀʙᴏᴛ"  # Inline Placeholder
 BOT_NAME = "ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ᴀꜱꜱɪꜱᴛᴀɴᴛ"  # Bot Name
 
 
