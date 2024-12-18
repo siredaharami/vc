@@ -160,16 +160,11 @@ async def restricted_command(bot: Client, msg: Message):
     command = msg.text.split()[0].lstrip("/")
     clone_data = load_clone_data()
 
-    # Check if the user is the owner of the cloned bot
+    # Check if the user is the owner of any cloned bot
     for token, details in clone_data.items():
         if details["owner_id"] == msg.from_user.id:
-            # Allow owner to use the bot's commands
-            # You can add more validation to ensure the command belongs to the cloned bot
-            if command in details["plugins"]:  # Ensure the plugin is part of the cloned bot's plugins
-                # You can add your actual command logic here if needed
-                return
-            else:
-                await msg.reply("You do not have permission to use this command for this cloned bot!")
-                return
-
-    await msg.reply("You are not the owner of this cloned bot!")
+            # The user is the owner, allow them to use the command
+            return  # Command logic can be placed here for execution
+        else:
+            await msg.reply("You are not the owner of this cloned bot, so you cannot use its commands!")
+            return
