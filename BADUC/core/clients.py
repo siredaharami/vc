@@ -1,6 +1,7 @@
 import os
 import sys
 import platform
+from pytgcalls import PyTgCalls
 from pyrogram import __version__ as pyrogram_version
 from pytgcalls import __version__ as pytgcalls_version
 from pyrogram import Client
