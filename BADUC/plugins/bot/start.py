@@ -20,7 +20,7 @@ SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
 
 
 # Start command handler
-@app.on_message(filters.command("start"))
+@bot.on_message(filters.command("start"))
 async def start(client, message):
     try:
         # Try to get user or any peer data that might cause issues
@@ -54,7 +54,7 @@ async def start(client, message):
         await message.reply("There was an issue with fetching the user data. Please try again later.")
         
 # Callback query handler for buttons
-@app.on_callback_query()
+@bot.on_callback_query()
 async def callback_query(client, callback_query):
     data = callback_query.data
     
