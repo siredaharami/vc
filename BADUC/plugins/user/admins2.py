@@ -92,6 +92,7 @@ async def allunmute(client, message: Message):
         
         
 # Command to unban all members
+
 @app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
 async def unban_all(client, message):
     # Check if the user is an admin
@@ -105,7 +106,7 @@ async def unban_all(client, message):
 
     try:
         # Get all banned members
-        banned_members = await client.get_chat_banned_members(chat_id)
+        banned_members = await client.get_chat_members(chat_id, filter="banned")
         
         if not banned_members:
             await message.reply("There are no banned members.")
@@ -140,10 +141,13 @@ async def ban_all(client, message):
 
     try:
         # Get all members in the group
-        members = await client.get_chat_members(chat_id)
+        members = client.get_chat_members(chat_id)
         
         # Exclude the bot and admins
-        members_to_ban = [m for m in members if m.user.id != client.id and m.status not in ["administrator", "creator"]]
+        members_to_ban = []
+        async for m in members:
+            if m.user.id != client.id and m.status not in ["administrator", "creator"]:
+                members_to_ban.append(m)
 
         if not members_to_ban:
             await message.reply("There are no members to ban (only admins or the bot).")
@@ -162,7 +166,6 @@ async def ban_all(client, message):
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
         print(f"Error: {e}")
-
 
 # Command to make the user leave the group
 @app.on_message(bad(["kickme"]) & (filters.me | filters.user(SUDOERS)))
