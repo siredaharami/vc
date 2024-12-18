@@ -165,9 +165,11 @@ async def run_async_clients():
             photo="https://files.catbox.moe/83d5lc.jpg",  # Add photo URL
             reply_markup=InlineKeyboardMarkup(
                 [
-                 [InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")],
-                 [InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD"")]
+                 [
+                     InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD"),
+                     InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD")
                  ]
+                ]
             )
         )
     except Exception as e:
