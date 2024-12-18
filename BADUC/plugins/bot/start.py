@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import random
 import os
 
-from BADUC.core.clients import *
+from BADUC.core.clients import bot
 from BADUC.core.config import OWNER_ID
 from BADUC.core.command import *
 
@@ -18,8 +18,6 @@ START_IMAGES = [
 ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"
 SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
 
-# Initialize the app (make sure to use your bot's token here)
-app = Client("my_bot", api_id="your_api_id", api_hash="your_api_hash", bot_token="your_bot_token")
 
 # Start command handler
 @app.on_message(filters.command("start"))
