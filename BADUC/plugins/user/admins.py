@@ -344,3 +344,4 @@ async def demote_user(client, message):
             can_edit_messages=False,
             can_delete_messages=False,
             can_invite_user
+        )
