@@ -1,8 +1,9 @@
 import random
 from pyrogram import Client, filters
 from BADUC.core.clients import bot
+from pyrogram import Client
+from pyrogram import StringSession  # Correct import for StringSession
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.sessions import StringSession  # For handling string session
 from BADUC.core.config import OWNER_ID  # Import the OWNER_ID from the config file
 
 # List of random images
