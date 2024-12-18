@@ -7,11 +7,22 @@ from pytgcalls import __version__ as pytgcalls_version
 from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from motor.motor_asyncio import AsyncIOMotorClient
-from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
+from BADUC.core.config import (
+    API_ID,
+    API_HASH,
+    STRING_SESSION,
+    MONGO_DB_URL,
+    LOG_GROUP_ID,
+    SUDOERS,
+    BOT_TOKEN,
+    BOT_PICTURE_URL,  # Add URL in your config
+)
 from .logger import LOGGER
 
 BOT_VERSION = "3.0.0"  # Define your bot version here
 BOTFATHER_USERNAME = "BotFather"  # BotFather username
+BOT_INLINE_PLACEHOLDER = "BaduserBot"  # Inline Placeholder
+BOT_NAME = "ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ᴀꜱꜱɪꜱᴛᴀɴᴛ"  # Bot Name
 
 
 def async_config():
@@ -33,6 +44,9 @@ def async_config():
         sys.exit()
     if not LOG_GROUP_ID:
         LOGGER.error("'LOG_GROUP_ID' - Not Found!")
+        sys.exit()
+    if not BOT_PICTURE_URL:
+        LOGGER.error("'BOT_PICTURE_URL' - Not Found!")
         sys.exit()
     LOGGER.info("All Required Variables Collected.")
 
@@ -110,12 +124,30 @@ async def enable_inline_mode():
         LOGGER.info(f"Bot Username: @{bot_username}")
 
         botfather_chat = await app.get_chat(BOTFATHER_USERNAME)
+        
+        # Set inline mode and placeholder
         await app.send_message(botfather_chat.id, "/setinline")
         await app.send_message(botfather_chat.id, f"@{bot_username}")
-        await app.send_message(botfather_chat.id, "Enabled")
-        LOGGER.info("Inline Mode Enabled Successfully.")
+        await app.send_message(botfather_chat.id, BOT_INLINE_PLACEHOLDER)
+        
+        # Set bot name
+        await app.send_message(botfather_chat.id, "/setname")
+        await app.send_message(botfather_chat.id, BOT_NAME)
+
+        # Set bot profile picture using URL
+        await app.send_message(botfather_chat.id, "/setuserpic")
+        await app.send_photo(botfather_chat.id, BOT_PICTURE_URL)
+        
+        # Add commands
+        await app.send_message(botfather_chat.id, "/setcommands")
+        await app.send_message(
+            botfather_chat.id,
+            "start - Start the bot\nhelp - Get help information",
+        )
+        
+        LOGGER.info("Inline Mode, Name, Picture, and Commands Set Successfully.")
     except Exception as e:
-        LOGGER.error(f"Failed To Enable Inline Mode: {e}")
+        LOGGER.error(f"Failed To Enable Inline Mode or Set Bot Details: {e}")
 
 
 async def run_async_clients():
@@ -130,7 +162,7 @@ async def run_async_clients():
         # Send detailed startup message in logger group
         await bot.send_photo(
             LOG_GROUP_ID,
-            photo="https://files.catbox.moe/83d5lc.jpg",  # Replace with your bot image URL
+            photo=BOT_PICTURE_URL,  # Use the same bot picture URL here
             caption=(
                 f"**Shukla Bot is Alive!** ✅\n\n"
                 f"**Python Version:** `{python_version}`\n"
