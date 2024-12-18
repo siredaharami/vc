@@ -3,7 +3,7 @@ from pyrogram import Client, filters
 from datetime import datetime, timedelta
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import ChatPermissions, ChatPrivileges, Message
-from pyrogram.types import Message
+from pyrogram.types import ChatPrivileges, Message
 from BADUC.database.misc import extract_user
 from pyrogram.errors import FloodWait
 import asyncio
@@ -301,12 +301,18 @@ async def promote_user(client, message: Message):
 async def promotte(client: Client, message: Message):
     user_id = await extract_user(message)
     umention = (await client.get_users(user_id)).mention
+    promoter_name = (await client.get_users(message.from_user.id)).first_name  # Get the name of the user who issued the command
     rd = await message.edit_text("`Processing...`")
+    
     if not user_id:
         return await rd.edit("I can't find that user.")
+    
     bot = (await client.get_chat_member(message.chat.id, client.me.id)).privileges
     if not bot.can_promote_members:
         return await rd.edit("I don't have enough permissions")
+    
+    video_url = "https://files.catbox.moe/6yko4k.mp4"  # Replace this with your actual video URL
+    
     if message.command[0][0] == "f":
         await message.chat.promote_member(
             user_id,
@@ -321,8 +327,13 @@ async def promotte(client: Client, message: Message):
                 can_promote_members=True,
             ),
         )
-        return await rd.edit(f"Fully Promoted! {umention}")
-
+        await message.chat.send_video(
+            video_url,
+            caption=f"Fully Promoted by {promoter_name}! Enjoy the video, {umention}",
+            reply_to_message_id=message.message_id
+        )
+        return await rd.edit(f"Fully Promoted by {promoter_name}! {umention}")
+    
     await message.chat.promote_member(
         user_id,
         privileges=ChatPrivileges(
@@ -336,17 +347,28 @@ async def promotte(client: Client, message: Message):
             can_promote_members=False,
         ),
     )
-    await rd.edit(f"Promoted! {umention}")
+    await message.chat.send_video(
+        video_url,
+        caption=f"Promoted by {promoter_name}! Here's a video for you, {umention}",
+        reply_to_message_id=message.message_id
+    )
+    await rd.edit(f"Promoted by {promoter_name}! {umention}")
+
 
 
 @app.on_message(bad(["demote"]) & (filters.me | filters.user(SUDOERS)))
 async def demote(client: Client, message: Message):
     user_id = await extract_user(message)
     rd = await message.edit_text("`Processing...`")
+    
     if not user_id:
         return await rd.edit("I can't find that user.")
+    
     if user_id == client.me.id:
         return await rd.edit("I can't demote myself.")
+    
+    promoter_name = (await client.get_users(message.from_user.id)).first_name  # Get the name of the user who issued the command
+    
     await message.chat.promote_member(
         user_id,
         privileges=ChatPrivileges(
@@ -360,6 +382,17 @@ async def demote(client: Client, message: Message):
             can_promote_members=False,
         ),
     )
-    umention = (await client.get_users(user_id)).mention
-    await rd.edit(f"Demoted! {umention}")
     
+    umention = (await client.get_users(user_id)).mention
+    
+    # Video URL (use your desired video URL here)
+    video_url = "https://files.catbox.moe/6yko4k.mp4"  # Replace this with your actual video URL
+    
+    # Send video along with text
+    await message.chat.send_video(
+        video_url,
+        caption=f"Demoted by {promoter_name}! {umention}\nWatch the video: {video_url}",
+        reply_to_message_id=message.message_id
+    )
+    
+    await rd.edit(f"Demoted by {promoter_name}! {umention}")
