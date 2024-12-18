@@ -5,7 +5,6 @@ import os
 
 # Replace with the bot instance and owner/assistant details
 from BADUC.core.clients import bot
-from BADUC.core.config import OWNER_ID  # Ensure OWNER_ID is set correctly
 from BADUC.core.command import *
 
 # List of start image URLs
@@ -18,6 +17,7 @@ START_IMAGES = [
 # Config placeholders
 ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"  # Telegram link to the assistant
 SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
+OWNER_USERNAME = "https://t.me/II_BAD_BABY_II"
 
 
 # Start command handler
@@ -35,7 +35,6 @@ async def start(client, message):
             ],
             [
                 InlineKeyboardButton("Channel Update", url="https://t.me/your_channel"),
-                InlineKeyboardButton("Assistant", url=ASSISTANT_ID),  # Opens the assistant's link
             ]
         ])
 
@@ -68,7 +67,10 @@ async def callback_query(client, callback_query):
         if data == "baduserbot":
             keyboard = InlineKeyboardMarkup([
                 [
+                    InlineKeyboardButton("Assistant", url=ASSISTANT_ID),  # Opens the assistant's link
                     InlineKeyboardButton("BOT OWNER", callback_data="bot_owner"),
+                ],
+                [
                     InlineKeyboardButton("CLONE", callback_data="clone"),
                 ]
             ])
@@ -79,7 +81,7 @@ async def callback_query(client, callback_query):
 
         # Handle the BOT OWNER button click
         elif data == "bot_owner":
-            await callback_query.message.edit_text(f"Contact the bot owner: @{OWNER_ID}")
+            await callback_query.message.edit_text(f"Contact the bot owner: @{OWNER_USERNAME}")
 
         # Handle the CLONE button click
         elif data == "clone":
