@@ -94,7 +94,7 @@ async def enable_inline_mode():
     """
     LOGGER.info("Enabling Inline Mode via BotFather...")
     try:
-        # Ensure the app is started
+        # Ensure the app is started and connected
         if not app.is_connected:
             LOGGER.info("Starting Userbot Client...")
             await app.start()
@@ -162,11 +162,12 @@ async def run_async_clients():
         await bot.send_message(
             LOG_GROUP_ID,
             "**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
-            photo="https://example.com/photo.jpg",  # Add photo URL
+            photo="https://files.catbox.moe/83d5lc.jpg",  # Add photo URL
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Help", callback_data="help_menu")],
+                [
                  [InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")],
-                 [InlineKeyboardButton("Update", callback_data="update")]]
+                 [InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD"")]
+                 ]
             )
         )
     except Exception as e:
@@ -180,3 +181,4 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Start PyTgCalls: {e}")
 
     await sudo_users()
+    
