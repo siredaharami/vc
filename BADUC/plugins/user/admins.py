@@ -315,7 +315,6 @@ async def fullpromote_user(client, message: Message):
             await client.promote_chat_member(
                 message.chat.id,
                 user_to_fullpromote.id,
-                can_change_info=True,
                 can_post_messages=True,
                 can_edit_messages=True,
                 can_delete_messages=True,
@@ -344,7 +343,6 @@ async def fullpromote_user(client, message: Message):
     else:
         # Inform the user to reply to a message
         await message.reply("Please reply to a message to fully promote a user.")
-        
 
 # 13. Demote (Updated with both usernames and video link)
 @app.on_message(filters.command("demote") & filters.me)
