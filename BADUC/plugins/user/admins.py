@@ -1,6 +1,8 @@
 import pyrogram
 from pyrogram import Client, filters
 from datetime import datetime, timedelta
+from pyrogram.errors import ChatAdminRequired
+from pyrogram.types import ChatPermissions, ChatPrivileges, Message
 from pyrogram.types import Message
 from BADUC.database.misc import extract_user
 from pyrogram.errors import FloodWait
