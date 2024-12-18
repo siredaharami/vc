@@ -1,4 +1,5 @@
 import pyrogram
+from pyrogram.errors import PeerIdInvalid
 from pyrogram import Client, filters
 from datetime import datetime, timedelta
 from pyrogram.types import Message
