@@ -144,7 +144,8 @@ async def clone_delete(bot: Client, msg: Message):
         await msg.reply("Bot clone not found!")
         return
 
-    if clone_data[bot_token]["owner_id"] != user_id:
+    # Use .get() to prevent KeyError if 'owner_id' is missing
+    if clone_data[bot_token].get("owner_id") != user_id:
         await msg.reply("You are not the owner of this cloned bot!")
         return
     
