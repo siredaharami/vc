@@ -153,3 +153,20 @@ async def clone_delete(bot: Client, msg: Message):
     save_clone_data(clone_data)
 
     await msg.reply(f"Cloned bot with token `{bot_token}` has been deleted.")
+
+# Restricting commands to the cloned bot's owner
+@bot.on_message(filters.command())
+async def restricted_command(bot: Client, msg: Message):
+    command = msg.text.split()[0].lstrip("/")
+    clone_data = load_clone_data()
+    
+    for token, details in clone_data.items():
+        if details["owner_id"] == msg.from_user.id:
+            # Allow owner to use the bot's commands
+            if command in details["plugins"]:
+                return
+            else:
+                await msg.reply("You do not have permission to use this command for this cloned bot!")
+                return
+
+    await msg.reply("You are not the owner of this cloned bot!")
