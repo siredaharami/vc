@@ -1,15 +1,14 @@
 import random
 from pyrogram import Client, filters
-from BADUC.core.clients import bot  # Import your custom bot instance
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from BADUC.core.clients import bot, app  # Import bot and app
 from BADUC.core.config import OWNER_ID  # Import OWNER_ID from config
-from BADUC.core.clients import app as session_string  # Session for string handling
 
 # Group and Channel Links (Replace with actual links)
 GROUP_LINK = "https://t.me/PBX_CHAT"
 CHANNEL_LINK = "https://t.me/HEROKUBIN_01"
 
-# List of random images
+# Random images list
 IMAGE_LIST = [
     "https://files.catbox.moe/mpkdqt.jpg",
     "https://files.catbox.moe/wbog9f.jpg",
@@ -18,100 +17,80 @@ IMAGE_LIST = [
 # Start command handler
 @bot.on_message(filters.command("start") & filters.private)
 async def start(client, message):
-    random_image = random.choice(IMAGE_LIST)  # Pick a random image
+    random_image = random.choice(IMAGE_LIST)
+
+    # Fetch the bot's username or ID dynamically
+    assistant_info = await client.get_me()
+    assistant_id = assistant_info.username or assistant_info.id
+
+    # Fetch the owner's username or numeric ID
+    owner_info = await app.get_users(OWNER_ID)
+    owner_username = owner_info.username or OWNER_ID
+
     buttons = InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("Assistant", callback_data="assistant")],
-            [InlineKeyboardButton("Help", callback_data="help")],
-            [InlineKeyboardButton("Clone", callback_data="clone")],
-            [InlineKeyboardButton("Group Link", url=GROUP_LINK)],
-            [InlineKeyboardButton("Channel Link", url=CHANNEL_LINK)],
-            [InlineKeyboardButton("Owner", callback_data="owner")],
+            [
+                InlineKeyboardButton("Assistant ID", url=f"https://t.me/{assistant_id}"),
+                InlineKeyboardButton("Owner ID", url=f"https://t.me/{owner_username}"),
+            ],
+            [
+                InlineKeyboardButton("Clone Menu", callback_data="clone"),
+                InlineKeyboardButton("Group", url=GROUP_LINK),
+                InlineKeyboardButton("Channel", url=CHANNEL_LINK),
+            ],
         ]
     )
     await client.send_photo(
         chat_id=message.chat.id,
         photo=random_image,
-        caption="Welcome to the bot! Choose an option below:",
+        caption="Welcome! Choose an option below:",
         reply_markup=buttons,
     )
 
-# Callback query handler for Assistant
-@bot.on_callback_query(filters.regex("assistant"))
-async def assistant(client, callback_query):
-    # Display Assistant-related message
-    await callback_query.message.edit_text(
-        "Assistant ID section is under construction or not available for now.",
-        reply_markup=None
-    )
-    await callback_query.answer("Assistant details coming soon!")
-
-# Callback query handler for Help
-@bot.on_callback_query(filters.regex("help"))
-async def help(client, callback_query):
-    help_text = (
-        "**Help Menu**\n\n"
-        "1. **Assistant**: Placeholder for Assistant section.\n"
-        "2. **Help**: Displays this menu.\n"
-        "3. **Clone**: Displays options to clone bots."
-    )
-    await callback_query.message.edit_text(
-        help_text,
-        reply_markup=None
-    )
-    await callback_query.answer("Help menu displayed!")
-
 # Callback query handler for Clone
 @bot.on_callback_query(filters.regex("clone"))
-async def clone(client, callback_query):
+async def clone_menu(client, callback_query):
     buttons = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton("Bot Clone", callback_data="bot_clone")],
             [InlineKeyboardButton("Userbot Clone", callback_data="userbot_clone")],
-            [InlineKeyboardButton("String Session", callback_data="string_session")],
+            [InlineKeyboardButton("Session Clone", callback_data="string_session")],
         ]
     )
     await callback_query.message.edit_text(
-        "Choose the clone option below:",
-        reply_markup=buttons
+        "Clone options are displayed below:",
+        reply_markup=buttons,
     )
-    await callback_query.answer("Clone options are displayed!")
+    await callback_query.answer("Clone menu opened!")
 
 # Callback query handler for Bot Clone
 @bot.on_callback_query(filters.regex("bot_clone"))
 async def bot_clone(client, callback_query):
     await callback_query.message.edit_text(
-        "**Bot Clone**: This feature allows cloning a bot. Further steps will be shown here.",
-        reply_markup=None
+        "Bot Clone: Instructions for cloning bots will appear here.",
+        reply_markup=None,
     )
-    await callback_query.answer("Bot Clone details displayed!")
+    await callback_query.answer("Bot Clone info displayed!")
 
 # Callback query handler for Userbot Clone
 @bot.on_callback_query(filters.regex("userbot_clone"))
 async def userbot_clone(client, callback_query):
     await callback_query.message.edit_text(
-        "**Userbot Clone**: This feature allows cloning a userbot. Further steps will be shown here.",
-        reply_markup=None
+        "Userbot Clone: Instructions for cloning userbots will appear here.",
+        reply_markup=None,
     )
-    await callback_query.answer("Userbot Clone details displayed!")
+    await callback_query.answer("Userbot Clone info displayed!")
 
-# Callback query handler for String Session
+# Callback query handler for String Session Clone
 @bot.on_callback_query(filters.regex("string_session"))
 async def string_session_handler(client, callback_query):
-    # Get the string session
-    string_session = session_string.save(client.session)
+    # Automatically fetch and display the session string using `app`
+    async with app:
+        string_session = app.export_session_string()
+    
     await callback_query.message.edit_text(
         f"Here is your String Session:\n\n`{string_session}`",
-        reply_markup=None
+        reply_markup=None,
     )
-    await callback_query.answer("String session displayed!")
-
-# Callback query handler for Owner
-@bot.on_callback_query(filters.regex("owner"))
-async def owner(client, callback_query):
-    # Display Owner-related message
-    await callback_query.message.edit_text(
-        f"Owner ID: `{OWNER_ID}`",
-        reply_markup=None
-    )
-    await callback_query.answer("Owner ID displayed!")
+    await callback_query.answer("String session generated!")
+    
