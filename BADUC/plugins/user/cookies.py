@@ -7,7 +7,7 @@ from yt_dlp import YoutubeDL
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
-from cookies import cookies  # Import cookies from the .py file
+import cookies
 
 class YouTubeAuthDownloader:
     def __init__(self):
