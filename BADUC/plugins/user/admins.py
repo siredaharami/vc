@@ -288,15 +288,16 @@ async def allunmute(client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
         
-# 10. kick (Updated with video link)
+# 10. kick 
 @app.on_message(bad(["kick"]) & (filters.me | filters.user(SUDOERS)))
 async def kick_user(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
 
+    # Check if the message is a reply
     if not message.reply_to_message:
-        await message.reply("Please reply to the user's message whom you want to kick.")
+        await message.reply("Please reply to the message of the user you want to kick.")
         return
 
     user_to_kick = message.reply_to_message.from_user
@@ -317,7 +318,7 @@ async def kick_user(client, message: Message):
         await message.reply("I need to be an admin with the proper permissions to perform this action.")
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-
+        
 # 11. kickme (Updated version with no text/GIF)
 @app.on_message(filters.command("kickme") & filters.me)
 async def kick_me(client, message):
