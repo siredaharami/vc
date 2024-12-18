@@ -146,8 +146,9 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Send Message To Logger Group: {e}")
 
     try:
-        await app.join_chat("dn")
-        await app.join_chat("bdu")
+        # Ensure the chat usernames are correct and the bot has joined them
+        await app.join_chat("@HEROKUBIN_01")  # Replace with correct username
+        await app.join_chat("@HEROKUBIN_01")  # Replace with correct username
     except Exception as e:
         LOGGER.error(f"Failed To Join Chats: {e}")
 
@@ -159,17 +160,18 @@ async def run_async_clients():
     try:
         await bot.start()
         LOGGER.info("Helper Bot Started.")
-        await bot.send_message(
+        await bot.send_photo(
             LOG_GROUP_ID,
-            "**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
             photo="https://files.catbox.moe/83d5lc.jpg",  # Add photo URL
+            caption="**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
             reply_markup=InlineKeyboardMarkup(
-                [
+            
+            [
                  [
                      InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD"),
                      InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD")
                  ]
-                ]
+            ]
             )
         )
     except Exception as e:
@@ -183,4 +185,4 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Start PyTgCalls: {e}")
 
     await sudo_users()
-    
+
