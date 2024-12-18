@@ -162,8 +162,11 @@ async def run_async_clients():
         await bot.send_message(
             LOG_GROUP_ID,
             "**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
+            photo="https://example.com/photo.jpg",  # Add photo URL
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Help", callback_data="help_menu")]]
+                [[InlineKeyboardButton("Help", callback_data="help_menu")],
+                 [InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")],
+                 [InlineKeyboardButton("Update", callback_data="update")]]
             )
         )
     except Exception as e:
