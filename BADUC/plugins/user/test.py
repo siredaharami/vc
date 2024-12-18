@@ -93,7 +93,7 @@ async def allmute(client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
 
-  @app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
 async def allunban(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
