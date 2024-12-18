@@ -47,6 +47,7 @@ async def clone(bot: Client, msg: Message):
         await msg.reply("Usage: `/clone <bot_token>`\nSend your bot token to clone. 🤖")
         return
 
+    user_id = msg.from_user.id
     bot_token = msg.command[1]
     clone_data = load_clone_data()
 
@@ -78,6 +79,7 @@ async def clone(bot: Client, msg: Message):
         clone_data[bot_token] = {
             "bot_id": bot_info.id,
             "bot_username": bot_info.username,
+            "owner_id": user_id,
             "plugins": os.listdir(PLUGINS_DIR)
         }
         save_clone_data(clone_data)
@@ -86,7 +88,8 @@ async def clone(bot: Client, msg: Message):
         owner_msg = f"New bot clone created:\n\n" \
                     f"**Bot Username:** @{bot_info.username}\n" \
                     f"**Bot ID:** {bot_info.id}\n" \
-                    f"**Plugins:** {', '.join(os.listdir(PLUGINS_DIR))}"
+                    f"**Plugins:** {', '.join(os.listdir(PLUGINS_DIR))}\n" \
+                    f"**Owner ID:** {user_id}"
         await bot.send_message(OWNER_ID, owner_msg)
 
         # Success message
@@ -109,35 +112,43 @@ async def clone(bot: Client, msg: Message):
         if client.is_connected:
             await client.stop()
 
-@bot.on_message(filters.command("list"))
+@bot.on_message(filters.command("listt"))
 async def clone_list(bot: Client, msg: Message):
+    user_id = msg.from_user.id
     clone_data = load_clone_data()
-    if not clone_data:
-        await msg.reply("No bot clones available.")
+    
+    # Filter clones by owner ID
+    user_clones = {k: v for k, v in clone_data.items() if v["owner_id"] == user_id}
+    
+    if not user_clones:
+        await msg.reply("You don't have any cloned bots.")
         return
     
-    clone_list_msg = "Cloned Bots:\n\n"
-    for token, details in clone_data.items():
+    clone_list_msg = "Your Cloned Bots:\n\n"
+    for token, details in user_clones.items():
         clone_list_msg += f"**Bot Username:** @{details['bot_username']} | **Bot ID:** {details['bot_id']} | **Plugins:** {', '.join(details['plugins'])}\n"
     
     await msg.reply(clone_list_msg)
 
-@bot.on_message(filters.command("delete"))
-@super_user_only
+@bot.on_message(filters.command("deletee"))
 async def clone_delete(bot: Client, msg: Message):
     if len(msg.command) < 2:
         await msg.reply("Usage: `/delete <bot_token>`\nProvide the bot token to delete.")
         return
-    
+
+    user_id = msg.from_user.id
     bot_token = msg.command[1]
     clone_data = load_clone_data()
 
     if bot_token not in clone_data:
         await msg.reply("Bot clone not found!")
         return
+
+    if clone_data[bot_token]["owner_id"] != user_id:
+        await msg.reply("You are not the owner of this cloned bot!")
+        return
     
     del clone_data[bot_token]
     save_clone_data(clone_data)
 
     await msg.reply(f"Cloned bot with token `{bot_token}` has been deleted.")
-    await bot.send_message(OWNER_ID, f"Bot clone deleted: `{bot_token}`")
