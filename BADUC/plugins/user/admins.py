@@ -3,7 +3,7 @@ from pyrogram import Client, filters
 from datetime import datetime, timedelta
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import ChatPermissions, ChatPrivileges, Message
-from pyrogram.types import ChatPrivileges, Message
+from pyrogram.types import Message
 from BADUC.database.misc import extract_user
 from pyrogram.errors import FloodWait
 import asyncio
@@ -156,74 +156,6 @@ async def unmute_user(client, message: Message):
     else:
         await message.reply("Reply to a message to unmute user.")
         
-# 5. tmute (temporary mute)
-@app.on_message(bad(["tmute"]) & (filters.me | filters.user(SUDOERS)))
-async def tmute_user(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-
-    # Ensure the command is a reply to a user's message
-    if not message.reply_to_message:
-        await message.reply("Reply to a message to mute the user.")
-        return
-
-    user_to_tmute = message.reply_to_message.from_user
-    user_muting = message.from_user
-
-    # Check if the user provided a time duration
-    try:
-        command_text = message.text.split(maxsplit=1)
-        if len(command_text) < 2:
-            await message.reply("Please specify a duration (e.g., `/tmute 2m` for 2 minutes or `/tmute 1d` for 1 day).")
-            return
-
-        # Extract duration (e.g., "2m" or "1d")
-        duration_text = command_text[1].strip().lower()
-
-        # Convert duration to seconds
-        unit = duration_text[-1]  # Last character (e.g., 'm' or 'd')
-        amount = int(duration_text[:-1])  # Numeric part
-        if unit == "m":
-            duration_seconds = amount * 60
-        elif unit == "h":
-            duration_seconds = amount * 3600
-        elif unit == "d":
-            duration_seconds = amount * 86400
-        else:
-            await message.reply("Invalid time format! Use `m` for minutes, `h` for hours, or `d` for days (e.g., `/tmute 2m`).")
-            return
-
-        # Check if the user is an admin
-        if await is_admin(client, message.chat.id, user_to_tmute.id):
-            await message.reply(
-                f"Aap admin ko nahi mute kar sakte, {user_to_tmute.first_name}. (You cannot mute an admin.)",
-                quote=True,
-            )
-            return
-
-        # Mute the user with a timeout
-        until_date = datetime.now() + timedelta(seconds=duration_seconds)
-        await client.restrict_chat_member(
-            message.chat.id,
-            user_to_tmute.id,
-            permissions=pyrogram.types.ChatPermissions(can_send_messages=False),
-            until_date=until_date,
-        )
-
-        # Send feedback message
-        await message.reply(
-            f"User {user_to_tmute.first_name} has been muted for {duration_text}.",
-            quote=True,
-        )
-
-    except ValueError:
-        await message.reply("Invalid duration! Use a valid format like `2m` for 2 minutes or `1d` for 1 day.")
-    except FloodWait as e:
-        await asyncio.sleep(e.x)
-        await tmute_user(client, message)
-    except Exception as e:
-        await message.reply(f"An unexpected error occurred: {e}")
 
 # 6. allban (Updated version with no text/GIF)
 
@@ -301,18 +233,12 @@ async def promote_user(client, message: Message):
 async def promotte(client: Client, message: Message):
     user_id = await extract_user(message)
     umention = (await client.get_users(user_id)).mention
-    promoter_name = (await client.get_users(message.from_user.id)).first_name  # Get the name of the user who issued the command
     rd = await message.edit_text("`Processing...`")
-    
     if not user_id:
         return await rd.edit("I can't find that user.")
-    
     bot = (await client.get_chat_member(message.chat.id, client.me.id)).privileges
     if not bot.can_promote_members:
         return await rd.edit("I don't have enough permissions")
-    
-    video_url = "https://files.catbox.moe/6yko4k.mp4"  # Replace this with your actual video URL
-    
     if message.command[0][0] == "f":
         await message.chat.promote_member(
             user_id,
@@ -327,13 +253,8 @@ async def promotte(client: Client, message: Message):
                 can_promote_members=True,
             ),
         )
-        await message.chat.send_video(
-            video_url,
-            caption=f"Fully Promoted by {promoter_name}! Enjoy the video, {umention}",
-            reply_to_message_id=message.message_id
-        )
-        return await rd.edit(f"Fully Promoted by {promoter_name}! {umention}")
-    
+        return await rd.edit(f"Fully Promoted! {umention}")
+
     await message.chat.promote_member(
         user_id,
         privileges=ChatPrivileges(
@@ -347,28 +268,17 @@ async def promotte(client: Client, message: Message):
             can_promote_members=False,
         ),
     )
-    await message.chat.send_video(
-        video_url,
-        caption=f"Promoted by {promoter_name}! Here's a video for you, {umention}",
-        reply_to_message_id=message.message_id
-    )
-    await rd.edit(f"Promoted by {promoter_name}! {umention}")
-
+    await rd.edit(f"Promoted! {umention}")
 
 
 @app.on_message(bad(["demote"]) & (filters.me | filters.user(SUDOERS)))
 async def demote(client: Client, message: Message):
     user_id = await extract_user(message)
     rd = await message.edit_text("`Processing...`")
-    
     if not user_id:
         return await rd.edit("I can't find that user.")
-    
     if user_id == client.me.id:
         return await rd.edit("I can't demote myself.")
-    
-    promoter_name = (await client.get_users(message.from_user.id)).first_name  # Get the name of the user who issued the command
-    
     await message.chat.promote_member(
         user_id,
         privileges=ChatPrivileges(
@@ -382,17 +292,6 @@ async def demote(client: Client, message: Message):
             can_promote_members=False,
         ),
     )
-    
     umention = (await client.get_users(user_id)).mention
+    await rd.edit(f"Demoted! {umention}")
     
-    # Video URL (use your desired video URL here)
-    video_url = "https://files.catbox.moe/6yko4k.mp4"  # Replace this with your actual video URL
-    
-    # Send video along with text
-    await message.chat.send_video(
-        video_url,
-        caption=f"Demoted by {promoter_name}! {umention}\nWatch the video: {video_url}",
-        reply_to_message_id=message.message_id
-    )
-    
-    await rd.edit(f"Demoted by {promoter_name}! {umention}")
