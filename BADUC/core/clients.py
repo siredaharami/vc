@@ -1,17 +1,20 @@
-import os, sys
-
+import os
+import sys
+import platform
+from pyrogram import __version__ as pyrogram_version
+from pytgcalls import __version__ as pytgcalls_version
 from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pytgcalls import PyTgCalls
 from motor.motor_asyncio import AsyncIOMotorClient
-
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
 
+BOT_VERSION = "1.0.0"  # Define your bot version here
 BOTFATHER_USERNAME = "@BotFather"  # BotFather username
 
+
 def async_config():
-    LOGGER.info("Checking Variables ...")
+    LOGGER.info("Checking Variables...")
     if not API_ID:
         LOGGER.error("'API_ID' - Not Found!")
         sys.exit()
@@ -41,9 +44,7 @@ def async_dirs():
         os.mkdir("cache")
     
     for file in os.listdir():
-        if file.endswith(".session"):
-            os.remove(file)
-        if file.endswith(".session-journal"):
+        if file.endswith(".session") or file.endswith(".session-journal"):
             os.remove(file)
     LOGGER.info("Directories Initialized.")
 
@@ -65,6 +66,7 @@ bot = Client(
 
 call = PyTgCalls(app)
 
+
 def mongodbase():
     global mongodb
     try:
@@ -79,6 +81,7 @@ def mongodbase():
 
 mongodbase()
 
+
 async def sudo_users():
     sudoersdb = mongodb.sudoers
     sudoers = await sudoersdb.find_one({"sudo": "sudo"})
@@ -88,20 +91,16 @@ async def sudo_users():
             SUDOERS.append(int(user_id))
     LOGGER.info("Sudo Users Loaded.")
 
+
 async def enable_inline_mode():
-    """
-    Automates enabling Inline Mode in BotFather for the bot.
-    """
     LOGGER.info("Enabling Inline Mode via BotFather...")
     try:
-        # Ensure the app is started and connected
         if not app.is_connected:
             LOGGER.info("Starting Userbot Client...")
             await app.start()
 
-        # Fetch bot details to get the username
         bot_details = await bot.get_me()
-        bot_username = bot_details.username  # Fetch bot username dynamically
+        bot_username = bot_details.username
 
         if not bot_username:
             LOGGER.error("Bot Username Not Found!")
@@ -109,19 +108,14 @@ async def enable_inline_mode():
 
         LOGGER.info(f"Bot Username: @{bot_username}")
 
-        # Start conversation with BotFather
         botfather_chat = await app.get_chat(BOTFATHER_USERNAME)
         await app.send_message(botfather_chat.id, "/setinline")
-        
-        # Select bot username dynamically
         await app.send_message(botfather_chat.id, f"@{bot_username}")
-        
-        # Enable inline mode (confirmation message)
         await app.send_message(botfather_chat.id, "Enabled")
-        
         LOGGER.info("Inline Mode Enabled Successfully.")
     except Exception as e:
         LOGGER.error(f"Failed To Enable Inline Mode: {e}")
+
 
 async def run_async_clients():
     try:
@@ -131,29 +125,27 @@ async def run_async_clients():
     except Exception as e:
         LOGGER.error(f"Failed To Start Userbot: {e}")
         return
-    
+
     try:
-        LOGGER.info("Sending Logger Group Message...")
+        python_version = platform.python_version()
         await app.send_message(
             LOG_GROUP_ID,
-            "**sʜᴜᴋʟᴀ ᴜsᴇʀʙᴏᴛ ɪs ᴀʟɪᴠᴇ**",
+            f"**Bot Startup Log**\n\n"
+            f"**Userbot Started** ✅\n"
+            f"**Pyrogram Version:** `{pyrogram_version}`\n"
+            f"**PyTgCalls Version:** `{pytgcalls_version}`\n"
+            f"**Python Version:** `{python_version}`\n"
+            f"**Bot Version:** `{BOT_VERSION}`",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
             )
         )
         LOGGER.info("Logger Group Message Sent.")
     except Exception as e:
-        LOGGER.error(f"Failed To Send Message To Logger Group: {e}")
+        LOGGER.error(f"Failed To Send Logger Group Message: {e}")
 
     try:
-        # Ensure the chat usernames are correct and the bot has joined them
-        await app.join_chat("@HEROKUBIN_01")  # Replace with correct username
-        await app.join_chat("@HEROKUBIN_01")  # Replace with correct username
-    except Exception as e:
-        LOGGER.error(f"Failed To Join Chats: {e}")
-
-    try:
-        await enable_inline_mode()  # Call the function to enable inline mode
+        await enable_inline_mode()
     except Exception as e:
         LOGGER.error(f"Failed To Enable Inline Mode: {e}")
 
@@ -162,16 +154,13 @@ async def run_async_clients():
         LOGGER.info("Helper Bot Started.")
         await bot.send_photo(
             LOG_GROUP_ID,
-            photo="https://files.catbox.moe/83d5lc.jpg",  # Add photo URL
-            caption="**sʜᴜᴋʟᴀ ʀᴏʙᴏᴛ ɪs ᴀʟɪᴠᴇ.**",
+            photo="https://files.catbox.moe/83d5lc.jpg",
+            caption="**Shukla Robot is Alive.**",
             reply_markup=InlineKeyboardMarkup(
-            
-            [
-                 [
-                     InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD"),
-                     InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD")
-                 ]
-            ]
+                [
+                    [InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD"),
+                     InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD")]
+                ]
             )
         )
     except Exception as e:
@@ -185,4 +174,3 @@ async def run_async_clients():
         LOGGER.error(f"Failed To Start PyTgCalls: {e}")
 
     await sudo_users()
-
