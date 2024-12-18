@@ -2,7 +2,7 @@ import random
 from pyrogram import Client, filters
 from BADUC.core.clients import bot  # Import your custom bot instance
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from config import OWNER_ID  # Import OWNER_ID from config
+from BADUC.core.config import OWNER_ID  # Import OWNER_ID from config
 
 
 from BADUC.core.clients import session_string  
