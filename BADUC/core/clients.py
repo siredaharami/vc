@@ -11,7 +11,7 @@ from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LO
 from .logger import LOGGER
 
 BOT_VERSION = "3.0.0"  # Define your bot version here
-BOTFATHER_USERNAME = "@BotFather"  # BotFather username
+BOTFATHER_USERNAME = "BotFather"  # BotFather username
 
 
 def async_config():
@@ -120,52 +120,67 @@ async def enable_inline_mode():
 
 async def run_async_clients():
     try:
-        LOGGER.info("Starting Userbot...")
-        await app.start()
-        LOGGER.info("Userbot Started.")
+        # Start Bot First
+        LOGGER.info("Starting Helper Bot...")
+        await bot.start()
+        LOGGER.info("Helper Bot Started.")
+        
+        python_version = platform.python_version()
+        
+        # Send detailed startup message in logger group
+        await bot.send_photo(
+            LOG_GROUP_ID,
+            photo="https://files.catbox.moe/83d5lc.jpg",  # Replace with your bot image URL
+            caption=(
+                f"**Shukla Bot is Alive!** ✅\n\n"
+                f"**Python Version:** `{python_version}`\n"
+                f"**Pyrogram Version:** `{pyrogram_version}`\n"
+                f"**PyTgCalls Version:** `{pytgcalls_version}`\n"
+                f"**Bot Version:** `{BOT_VERSION}`"
+            ),
+            reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                "💫 Start Me",
+                                url=f"https://t.me/{bot.me.username}?start=start",
+                            ),
+                            InlineKeyboardButton(
+                                "💖 Repo",
+                                url="https://github.com/Badhacker98/PBX_2.0/fork",
+                            ),
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                "💬 Support", url="https://t.me/ll_THE_BAD_BOT_ll"
+                            )
+                        ],
+                    ]
+                ),
+        )
+        LOGGER.info("Logger Group Message Sent (Helper Bot).")
     except Exception as e:
-        LOGGER.error(f"Failed To Start Userbot: {e}")
+        LOGGER.error(f"Failed To Start Helper Bot Or Send Message: {e}")
         return
 
     try:
-        python_version = platform.python_version()
+        # Start Userbot (Assistant)
+        LOGGER.info("Starting Userbot...")
+        await app.start()
+        LOGGER.info("Userbot Started.")
+        
+        # Send simple alive message in logger group
         await app.send_message(
             LOG_GROUP_ID,
-            f"**Bot Startup Log**\n\n"
-            f"**Userbot Started** ✅\n"
-            f"**Pyrogram Version:** `{pyrogram_version}`\n"
-            f"**PyTgCalls Version:** `{pytgcalls_version}`\n"
-            f"**Python Version:** `{python_version}`\n"
-            f"**Bot Version:** `{BOT_VERSION}`",
+            "**Shukla Userbot is Alive!** ✅",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
-            )
+            ),
         )
-        LOGGER.info("Logger Group Message Sent.")
+        LOGGER.info("Logger Group Message Sent (Userbot).")
     except Exception as e:
-        LOGGER.error(f"Failed To Send Logger Group Message: {e}")
-
-    try:
-        await enable_inline_mode()
-    except Exception as e:
-        LOGGER.error(f"Failed To Enable Inline Mode: {e}")
-
-    try:
-        await bot.start()
-        LOGGER.info("Helper Bot Started.")
-        await bot.send_photo(
-            LOG_GROUP_ID,
-            photo="https://files.catbox.moe/83d5lc.jpg",
-            caption="**Shukla Robot is Alive.**",
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD"),
-                     InlineKeyboardButton("Update", url="https://t.me/MASTIWITHFRIENDSXD")]
-                ]
-            )
-        )
-    except Exception as e:
-        LOGGER.error(f"Failed To Start Helper Bot Or Send Message: {e}")
+        LOGGER.error(f"Failed To Start Userbot Or Send Message: {e}")
+        return
 
     try:
         LOGGER.info("Starting PyTgCalls...")
@@ -173,5 +188,10 @@ async def run_async_clients():
         LOGGER.info("PyTgCalls Started.")
     except Exception as e:
         LOGGER.error(f"Failed To Start PyTgCalls: {e}")
+
+    try:
+        await enable_inline_mode()
+    except Exception as e:
+        LOGGER.error(f"Failed To Enable Inline Mode: {e}")
 
     await sudo_users()
