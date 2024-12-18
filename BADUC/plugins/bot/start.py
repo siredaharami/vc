@@ -18,6 +18,9 @@ START_IMAGES = [
 ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"
 SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
 
+# Initialize the app (make sure to use your bot's token here)
+app = Client("my_bot", api_id="your_api_id", api_hash="your_api_hash", bot_token="your_bot_token")
+
 # Start command handler
 @app.on_message(filters.command("start"))
 async def start(client, message):
@@ -96,4 +99,3 @@ async def callback_query(client, callback_query):
     # Handle the Session Clone button click
     elif data == "session_clone":
         await callback_query.message.edit_text("Please type the session cloning details.")
-      
