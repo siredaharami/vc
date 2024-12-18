@@ -220,7 +220,7 @@ async def run_async_clients():
         # Send simple alive message in logger group
         await app.send_message(
             LOG_GROUP_ID,
-            "**ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ꜱᴛᴀʀᴛ!** ✅",
+            "**ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ꜱᴛᴀʀᴛ ! ** ✅",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/PBX_CHAT")]]
             ),
