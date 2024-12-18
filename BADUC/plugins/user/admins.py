@@ -195,19 +195,13 @@ async def allban(client, message: Message):
 
     chat = message.chat.id
 
-    # Ensure user to ban is part of the chat
     try:
-        members = await client.get_chat_members(chat)
-        members_ids = [member.user.id for member in members]
-
-        for member in members:
-            if member.user.id in members_ids:
+        async for member in client.get_chat_members(chat):
+            if member.user:
                 await client.ban_chat_member(chat, member.user.id)
-                await message.reply(f"User {member.user.username} banned successfully.")
-            else:
-                await message.reply(f"User {member.user.username} is not a member.")
+                await message.reply(f"User {member.user.username or member.user.id} banned successfully.")
     except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.x)
+        await asyncio.sleep(e.value)
         await allban(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
@@ -222,25 +216,19 @@ async def allunban(client, message: Message):
     chat = message.chat.id
 
     try:
-        # Fetch the banned members list
-        banned_members = await client.get_chat_banned_members(chat)
-        banned_ids = [member.user.id for member in banned_members]
-
-        # Loop through the banned users and unban them
-        for banned_user in banned_members:
-            if banned_user.user.id in banned_ids:
+        # Fetch the list of banned members
+        async for banned_user in client.get_chat_members(chat, filter="banned"):
+            if banned_user.user:
                 await client.unban_chat_member(chat, banned_user.user.id)
-                await message.reply(f"User {banned_user.user.username} unbanned successfully.")
-            else:
-                await message.reply(f"User {banned_user.user.username} is not banned.")
-    
+                await message.reply(f"User {banned_user.user.username or banned_user.user.id} unbanned successfully.")
     except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.x)
+        await asyncio.sleep(e.value)
         await allunban(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
 
 # 8. allmute (Updated version with no text/GIF)
+
 @app.on_message(bad(["allmute"]) & (filters.me | filters.user(SUDOERS)))
 async def allmute(client, message: Message):
     if is_owner(message.from_user.id):
@@ -249,14 +237,12 @@ async def allmute(client, message: Message):
 
     chat = message.chat.id
     try:
-        # Fetch the members of the chat (make sure you're not calling this for too many users at once)
-        members = await client.get_chat_members(chat)
-
-        for member in members:
+        # Fetch and process chat members using an async for loop
+        async for member in client.get_chat_members(chat):
             if member.user.id != message.from_user.id:  # Avoid muting the message sender (admin)
                 await client.restrict_chat_member(
-                    chat, 
-                    member.user.id, 
+                    chat,
+                    member.user.id,
                     permissions=pyrogram.types.ChatPermissions(
                         can_send_messages=False,  # This mutes the user
                         can_send_media_messages=False,
@@ -264,11 +250,14 @@ async def allmute(client, message: Message):
                         can_add_web_page_previews=False
                     )
                 )
-                await message.reply(f"User {member.user.username} muted successfully.")
+                await message.reply(f"User {member.user.username or member.user.id} muted successfully.")
     
+    except pyrogram.errors.FloodWait as e:
+        await asyncio.sleep(e.value)
+        await allmute(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-
+        
 # 9. allunmute (Updated version with no text/GIF)
 @app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
 async def allunmute(client, message: Message):
@@ -278,14 +267,12 @@ async def allunmute(client, message: Message):
 
     chat = message.chat.id
     try:
-        # Fetch the members of the chat (make sure you're not calling this for too many users at once)
-        members = await client.get_chat_members(chat)
-
-        for member in members:
+        # Fetch and process chat members using an async for loop
+        async for member in client.get_chat_members(chat):
             if member.user.id != message.from_user.id:  # Avoid unmuting the message sender (admin)
                 await client.restrict_chat_member(
-                    chat, 
-                    member.user.id, 
+                    chat,
+                    member.user.id,
                     permissions=pyrogram.types.ChatPermissions(
                         can_send_messages=True,  # This un-mutes the user
                         can_send_media_messages=True,
@@ -293,11 +280,14 @@ async def allunmute(client, message: Message):
                         can_add_web_page_previews=True
                     )
                 )
-                await message.reply(f"User {member.user.username} unmuted successfully.")
+                await message.reply(f"User {member.user.username or member.user.id} unmuted successfully.")
     
+    except pyrogram.errors.FloodWait as e:
+        await asyncio.sleep(e.value)
+        await allunmute(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-
+        
 # 10. kick (Updated with video link)
 @app.on_message(bad(["kick"]) & (filters.me | filters.user(SUDOERS)))
 async def kick_user(client, message: Message):
@@ -305,15 +295,26 @@ async def kick_user(client, message: Message):
         await message.reply("Owner cannot use this command.")
         return
 
-    user_to_kick = message.reply_to_message.from_user  # Assuming you're replying to the message of the user to be kicked
+    if not message.reply_to_message:
+        await message.reply("Please reply to the user's message whom you want to kick.")
+        return
+
+    user_to_kick = message.reply_to_message.from_user
 
     try:
-        await client.ban_chat_member(
-            message.chat.id, 
-            user_to_kick.id, 
-            revoke_messages=True  # This revokes all messages from the user and kicks them out
-        )
-        await message.reply(f"User {user_to_kick.username} has been kicked successfully.")
+        # Ban the user
+        await client.ban_chat_member(message.chat.id, user_to_kick.id)
+
+        # Optionally delete the user's messages
+        async for msg in client.search_messages(
+            chat_id=message.chat.id, 
+            from_user=user_to_kick.id
+        ):
+            await client.delete_messages(chat_id=message.chat.id, message_ids=msg.id)
+
+        await message.reply(f"User {user_to_kick.username or user_to_kick.id} has been kicked successfully.")
+    except pyrogram.errors.ChatAdminRequired:
+        await message.reply("I need to be an admin with the proper permissions to perform this action.")
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
 
