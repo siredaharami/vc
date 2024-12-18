@@ -9,7 +9,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
 
-BOT_VERSION = "1.0.0"  # Define your bot version here
+BOT_VERSION = "3.0.0"  # Define your bot version here
 BOTFATHER_USERNAME = "@BotFather"  # BotFather username
 
 
