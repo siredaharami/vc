@@ -293,3 +293,70 @@ async def promote_user(client, message: Message):
     else:
         await message.reply("Reply to a message to promote user.")
 
+
+@app.on_message(bad(["fullpromote"]) & (filters.me | filters.user(SUDOERS)))
+async def promotte(client: Client, message: Message):
+    user_id = await extract_user(message)
+    umention = (await client.get_users(user_id)).mention
+    rd = await message.edit_text("`Processing...`")
+    if not user_id:
+        return await rd.edit("I can't find that user.")
+    bot = (await client.get_chat_member(message.chat.id, client.me.id)).privileges
+    if not bot.can_promote_members:
+        return await rd.edit("I don't have enough permissions")
+    if message.command[0][0] == "f":
+        await message.chat.promote_member(
+            user_id,
+            privileges=ChatPrivileges(
+                can_manage_chat=True,
+                can_delete_messages=True,
+                can_manage_video_chats=True,
+                can_restrict_members=True,
+                can_change_info=True,
+                can_invite_users=True,
+                can_pin_messages=True,
+                can_promote_members=True,
+            ),
+        )
+        return await rd.edit(f"Fully Promoted! {umention}")
+
+    await message.chat.promote_member(
+        user_id,
+        privileges=ChatPrivileges(
+            can_manage_chat=True,
+            can_delete_messages=True,
+            can_manage_video_chats=True,
+            can_restrict_members=True,
+            can_change_info=True,
+            can_invite_users=True,
+            can_pin_messages=True,
+            can_promote_members=False,
+        ),
+    )
+    await rd.edit(f"Promoted! {umention}")
+
+
+@app.on_message(bad(["demote"]) & (filters.me | filters.user(SUDOERS)))
+async def demote(client: Client, message: Message):
+    user_id = await extract_user(message)
+    rd = await message.edit_text("`Processing...`")
+    if not user_id:
+        return await rd.edit("I can't find that user.")
+    if user_id == client.me.id:
+        return await rd.edit("I can't demote myself.")
+    await message.chat.promote_member(
+        user_id,
+        privileges=ChatPrivileges(
+            can_manage_chat=False,
+            can_delete_messages=False,
+            can_manage_video_chats=False,
+            can_restrict_members=False,
+            can_change_info=False,
+            can_invite_users=False,
+            can_pin_messages=False,
+            can_promote_members=False,
+        ),
+    )
+    umention = (await client.get_users(user_id)).mention
+    await rd.edit(f"Demoted! {umention}")
+    
