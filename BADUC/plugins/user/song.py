@@ -1,6 +1,7 @@
 import requests
 import shutil
 import yt_dlp
+from pyrogram import Client, filters
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
 from BADUC import SUDOERS
