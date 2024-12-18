@@ -8,7 +8,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from BADUC.core.config import API_ID, API_HASH, STRING_SESSION, MONGO_DB_URL, LOG_GROUP_ID, SUDOERS, BOT_TOKEN
 from .logger import LOGGER
 
-BOTFATHER_USERNAME = "BotFather"  # BotFather username
+BOTFATHER_USERNAME = "@BotFather"  # BotFather username
 
 def async_config():
     LOGGER.info("Checking Variables ...")
