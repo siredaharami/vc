@@ -39,9 +39,9 @@ async def allmute(client, message: Message):
 
     chat = message.chat.id
     try:
-        # Check if the bot has admin privileges
+        # Check if the bot has admin privileges and can restrict members
         bot_member = await client.get_chat_member(chat, client.me.id)
-        if not bot_member.can_restrict_members:
+        if bot_member.status != "administrator" or not bot_member.can_restrict_members:
             await message.reply("Bot does not have permission to mute members.")
             return
 
@@ -65,9 +65,8 @@ async def allmute(client, message: Message):
         await allmute(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-        
-        
-# 9. allunmute (Updated version with no text/GIF)
+
+
 @app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
 async def allunmute(client, message: Message):
     if is_owner(message.from_user.id):
@@ -76,9 +75,9 @@ async def allunmute(client, message: Message):
 
     chat = message.chat.id
     try:
-        # Check if the bot has admin privileges
+        # Check if the bot has admin privileges and can restrict members
         bot_member = await client.get_chat_member(chat, client.me.id)
-        if not bot_member.can_restrict_members:
+        if bot_member.status != "administrator" or not bot_member.can_restrict_members:
             await message.reply("Bot does not have permission to unmute members.")
             return
 
