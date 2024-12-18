@@ -16,7 +16,7 @@ START_IMAGES = [
 ]
 
 # Config placeholders
-ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"  # Update this if needed
+ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"  # Telegram link to the assistant
 SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
 
 
@@ -35,6 +35,7 @@ async def start(client, message):
             ],
             [
                 InlineKeyboardButton("Channel Update", url="https://t.me/your_channel"),
+                InlineKeyboardButton("Assistant", url=ASSISTANT_ID),  # Opens the assistant's link
             ]
         ])
 
@@ -67,7 +68,6 @@ async def callback_query(client, callback_query):
         if data == "baduserbot":
             keyboard = InlineKeyboardMarkup([
                 [
-                    InlineKeyboardButton("ASSISTANT ID", callback_data="assistant_id"),
                     InlineKeyboardButton("BOT OWNER", callback_data="bot_owner"),
                     InlineKeyboardButton("CLONE", callback_data="clone"),
                 ]
@@ -76,10 +76,6 @@ async def callback_query(client, callback_query):
                 "Choose an option:",
                 reply_markup=keyboard
             )
-
-        # Handle the ASSISTANT ID button click
-        elif data == "assistant_id":
-            await callback_query.message.edit_text(f"Assistant ID: {ASSISTANT_ID}")
 
         # Handle the BOT OWNER button click
         elif data == "bot_owner":
