@@ -155,7 +155,7 @@ async def clone_delete(bot: Client, msg: Message):
     await msg.reply(f"Cloned bot with token `{bot_token}` has been deleted.")
 
 # Restricting commands to the cloned bot's owner
-@bot.on_message(filters.command())  # This will now capture all commands
+@bot.on_message(filters.command([]))  # Capture all commands
 async def restricted_command(bot: Client, msg: Message):
     command = msg.text.split()[0].lstrip("/")
     clone_data = load_clone_data()
