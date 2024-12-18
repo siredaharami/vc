@@ -3,6 +3,9 @@ import shutil
 import yt_dlp
 from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
+from BADUC import SUDOERS
+from BADUC.core.clients import app
+from BADUC.core.command import *
 
 # Constants
 COOKIES_FILE = "cookies.txt"
@@ -11,7 +14,7 @@ SPAM_THRESHOLD = 3
 user_last_message_time = {}
 user_command_count = {}
 
-@app.on_message(cdx("song"))
+@app.on_message(bad(["song"]) & (filters.me | filters.user(SUDOERS)))
 async def download_song(client, message):
     user_id = message.from_user.id
     current_time = message.date.timestamp()
