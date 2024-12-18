@@ -1,24 +1,21 @@
 import random
 from pyrogram import Client, filters
-from BADUC.core.clients import bot
-from pyrogram import Client
-from pyrogram import StringSession  # Correct import for StringSession
+from BADUC.core.clients import bot  # Import your custom bot instance
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from BADUC.core.config import OWNER_ID  # Import the OWNER_ID from the config file
+from config import OWNER_ID  # Import OWNER_ID from config
+
+
+from BADUC.core.clients import session_string  
+
+# Group and Channel Links (Replace with actual links)
+GROUP_LINK = "https://t.me/PBX_CHAT"
+CHANNEL_LINK = "https://t.me/HEROKUBIN_01"
 
 # List of random images
 IMAGE_LIST = [
     "https://files.catbox.moe/mpkdqt.jpg",
     "https://files.catbox.moe/wbog9f.jpg",
 ]
-
-# Group and Channel Links (Replace with actual links)
-GROUP_LINK = "https://t.me/PBX_CHAT"  # Replace with your group link
-CHANNEL_LINK = "https://t.me/HEROKUBIN_01"  # Replace with your channel link
-
-# Function to generate the string session for the bot
-def get_string_session(client):
-    return StringSession.save(client.session)
 
 # Start command handler
 @bot.on_message(filters.command("start") & filters.private)
@@ -31,7 +28,7 @@ async def start(client, message):
             [InlineKeyboardButton("Clone", callback_data="clone")],
             [InlineKeyboardButton("Group Link", url=GROUP_LINK)],
             [InlineKeyboardButton("Channel Link", url=CHANNEL_LINK)],
-            [InlineKeyboardButton("Owner", callback_data="owner")],  # Owner button
+            [InlineKeyboardButton("Owner", callback_data="owner")],
         ]
     )
     await client.send_photo(
@@ -44,12 +41,12 @@ async def start(client, message):
 # Callback query handler for Assistant
 @bot.on_callback_query(filters.regex("assistant"))
 async def assistant(client, callback_query):
-    string_session = get_string_session(client)  # Get the string session
+    string_session = session_string.save(client.session)  # Get the string session
     await callback_query.message.edit_text(
         f"Here is your Bot's String Session:\n\n`{string_session}`",
         reply_markup=None  # Remove buttons after showing the session ID
     )
-    await callback_query.answer("String session shown!")
+    await callback_query.answer("String session displayed!")
 
 # Callback query handler for Help
 @bot.on_callback_query(filters.regex("help"))
@@ -58,7 +55,7 @@ async def help(client, callback_query):
         "**Help Menu**\n\n"
         "1. **Assistant**: Displays the Bot's String Session.\n"
         "2. **Help**: Displays this menu.\n"
-        "3. **Clone**: Automatically types the `/clone` command."
+        "3. **Clone**: Displays options to clone bots."
     )
     await callback_query.message.edit_text(
         help_text,
@@ -80,7 +77,7 @@ async def clone(client, callback_query):
         "Choose the clone option below:",
         reply_markup=buttons
     )
-    await callback_query.answer("Clone options are shown!")
+    await callback_query.answer("Clone options are displayed!")
 
 # Callback query handler for Bot Clone
 @bot.on_callback_query(filters.regex("bot_clone"))
@@ -103,12 +100,12 @@ async def userbot_clone(client, callback_query):
 # Callback query handler for String Session
 @bot.on_callback_query(filters.regex("string_session"))
 async def string_session(client, callback_query):
-    string_session = get_string_session(client)  # Get the string session
+    string_session = session_string.save(client.session)  # Get the string session
     await callback_query.message.edit_text(
         f"Here is your Bot's String Session:\n\n`{string_session}`",
         reply_markup=None  # Remove buttons after showing the session ID
     )
-    await callback_query.answer("String session shown!")
+    await callback_query.answer("String session displayed!")
 
 # Callback query handler for Owner
 @bot.on_callback_query(filters.regex("owner"))
@@ -117,4 +114,5 @@ async def owner(client, callback_query):
         f"Bot Owner ID: `{OWNER_ID}`",  # Display the Owner ID from the config
         reply_markup=None  # Remove buttons after showing the owner ID
     )
-    await callback_query.answer("Owner ID shown!")
+    await callback_query.answer("Owner ID displayed!")
+
