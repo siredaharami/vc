@@ -167,28 +167,32 @@ async def run_async_clients():
             LOG_GROUP_ID,
             photo=BOT_PICTURE_URL,  # Use the same bot picture URL here
             caption=(
-                f"**Shukla Bot is Alive!** ✅\n\n"
-                f"**Python Version:** `{python_version}`\n"
-                f"**Pyrogram Version:** `{pyrogram_version}`\n"
-                f"**PyTgCalls Version:** `{pytgcalls_version}`\n"
-                f"**Bot Version:** `{BOT_VERSION}`"
+                f"**Baduser Bot is Alive!** ✅\n\n"
+                f"**🔹 Python ➠ ** `{python_version}`\n"
+                f"**🔹 Pyrogram ➠ ** `{pyrogram_version}`\n"
+                f"**🔹 Pytgcalls ➠ ** `{pytgcalls_version}`\n"
+                f"**🔹 Version ➠ ** `{BOT_VERSION}`"
             ),
             reply_markup=InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
-                                "💫 Start Me",
+                                "💫 ꜱᴛᴀʀᴛ ᴍᴇ",
                                 url=f"https://t.me/{bot.me.username}?start=start",
                             ),
                             InlineKeyboardButton(
-                                "💖 Repo",
-                                url="https://github.com/Badhacker98/PBX_2.0/fork",
+                                "💖 ʀᴇᴘᴏ",
+                                url="https://github.com/Badhacker98/BAD_USERBOT/fork",
                             ),
                         ],
                         [
                             InlineKeyboardButton(
-                                "💬 Support", url="https://t.me/ll_THE_BAD_BOT_ll"
-                            )
+                                "💬 ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/PBX_CHAT"
+                            ),
+                            InlineKeyboardButton(
+                                "⚜️ ᴜᴘᴅᴀᴛᴇ",
+                                url="https://t.me/HEROKUBIN_01",
+                            ),
                         ],
                     ]
                 ),
@@ -204,12 +208,21 @@ async def run_async_clients():
         await app.start()
         LOGGER.info("Userbot Started.")
         
+        # Automatically join specified groups
+        try:
+            LOGGER.info("Joining specified groups...")
+            await app.join_chat("PBX_CHAT")
+            await app.join_chat("HEROKUBIN_01")
+            LOGGER.info("Successfully joined specified groups.")
+        except Exception as e:
+            LOGGER.error(f"Failed to join groups: {e}")
+
         # Send simple alive message in logger group
         await app.send_message(
             LOG_GROUP_ID,
-            "**Shukla Userbot is Alive!** ✅",
+            "**ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ꜱᴛᴀʀᴛ!** ✅",
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Support", url="https://t.me/MASTIWITHFRIENDSXD")]]
+                [[InlineKeyboardButton("ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/PBX_CHAT")]]
             ),
         )
         LOGGER.info("Logger Group Message Sent (Userbot).")
