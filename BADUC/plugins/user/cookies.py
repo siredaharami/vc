@@ -8,7 +8,6 @@ from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
 
-
 class YouTubeAuthDownloader:
     def __init__(self):
         self.base_url = "https://www.youtube.com/watch?v="
@@ -51,17 +50,19 @@ class YouTubeAuthDownloader:
         return file_path
         
 def get_random_cookie():
-    if not cookies:
-        raise FileNotFoundError("No cookies available in the cookies.py file.")
-    return random.choice(cookies)
+    folder_path = f"{os.getcwd()}/cookies"
+    txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
+    if not txt_files:
+        raise FileNotFoundError("No .txt files found in the specified folder.")
+    return random.choice(txt_files)
 
 
 async def check_cookies(video_url):
-    cookie = get_random_cookie()
+    cookie_file = get_random_cookie()
     opts = {
         "format": "bestaudio",
         "quiet": True,
-        "cookiefile": cookie,
+        "cookiefile": cookie_file,
     }
     try:
         with YoutubeDL(opts) as ytdl:
