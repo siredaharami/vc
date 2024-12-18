@@ -39,6 +39,12 @@ async def allmute(client, message: Message):
 
     chat = message.chat.id
     try:
+        # Check if the bot has admin privileges
+        bot_member = await client.get_chat_member(chat, client.me.id)
+        if not bot_member.can_restrict_members:
+            await message.reply("Bot does not have permission to mute members.")
+            return
+
         # Fetch and process chat members using an async for loop
         async for member in client.get_chat_members(chat):
             if member.user.id != message.from_user.id:  # Avoid muting the message sender (admin)
@@ -60,36 +66,9 @@ async def allmute(client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
         
-# 9. allunmute (Updated version with no text/GIF)
-@app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
-async def allunmute(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-
-    chat = message.chat.id
-    try:
-        # Fetch and process chat members using an async for loop
-        async for member in client.get_chat_members(chat):
-            if member.user.id != message.from_user.id:  # Avoid unmuting the message sender (admin)
-                await client.restrict_chat_member(
-                    chat,
-                    member.user.id,
-                    permissions=pyrogram.types.ChatPermissions(
-                        can_send_messages=True,  # This un-mutes the user
-                        can_send_media_messages=True,
-                        can_send_other_messages=True,
-                        can_add_web_page_previews=True
-                    )
-                )
-                await message.reply(f"User {member.user.username or member.user.id} unmuted successfully.")
-    
-    except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.value)
-        await allunmute(client, message)
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
         
+# 9. allunmute (Updated version with no text/GIF)
+
         
 # Command to unban all members
 
