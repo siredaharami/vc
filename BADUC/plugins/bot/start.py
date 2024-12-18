@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from BADUC.core.config import OWNER_ID  # Import OWNER_ID from config
 
 
-from BADUC.core.clients import session_string  
+from BADUC.core.clients import app as session_string  
 
 # Group and Channel Links (Replace with actual links)
 GROUP_LINK = "https://t.me/PBX_CHAT"
