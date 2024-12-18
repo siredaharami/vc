@@ -5,7 +5,6 @@ from pyrogram.types import Message
 from pyrogram.errors import FloodWait
 import asyncio
 
-from BADUC.core.config import OWNER_ID  # Import OWNER_ID from config.py
 from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
@@ -27,7 +26,7 @@ async def send_media(client, message, media_url, caption):
 
 # Function to check if the user is the owner
 def is_owner(user_id):
-    return user_id == OWNER_ID
+    return user_id == SUDOERS
 
 # 1. ban
 @app.on_message(bad(["ban"]) & (filters.me | filters.user(SUDOERS)))
@@ -224,142 +223,7 @@ async def tmute_user(client, message: Message):
         await message.reply(f"An unexpected error occurred: {e}")
 
 # 6. allban (Updated version with no text/GIF)
-@app.on_message(bad(["banall"]) & (filters.me | filters.user(SUDOERS)))
-async def allban(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
 
-    chat = message.chat.id
-    banned_users = []
-
-    try:
-        # Iterate through chat members and ban them
-        async for member in client.get_chat_members(chat):
-            if member.user and not member.user.is_bot:  # Skip bots
-                await client.ban_chat_member(chat, member.user.id)
-                banned_users.append(member.user.username or member.user.id)
-                await asyncio.sleep(0.5)  # Prevent hitting rate limits
-
-        # Provide feedback about the bans
-        if banned_users:
-            await message.reply(f"Banned {len(banned_users)} users:\n" + "\n".join(map(str, banned_users)))
-        else:
-            await message.reply("No members to ban in this chat.")
-
-    except pyrogram.errors.ChatAdminRequired:
-        await message.reply("I need to be an admin with the 'Ban Members' permission to perform this action.")
-    except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.value)
-        await allban(client, message)  # Retry after waiting
-    except Exception as e:
-        await message.reply(f"An unexpected error occurred: {e}")
-
-# 7. allunban (Updated version with no text/GIF)
-@app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
-async def allunban(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-
-    chat = message.chat.id
-
-    try:
-        # Check if there are any banned members
-        banned_users = []
-        async for banned_user in client.get_chat_members(chat, filter="banned"):
-            banned_users.append(banned_user)
-
-        if not banned_users:
-            await message.reply("No banned members found in this chat.")
-            return
-
-        # Unban all banned members
-        for banned_user in banned_users:
-            if banned_user.user:
-                await client.unban_chat_member(chat, banned_user.user.id)
-                await message.reply(f"User {banned_user.user.username or banned_user.user.id} unbanned successfully.")
-
-    except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.value)
-        await allunban(client, message)
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
-
-# 8. allmute (Updated version with no text/GIF)
-@app.on_message(bad(["allmute"]) & (filters.me | filters.user(SUDOERS)))
-async def allmute(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-
-    chat = message.chat.id
-    try:
-        # Check if the bot is an admin with the required permissions
-        bot_permissions = await client.get_chat_member(chat, client.get_me().id)
-        if not bot_permissions.can_restrict_members:
-            await message.reply("I don't have the necessary permissions to mute members in this chat.")
-            return
-
-        # Fetch and process chat members using an async for loop
-        async for member in client.get_chat_members(chat):
-            if member.user.id != message.from_user.id:  # Avoid muting the message sender (admin)
-                await client.restrict_chat_member(
-                    chat,
-                    member.user.id,
-                    permissions=pyrogram.types.ChatPermissions(
-                        can_send_messages=False,  # This mutes the user
-                        can_send_media_messages=False,
-                        can_send_other_messages=False,
-                        can_add_web_page_previews=False
-                    )
-                )
-                await message.reply(f"User {member.user.username or member.user.id} muted successfully.")
-    
-    except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.value)
-        await allmute(client, message)
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
-
-
-# 9. allunmute (Updated version with no text/GIF)
-@app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
-async def allunmute(client, message: Message):
-    if is_owner(message.from_user.id):
-        await message.reply("Owner cannot use this command.")
-        return
-
-    chat = message.chat.id
-    try:
-        # Check if the bot is an admin with the required permissions
-        bot_permissions = await client.get_chat_member(chat, client.get_me().id)
-        if not bot_permissions.can_restrict_members:
-            await message.reply("I don't have the necessary permissions to unmute members in this chat.")
-            return
-
-        # Fetch and process chat members using an async for loop
-        async for member in client.get_chat_members(chat):
-            if member.user.id != message.from_user.id:  # Avoid unmuting the message sender (admin)
-                await client.restrict_chat_member(
-                    chat,
-                    member.user.id,
-                    permissions=pyrogram.types.ChatPermissions(
-                        can_send_messages=True,  # This un-mutes the user
-                        can_send_media_messages=True,
-                        can_send_other_messages=True,
-                        can_add_web_page_previews=True
-                    )
-                )
-                await message.reply(f"User {member.user.username or member.user.id} unmuted successfully.")
-    
-    except pyrogram.errors.FloodWait as e:
-        await asyncio.sleep(e.value)
-        await allunmute(client, message)
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
-        
-# 10. kick 
 @app.on_message(bad(["kick"]) & (filters.me | filters.user(SUDOERS)))
 async def kick_user(client, message: Message):
     if is_owner(message.from_user.id):
@@ -396,32 +260,6 @@ async def kick_user(client, message: Message):
 
     except pyrogram.errors.ChatAdminRequired:
         await message.reply("I need to be an admin with the proper permissions to perform this action.")
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
-        
-# 11. kickme (Updated version with no text/GIF)
-@app.on_message(filters.command("kickme") & filters.me)
-async def kick_me(client, message):
-    try:
-        # Video URL to be sent with the goodbye message
-        video_url = "https://files.catbox.moe/quanf0.mp4"  # Replace with your preferred video URL
-        
-        # Send "bye bye" message with video
-        await client.send_video(
-            chat_id=message.chat.id,
-            video=video_url,
-            caption="Bye bye! I am leaving the chat now."
-        )
-        
-        # Ban the bot itself (or the user issuing the command) to leave the group
-        await message.chat.ban_chat_member(
-            message.from_user.id, 
-            revoke_messages=True  # This removes the user and deletes their messages
-        )
-        
-        # Optionally, leave the chat after being kicked (if needed)
-        await client.leave_chat(message.chat.id)
-        
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
         
@@ -505,12 +343,4 @@ async def demote_user(client, message):
             can_post_messages=False,
             can_edit_messages=False,
             can_delete_messages=False,
-            can_invite_users=False,
-            can_pin_messages=False,
-            can_promote_members=False
-        )
-
-        await message.reply(f"User {user_to_demote.mention} has been demoted and removed from the admin list.")
-
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")
+            can_invite_user
