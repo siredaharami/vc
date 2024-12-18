@@ -299,15 +299,19 @@ async def fullpromote_user(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
         return
+
     if message.reply_to_message:
         try:
+            # Get the user to promote and the user who is promoting
             user_to_fullpromote = message.reply_to_message.from_user
             user_fullpromoting = message.from_user
 
+            # Check if the user is already an admin
             if await is_admin(client, message.chat.id, user_to_fullpromote.id):
                 await message.reply(f"Aap admin ko nahi promote kar sakte, {user_to_fullpromote.first_name}. (You cannot fully promote an admin.)", quote=True)
                 return
 
+            # Promote the user with all admin rights
             await client.promote_chat_member(
                 message.chat.id,
                 user_to_fullpromote.id,
@@ -319,25 +323,42 @@ async def fullpromote_user(client, message: Message):
                 can_pin_messages=True,
                 can_promote_members=True,
             )
+
+            # Send confirmation message and media (video)
             caption = (
                 f"User @{user_to_fullpromote.username} ({user_to_fullpromote.first_name}) "
                 f"has been fully promoted with all admin rights by @{user_fullpromoting.username} ({user_fullpromoting.first_name})."
             )
-            media_url = "https://files.catbox.moe/zefegl.mp4"  # Replace with actual video link
+            media_url = "https://files.catbox.moe/zefegl.mp4"  # Video URL (replace with your actual video)
             await send_media(client, message, media_url, caption)
+
+            # Inform about the success
+            await message.reply(f"User {user_to_fullpromote.first_name} has been fully promoted successfully.")
+
         except FloodWait as e:
+            # Handle FloodWait exception and retry
             await asyncio.sleep(e.x)
             await fullpromote_user(client, message)
+        except Exception as e:
+            await message.reply(f"An error occurred: {e}")
     else:
-        await message.reply("Reply to a message to full promote user.")
+        # Inform the user to reply to a message
+        await message.reply("Please reply to a message to fully promote a user.")
+        
 
 # 13. Demote (Updated with both usernames and video link)
 @app.on_message(filters.command("demote") & filters.me)
 async def demote_user(client, message):
+    if not message.reply_to_message:
+        await message.reply("Please reply to a message to demote the user.")
+        return
+
     user_to_demote = message.reply_to_message.from_user
 
     try:
-        await message.chat.promote_chat_member(
+        # Demote the user by removing admin privileges
+        await client.promote_chat_member(
+            message.chat.id,
             user_to_demote.id,
             can_change_info=False,
             can_post_messages=False,
