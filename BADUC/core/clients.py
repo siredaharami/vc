@@ -132,14 +132,17 @@ async def enable_inline_mode():
         
         # Set bot name
         await app.send_message(botfather_chat.id, "/setname")
+        await app.send_message(botfather_chat.id, f"@{bot_username}")
         await app.send_message(botfather_chat.id, BOT_NAME)
 
         # Set bot profile picture using URL
         await app.send_message(botfather_chat.id, "/setuserpic")
+        await app.send_message(botfather_chat.id, f"@{bot_username}")
         await app.send_photo(botfather_chat.id, BOT_PICTURE_URL)
         
         # Add commands
         await app.send_message(botfather_chat.id, "/setcommands")
+        await app.send_message(botfather_chat.id, f"@{bot_username}")
         await app.send_message(
             botfather_chat.id,
             "start - Start the bot\nhelp - Get help information",
