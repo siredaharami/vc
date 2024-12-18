@@ -343,5 +343,12 @@ async def demote_user(client, message):
             can_post_messages=False,
             can_edit_messages=False,
             can_delete_messages=False,
-            can_invite_user
+            can_invite_users=False,
+            can_pin_messages=False,
+            can_promote_members=False
         )
+
+        await message.reply(f"User {user_to_demote.mention} has been demoted and removed from the admin list.")
+
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
