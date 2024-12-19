@@ -34,6 +34,12 @@ async def save_clonebot_owner(bot_id, user_id):
     """
     await cloneownerdb.insert_one({"bot_id": bot_id, "user_id": user_id})
 
+def is_authorized(bot_id, user_id):
+    """
+    Check if the user is authorized to execute commands for a bot.
+    """
+    return CLONE_OWNERS.get(bot_id) == user_id
+
 @bot.on_message(filters.command(["clone", "host", "deploy"]))
 async def clone_txt(client, message):
     if len(message.command) > 1:
@@ -90,6 +96,10 @@ async def clone_txt(client, message):
 
 @bot.on_message(filters.command("cloned"))
 async def list_cloned_bots(client, message):
+    if not is_authorized(None, message.from_user.id):
+        await message.reply_text("❌ You're not authorized to use this command.")
+        return
+
     try:
         cloned_bots = clonebotdb.find()
         cloned_bots_list = await cloned_bots.to_list(length=None)
@@ -107,25 +117,3 @@ async def list_cloned_bots(client, message):
     except Exception as e:
         logging.exception(e)
         await message.reply_text("ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ʟɪꜱᴛɪɴɢ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ.")
-
-@bot.on_message(filters.command(["delclone", "deleteclone"]))
-async def delete_cloned_bot(client, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text("⚠️ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ.")
-            return
-
-        bot_token = " ".join(message.command[1:])
-        ok = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ...")
-
-        cloned_bot = await clonebotdb.find_one({"token": bot_token})
-        if cloned_bot:
-            await clonebotdb.delete_one({"token": bot_token})
-            CLONES.remove(cloned_bot["bot_id"])
-            await ok.edit_text("🤖 ʏᴏᴜʀ ᴄʟᴏɴᴇᴅ ʙᴏᴛ ʜᴀꜱ ʙᴇᴇɴ ʀᴇᴍᴏᴠᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅.")
-        else:
-            await message.reply_text("⚠️ ᴛʜᴇ ᴘʀᴏᴠɪᴅᴇᴅ ʙᴏᴛ ᴛᴏᴋᴇɴ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʟɪꜱᴛ.")
-    except Exception as e:
-        await message.reply_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʙᴏᴛ: {e}")
-        logging.exception(e)
-
