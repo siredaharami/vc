@@ -1,27 +1,29 @@
 from BADUC.core.clients import bot
 from BADUC.core.config import API_ID, API_HASH, BOT_TOKEN
-from pyrogram import filters
-import os
-import re
-import asyncio
-import time
-from pyrogram import *
-from pyrogram.types import * 
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
+@bot.on_message(filters.command("clone"))
+async def clone(bot, msg: Message):
+    if len(msg.command) < 2:
+        await msg.reply("Usage: `/clone <session_name>`\n\nReplace `<session_name>` with the desired name for the cloned session.")
+        return
 
-@bot.on_message(filters.command("clonee"))
-async def clone(bot: bot, msg: Message):
-    chat = msg.chat
-    text = await msg.reply("Usage:\n\n /clone bot session")
-    cmd = msg.command
-    phone = msg.command[1]
+    session_name = msg.command[1]  # Get the session name from the command
+    response = await msg.reply("Initializing your bot client...")
+
     try:
-        await text.edit("Booting Your Client")
-                   # change this Directry according to ur repo
-        client = Client(name="Melody", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, plugins=dict(root="BADUC/plugins/clone2"))
+        # Initialize and start a new Pyrogram bot client
+        client = Client(
+            name=session_name,
+            api_id=API_ID,
+            api_hash=API_HASH,
+            bot_token=BOT_TOKEN,
+            plugins=dict(root="BADUC/plugins/clone2")  # Adjust the plugins path if needed
+        )
         await client.start()
-        user = await client.get_me()
-        await msg.reply(f"Your Client Has Been Successfully As {user.first_name} ✅.")
+        bot_info = await client.get_me()  # Get bot details
+
+        await response.edit(f"Your bot client has been successfully initialized as **{bot_info.first_name}** ✅.")
     except Exception as e:
-        await msg.reply(f"**ERROR:** `{str(e)}`\nPress /start to Start again.")
-      
+        await response.edit(f"**ERROR:** `{str(e)}`\n\nPlease check your configuration and try again.")
