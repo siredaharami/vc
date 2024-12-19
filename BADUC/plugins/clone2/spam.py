@@ -4,41 +4,13 @@ from pyrogram import Client
 from pyrogram.types import Message
 
 from BADUC.core.config import LOG_GROUP_ID
+from BADUC.plugins.bot.clone3 import get_bot_owner  # Assuming get_bot_owner is available
 
 import random
 import time
 import os
 import json
 
-# Load clone data
-CLONE_DATA_FILE = "clone_data.json"
-
-def load_clone_data():
-    if os.path.exists(CLONE_DATA_FILE):
-        with open(CLONE_DATA_FILE, "r") as file:
-            return json.load(file)
-    return {}
-
-def is_cloned_user(user_id):
-    """Check if the user is a cloned bot owner."""
-    clone_data = load_clone_data()
-    for _, details in clone_data.items():
-        if details.get("owner_id") == user_id:
-            return True
-    return False
-    
-
-# Decorator for commands restricted to cloned bot owners
-def cloned_user_only(func):
-    async def wrapper(client: Client, message: Message):
-        user_id = message.from_user.id
-        if not is_cloned_user(user_id):
-            await message.reply("You are not authorized to use this command!")
-            return
-        return await func(client, message)
-    return wrapper
-    
-    
 spamTask = {}
 
 async def spam_text(
@@ -85,9 +57,25 @@ async def spam_text(
     )
 
 
+async def check_owner(Client: Client, message: Message):
+    bot_info = await Client.get_me()
+    bot_id = bot_info.id
+    user_id = message.from_user.id
+    
+    # Authorization check
+    owner_id = await get_bot_owner(bot_id)
+    if owner_id != user_id:
+        await message.reply_text("❌ You're not authorized to use this bot.")
+        return False
+    return True
+
+
 @Client.on_message(filters.command("spam"))
-@cloned_user_only
 async def spamMessage(Client: Client, message: Message):
+    # Authorization check
+    if not await check_owner(Client, message):
+        return
+
     if len(message.command) < 3:
         return await Client.delete(message, "Give me something to spam.")
 
@@ -119,8 +107,11 @@ async def spamMessage(Client: Client, message: Message):
 
 
 @Client.on_message(filters.command("mspam"))
-@cloned_user_only
 async def mediaSpam(Client: Client, message: Message):
+    # Authorization check
+    if not await check_owner(Client, message):
+        return
+
     if not message.reply_to_message:
         return await message.delete()
 
@@ -155,8 +146,11 @@ async def mediaSpam(Client: Client, message: Message):
 
 
 @Client.on_message(filters.command("stopspam"))
-@cloned_user_only
 async def stopSpam(_, message: Message):
+    # Authorization check
+    if not await check_owner(_, message):
+        return
+
     chat_id = message.chat.id
 
     if not spamTask.get(chat_id, None):
