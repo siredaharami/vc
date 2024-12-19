@@ -7,7 +7,7 @@ import random
 import time
 
 # import 
-from BADUC import SUDOERS
+from BADUC import SUDOERS as SUDO_USER
 from BADUC.database.data import *
 
 ACTIVATE_RLIST = []
