@@ -103,7 +103,7 @@ async def delayspam(Badmunda: Client, e: Message):
 
 @bot.on_message(filters.command("pspam"))
 async def _pornspam(Badmunda: Client, e: Message):
-    usage = f"Command :- /pspam (count)\n\nExample :- `/pspam 23`"
+    usage = "Command :- /pspam (count)\n\nExample :- `/pspam 23`"
     try:
         lol = "".join(e.text.split(maxsplit=1)[1:]).split(" ", 1)
     except IndexError:
@@ -119,38 +119,23 @@ async def _pornspam(Badmunda: Client, e: Message):
             porn = random.choice(pornlinks)
             if ".jpg" in porn or ".png" in porn:
                 for i in range(1, 26):
-                    lol = globals()[f"Client{i}"]
+                    lol = globals().get(f"Client{i}")
                     if lol is not None:
                         await lol.send_photo(
                             chat.id,
-                            random.choice(pornlinks),
+                            porn,
                             caption=f"{lmao.from_user.mention} {random.choice(RAID)}",
                         )
                 await asyncio.sleep(0.4)
-            if ".mp4" in porn.lower():
+            elif ".mp4" in porn.lower():
                 for i in range(1, 26):
-                    lol = globals()[f"Client{i}"]
+                    lol = globals().get(f"Client{i}")
                     if lol is not None:
                         await lol.send_video(
                             chat.id,
                             porn,
                             caption=f"{lmao.from_user.mention} {random.choice(RAID)}",
                         )
-                await asyncio.sleep(0.4)
-    elif counts:
-        for _ in range(counts):
-            porn = random.choice(pornlinks)
-            if ".jpg" in porn or ".png" in porn:
-                for i in range(1, 26):
-                    lol = globals()[f"Client{i}"]
-                    if lol is not None:
-                        await lol.send_photo(chat.id, porn, caption=random.choice(RAID))
-                await asyncio.sleep(0.4)
-            if ".mp4" in porn.lower():
-                for i in range(1, 26):
-                    lol = globals()[f"Client{i}"]
-                    if lol is not None:
-                        await lol.send_video(chat.id, porn, caption=random.choice(RAID))
                 await asyncio.sleep(0.4)
     else:
         await e.reply_text(usage)
@@ -164,7 +149,6 @@ async def _pornspam(Badmunda: Client, e: Message):
             )
         except Exception as a:
             print(a)
-
 
 @bot.on_message(filters.command("hang"))
 async def _hangchat(Badmunda: Client, e: Message):
