@@ -152,7 +152,7 @@ async def delete_cloned_bot(client, message):
 
 
 
-@bot.on_message(sukh(["clonelist"]) & (filters.me | filters.user(SUDOERS)))
+@bot.on_message(sukh(["dellall"]) & (filters.me | filters.user(SUDOERS)))
 async def delete_all_cloned_bots(client, message):
     try:
         a = await message.reply_text("ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ...")
