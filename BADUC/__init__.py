@@ -21,11 +21,11 @@ mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 mongodb = mongodb.program
 clonedb = None
-def dbb():
-    global db
+def mongodb():
+    global mongodb
     global clonedb
     clonedb = {}
-    db = {}
+    mongodb = {}
 # import 
 
 # All Clients
@@ -66,7 +66,7 @@ vars = config
 
 CLONE_OWNERS = {}
 
-cloneownerdb = db.clone_owners
+cloneownerdb = mongodb.clone_owners
 
 async def load_clone_owners():
     async for entry in cloneownerdb.find():
