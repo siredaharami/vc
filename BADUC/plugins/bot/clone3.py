@@ -10,6 +10,8 @@ from BADUC.core.config import API_HASH, API_ID, OWNER_ID
 from BADUC import CLONE_OWNERS
 from BADUC.core.clients import bot
 from BADUC import mongodb
+from BADUC.core.command import *
+from BADUC import SUDOERS
 
 # Global Variables
 CLONES = set()
@@ -102,4 +104,63 @@ async def clone_txt(client, message):
         except Exception as e:
             await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
+
+@bot.on_message(filters.command("cloned"))
+async def list_cloned_bots(client, message):
+    try:
+        cloned_bots = clonebotdb.find()
+        cloned_bots_list = await cloned_bots.to_list(length=None)
+        if not cloned_bots_list:
+            await message.reply_text("ɴᴏ ʙᴏᴛꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴄʟᴏɴᴇᴅ ʏᴇᴛ.")
+            return
+        total_clones = len(cloned_bots_list)
+        text = f"**Total Cloned Bots:** {total_clones}\n\n"
+        for bot in cloned_bots_list:
+            text += f"**Bot ID:** `{bot['bot_id']}`\n"
+            text += f"**Bot Name:** {bot['name']}\n"
+            text += f"**Bot Username:** @{bot['username']}\n\n"
+        await message.reply_text(text)
+    except Exception as e:
+        logging.exception(e)
+        await message.reply_text("ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ʟɪꜱᴛɪɴɢ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ.")
+
+@bot.on_message(
+    filters.command(["deletecloned", "delcloned", "delclone", "deleteclone", "removeclone", "cancelclone"])
+)
+async def delete_cloned_bot(client, message):
+    try:
+        if len(message.command) < 2:
+            await message.reply_text("⚠️ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ.")
+            return
+
+        bot_token = " ".join(message.command[1:])
+        ok = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ...")
+
+        cloned_bot = await clonebotdb.find_one({"token": bot_token})
+        if cloned_bot:
+            await clonebotdb.delete_one({"token": bot_token})
+            CLONES.remove(cloned_bot["bot_id"])
+            await ok.edit_text(
+                "🤖 ʏᴏᴜʀ ᴄʟᴏɴᴇᴅ ʙᴏᴛ ʜᴀꜱ ʙᴇᴇɴ ʀᴇᴍᴏᴠᴇᴅ ꜰʀᴏᴍ ᴍʏ ᴅᴀᴛᴀʙᴀꜱᴇ ✅\n🔄 ᴋɪɴᴅʟʏ ʀᴇᴠᴏᴋᴇ ʏᴏᴜʀ ʙᴏᴛ ᴛᴏᴋᴇɴ ꜰʀᴏᴍ @botfather ᴏᴛʜᴇʀᴡɪꜱᴇ ʏᴏᴜʀ ʙᴏᴛ ᴡɪʟʟ ꜱᴛᴏᴘ ᴡʜᴇɴ @{bot.username} ᴡɪʟʟ ʀᴇꜱᴛᴀʀᴛ ☠️"
+            )
+            os.system(f"kill -9 {os.getpid()} && bash start")
+        else:
+            await message.reply_text("⚠️ ᴛʜᴇ ᴘʀᴏᴠɪᴅᴇᴅ ʙᴏᴛ ᴛᴏᴋᴇɴ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʟɪꜱᴛ.")
+    except Exception as e:
+        await message.reply_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʙᴏᴛ: {e}")
+        logging.exception(e)
+
+
+
+@bot.on_message(sukh(["clonelist"]) & (filters.me | filters.user(SUDOERS)))
+async def delete_all_cloned_bots(client, message):
+    try:
+        a = await message.reply_text("ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ...")
+        await clonebotdb.delete_many({})
+        CLONES.clear()
+        await a.edit_text("ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴅᴇʟᴇᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅")
+        os.system(f"kill -9 {os.getpid()} && bash start")
+    except Exception as e:
+        await a.edit_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ. {e}")
+        logging.exception(e)
 
