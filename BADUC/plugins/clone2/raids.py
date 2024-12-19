@@ -1,6 +1,7 @@
 from random import choice
 from pyrogram import filters, Client
 from pyrogram.types import Message
+from BADUC.plugins.bot.clone3 import get_bot_owner
 import asyncio
 import random
 import time
