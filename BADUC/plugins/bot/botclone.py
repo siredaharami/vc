@@ -10,7 +10,7 @@ from pyrogram.types import *
 
 
 @bot.on_message(filters.command("clonee"))
-async def clone(bot: app, msg: Message):
+async def clone(bot: bot, msg: Message):
     chat = msg.chat
     text = await msg.reply("Usage:\n\n /clone bot session")
     cmd = msg.command
