@@ -20,6 +20,7 @@ CLONE_OWNERS = {}
 
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
+db = mongodb.Anonymous
 mongodb = mongodb.program
 
 # import 
@@ -59,6 +60,8 @@ vars = config
 
 
 #clone
+
+cloneownerdb = db.clone_owners
 
 async def load_clone_owners():
     async for entry in cloneownerdb.find():
