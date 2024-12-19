@@ -118,7 +118,7 @@ async def button_handler(client, callback_query):
             await callback_query.message.edit(text=formatted_description)
 
 # Example plugin added using the @plugin decorator
-@app.on_message(filters.command("example"))
+@bot.on_message(filters.command("example"))
 @plugin(
     name="example",
     description="""
