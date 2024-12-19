@@ -1,7 +1,8 @@
 import asyncio
 import random
 
-
+from BADUC.database.Bot.porn import 
+from BADUC.database.Bot.raid import 
 from BADUC.core.clients import bot
 from pyrogram import Client, filters
 from pyrogram.types import *
