@@ -1,16 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from BADUC.core.clients import bot
 
 # Dictionary to store plugin details automatically
 plugin_details = {}
 
 # Global variable to keep track of the current plugin being viewed
 current_plugin_index = {}
-
-# Group and Owner Links
-GROUP_LINK = "https://t.me/ll_BAD_MUNDA_WORLD_ll"
-OWNER_LINK = "https://t.me/HEROKUBIN_01"
 
 # Decorator to register plugins automatically
 def plugin(name, description):
@@ -34,10 +29,6 @@ async def help(client: Client, message: Message):
         InlineKeyboardButton("👈 Previous", callback_data="prev"),
         InlineKeyboardButton("Next 👉", callback_data="next")
     ])
-    buttons.append([
-        InlineKeyboardButton("🔗 Group", url=GROUP_LINK),
-        InlineKeyboardButton("👑 Owner", url=OWNER_LINK)
-    ])
 
     # Send message with buttons
     await message.reply(
@@ -59,24 +50,13 @@ async def button_handler(client, callback_query):
         plugin_description = plugin_details[plugin_name]
         current_plugin_index[user_id] = plugin_number
 
-        formatted_description = f"""```python
-# Plugin Details:
-# Command: {plugin_name}
-{plugin_description}
-
-# Group: {GROUP_LINK}
-# Owner: {OWNER_LINK}
-```"""
+        formatted_description = f"**Command:** {plugin_name}\n{plugin_description}"
         await callback_query.message.edit(
             text=formatted_description,
             reply_markup=InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton("👈 Previous", callback_data="prev"),
                     InlineKeyboardButton("Next 👉", callback_data="next")
-                ],
-                [
-                    InlineKeyboardButton("🔗 Group", url=GROUP_LINK),
-                    InlineKeyboardButton("👑 Owner", url=OWNER_LINK)
                 ]
             ])
         )
@@ -89,14 +69,7 @@ async def button_handler(client, callback_query):
             plugin_name = list(plugin_details.keys())[plugin_number - 1]
             plugin_description = plugin_details[plugin_name]
 
-            formatted_description = f"""```python
-# Plugin Details:
-# Command: {plugin_name}
-{plugin_description}
-
-# Group: {GROUP_LINK}
-# Owner: {OWNER_LINK}
-```"""
+            formatted_description = f"**Command:** {plugin_name}\n{plugin_description}"
             await callback_query.message.edit(text=formatted_description)
 
     elif data == "prev":
@@ -107,14 +80,7 @@ async def button_handler(client, callback_query):
             plugin_name = list(plugin_details.keys())[plugin_number - 1]
             plugin_description = plugin_details[plugin_name]
 
-            formatted_description = f"""```python
-# Plugin Details:
-# Command: {plugin_name}
-{plugin_description}
-
-# Group: {GROUP_LINK}
-# Owner: {OWNER_LINK}
-```"""
+            formatted_description = f"**Command:** {plugin_name}\n{plugin_description}"
             await callback_query.message.edit(text=formatted_description)
 
 # Example plugin added using the @plugin decorator
