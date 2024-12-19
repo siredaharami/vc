@@ -42,6 +42,13 @@ async def clone_txt(client, message):
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token, plugins=dict(root="BADUC/plugins/clone2"))
             await ai.start()
             bot = await ai.get_me()
+
+            # Check if the token belongs to a bot
+            if not bot.is_bot:
+                await mi.edit_text("⚠️ The provided token does not belong to a bot. Please provide a valid bot token.")
+                await ai.stop()
+                return
+
             bot_id = bot.id
             user_id = message.from_user.id
 
@@ -70,7 +77,8 @@ async def clone_txt(client, message):
             cloned_bots = clonebotdb.find()
             cloned_bots_list = await cloned_bots.to_list(length=None)
 
-            await bot.send_message(
+            # Notify owner
+            await client.send_message(
                 int(OWNER_ID), f"ɴᴇᴡ~ᴄʟᴏɴᴇ\n\nʙᴏᴛ:- @{bot.username}\n\nᴅᴇᴛᴀɪʟꜱ:-\n{details}"
             )
             await clonebotdb.insert_one(details)
@@ -128,12 +136,3 @@ async def delete_cloned_bot(client, message):
         await message.reply_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʙᴏᴛ: {e}")
         logging.exception(e)
 
-if __name__ == "__main__":
-    asyncio.run(initialize_clones())
-    try:
-        logging.info("Starting the bot...")
-        bot.run()
-    except KeyboardInterrupt:
-        logging.info("Bot stopped manually.")
-    except Exception as e:
-        logging.exception("Unexpected error occurred.")
