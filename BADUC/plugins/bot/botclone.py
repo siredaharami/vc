@@ -1,5 +1,5 @@
 from BADUC.core.clients import bot
-from BADUC.core.config import API_ID, API_HASH
+from BADUC.core.config import API_ID, API_HASH, BOT_TOKEN
 from pyrogram import filters
 import os
 import re
