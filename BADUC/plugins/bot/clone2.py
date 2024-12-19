@@ -49,129 +49,117 @@ def copy_plugins():
         if os.path.isdir(src_path) and not os.path.exists(dst_path):
             shutil.copytree(src_path, dst_path)
 
+# Step 1: Collect API_ID, API_HASH, and BOT_TOKEN
 @bot.on_message(filters.command("clonee"))
 async def clone(bot: Client, msg: Message):
     if len(msg.command) < 2:
-        await msg.reply("Usage: `/clone <bot_token>`\nSend your bot token to clone. 🤖")
+        await msg.reply("Usage: `/clone <step>`\nUse `/clone apiid` to start the process.")
         return
 
     user_id = msg.from_user.id
-    bot_token = msg.command[1]
+    step = msg.command[1].lower()
+
+    # Step-by-step process: Get API_ID, then API_HASH, then BOT_TOKEN
     clone_data = load_clone_data()
 
-    if bot_token in clone_data:
-        await msg.reply("This bot has already been cloned!")
-        return
-    
-    try:
-        reply_msg = await msg.reply("Please wait... Setting up the bot and loading plugins. 🔄")
-        ensure_plugin_directory()
-        copy_plugins()
+    if step == "apiid":
+        # Ask for API_ID
+        await msg.reply("Please send your **API_ID**.")
 
-        # Create a separate lock for each bot token
-        lock = get_bot_lock(bot_token)
-        with lock:
-            client = Client(
-                name="ClonedBot",
-                api_id=API_ID,
-                api_hash=API_HASH,
-                bot_token=bot_token,
-                plugins=dict(root=PLUGINS_DIR)
-            )
+    elif step == "apihash":
+        # Ask for API_HASH after API_ID is received
+        await msg.reply("Please send your **API_HASH**.")
 
-            await client.start()
-            bot_info = await client.get_me()
+    elif step == "token":
+        # Ask for BOT_TOKEN after API_HASH is received
+        await msg.reply("Please send your **BOT_TOKEN**.")
 
-            # Save clone data including bot token
-            clone_data[bot_token] = {
-                "bot_id": bot_info.id,
-                "bot_username": bot_info.username,
-                "owner_id": user_id,
-                "plugins": os.listdir(PLUGINS_DIR),
-                "bot_token": bot_token  # Save the bot token as well
-            }
+    else:
+        await msg.reply("Invalid step. Use `/clone apiid` to start the process.")
 
-            # Update in-memory cache
-            clone_data_cache[bot_token] = clone_data[bot_token]
-            save_clone_data()  # Persist data to file
-
-            # Notify owner with bot token included
-            owner_msg = f"New bot clone created:\n\n" \
-                        f"**Bot Username:** @{bot_info.username}\n" \
-                        f"**Bot ID:** {bot_info.id}\n" \
-                        f"**Bot Token:** `{bot_token}`\n" \
-                        f"**Plugins:** {', '.join(os.listdir(PLUGINS_DIR))}\n" \
-                        f"**Owner ID:** {user_id}"
-            await bot.send_message(OWNER_ID, owner_msg)
-
-            # Success message for the user
-            success_msg = (
-                f"✅ Bot cloned successfully!\n\n"
-                f"🤖 **Bot Username:** @{bot_info.username}\n"
-                f"🆔 **Bot ID:** {bot_info.id}\n"
-                f"**Plugins Loaded:** {', '.join(os.listdir(PLUGINS_DIR))}"
-            )
-            await reply_msg.edit(success_msg)
-            await idle()
-
-    except Exception as e:
-        error_msg = f"❌ **ERROR:** `{str(e)}`\nPlease check your bot token, API ID, or API Hash."
-        await msg.reply(error_msg)
-    finally:
-        if client.is_connected:
-            await client.stop()
-
-@bot.on_message(filters.command("deleteall"))
-async def delete_all(bot: Client, msg: Message):
-    user_id = msg.from_user.id
-    if user_id != OWNER_ID:
-        await msg.reply("Only the main bot owner can delete all cloned bots!")
-        return
-
-    clone_data = load_clone_data()
-    clone_data.clear()
-    save_clone_data()
-
-    await msg.reply("All cloned bots have been deleted successfully!")
-
-@bot.on_message(filters.command("listt"))
-async def clone_list(bot: Client, msg: Message):
+# Handle API_ID, API_HASH, and BOT_TOKEN step by step
+@bot.on_message(filters.text)
+async def handle_clone_steps(bot: Client, msg: Message):
     user_id = msg.from_user.id
     clone_data = load_clone_data()
-    user_clones = {k: v for k, v in clone_data.items() if v["owner_id"] == user_id}
-    
-    if not user_clones:
-        await msg.reply("You don't have any cloned bots.")
-        return
-    
-    clone_list_msg = "Your Cloned Bots:\n\n"
-    for token, details in user_clones.items():
-        clone_list_msg += f"**Bot Username:** @{details['bot_username']} | **Bot ID:** {details['bot_id']} | **Plugins:** {', '.join(details['plugins'])}\n"
-    await msg.reply(clone_list_msg)
 
-@bot.on_message(filters.command("deletee"))
-async def clone_delete(bot: Client, msg: Message):
-    if len(msg.command) < 2:
-        await msg.reply("Usage: `/delete <bot_token>`\nProvide the bot token to delete.")
+    # Step 1: Save API_ID
+    if "api_id" not in clone_data:
+        clone_data["api_id"] = msg.text.strip()
+        await msg.reply("API_ID saved! Now, send the **API_HASH**.")
+        save_clone_data()
         return
 
-    user_id = msg.from_user.id
-    bot_token = msg.command[1]
-    clone_data = load_clone_data()
-
-    if bot_token not in clone_data:
-        await msg.reply("Bot clone not found!")
+    # Step 2: Save API_HASH
+    if "api_hash" not in clone_data:
+        clone_data["api_hash"] = msg.text.strip()
+        await msg.reply("API_HASH saved! Now, send the **BOT_TOKEN**.")
+        save_clone_data()
         return
 
-    if clone_data[bot_token].get("owner_id") != user_id:
-        await msg.reply("You are not the owner of this cloned bot!")
-        return
-    
-    del clone_data[bot_token]
-    clone_data_cache.pop(bot_token, None)  # Remove from cache
-    save_clone_data()
+    # Step 3: Save BOT_TOKEN and create the clone
+    if "bot_token" not in clone_data:
+        bot_token = msg.text.strip()
+        clone_data["bot_token"] = bot_token
 
-    await msg.reply(f"Cloned bot with token `{bot_token}` has been deleted.")
+        # Proceed with cloning process
+        try:
+            reply_msg = await msg.reply("Please wait... Setting up the bot and loading plugins. 🔄")
+            ensure_plugin_directory()
+            copy_plugins()
+
+            # Create a separate lock for each bot token
+            lock = get_bot_lock(bot_token)
+            with lock:
+                client = Client(
+                    name="ClonedBot",
+                    api_id=clone_data["api_id"],
+                    api_hash=clone_data["api_hash"],
+                    bot_token=bot_token,
+                    plugins=dict(root=PLUGINS_DIR)
+                )
+
+                await client.start()
+                bot_info = await client.get_me()
+
+                # Save clone data including bot token
+                clone_data[bot_token] = {
+                    "bot_id": bot_info.id,
+                    "bot_username": bot_info.username,
+                    "owner_id": user_id,
+                    "plugins": os.listdir(PLUGINS_DIR),
+                    "bot_token": bot_token  # Save the bot token as well
+                }
+
+                # Update in-memory cache
+                clone_data_cache[bot_token] = clone_data[bot_token]
+                save_clone_data()  # Persist data to file
+
+                # Notify owner with bot token included
+                owner_msg = f"New bot clone created:\n\n" \
+                            f"**Bot Username:** @{bot_info.username}\n" \
+                            f"**Bot ID:** {bot_info.id}\n" \
+                            f"**Bot Token:** `{bot_token}`\n" \
+                            f"**Plugins:** {', '.join(os.listdir(PLUGINS_DIR))}\n" \
+                            f"**Owner ID:** {user_id}"
+                await bot.send_message(OWNER_ID, owner_msg)
+
+                # Success message for the user
+                success_msg = (
+                    f"✅ Bot cloned successfully!\n\n"
+                    f"🤖 **Bot Username:** @{bot_info.username}\n"
+                    f"🆔 **Bot ID:** {bot_info.id}\n"
+                    f"**Plugins Loaded:** {', '.join(os.listdir(PLUGINS_DIR))}"
+                )
+                await reply_msg.edit(success_msg)
+                await idle()
+
+        except Exception as e:
+            error_msg = f"❌ **ERROR:** `{str(e)}`\nPlease check your bot token, API ID, or API Hash."
+            await msg.reply(error_msg)
+        finally:
+            if client.is_connected:
+                await client.stop()
 
 # Restricting commands to the cloned bot's owner
 @bot.on_message(filters.command([]))  # Capture all commands
