@@ -4,6 +4,7 @@ from pytgcalls import idle
 
 from . import logs, plugs, vars
 from .plugins import ALL_PLUGINS
+from BADUC import load_clone_owners
 from BADUC.core.clients import run_async_clients
 from BADUC.functions.enums import run_async_enums
 from BADUC.functions.inline import run_async_inline
@@ -29,6 +30,7 @@ async def main():
                 plugs[imported_plugin.__NAME__.lower()
                 ] = imported_plugin
     await run_async_enums()
+    await load_clone_owners()
     logs.info(">> Successfully Imported All Plugins.")
     await run_async_inline()
     logs.info("Successfully Deployed !!")
