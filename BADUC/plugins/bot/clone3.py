@@ -34,6 +34,13 @@ async def save_clonebot_owner(bot_id, user_id):
     """
     await cloneownerdb.insert_one({"bot_id": bot_id, "user_id": user_id})
 
+async def get_bot_owner(bot_id):
+    """
+    Retrieve the owner of a specific bot.
+    """
+    owner = await cloneownerdb.find_one({"bot_id": bot_id})
+    return owner["user_id"] if owner else None
+
 def is_authorized(bot_id, user_id):
     """
     Check if the user is authorized to execute commands for a bot.
@@ -63,6 +70,7 @@ async def clone_txt(client, message):
             await ai.set_bot_commands([
                 BotCommand("start", "✧ sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ ✧"),
                 BotCommand("help", "✧ ɢᴇᴛ ᴛʜᴇ ʜᴇʟᴘ ᴍᴇɴᴜ ✧"),
+                BotCommand("ping", "✧ ᴄʜᴇᴄᴋ ʙᴏᴛ ʀᴇꜱᴘᴏɴꜱᴇ ✧")
             ])
 
             details = {
@@ -89,17 +97,14 @@ async def clone_txt(client, message):
             CLONES.add(bot.id)
 
             await mi.edit_text(
-                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ."
+                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ."
             )
         except Exception as e:
             await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
+
 @bot.on_message(filters.command("cloned"))
 async def list_cloned_bots(client, message):
-    if not is_authorized(None, message.from_user.id):
-        await message.reply_text("❌ You're not authorized to use this command.")
-        return
-
     try:
         cloned_bots = clonebotdb.find()
         cloned_bots_list = await cloned_bots.to_list(length=None)
