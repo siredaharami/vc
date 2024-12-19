@@ -5,7 +5,7 @@ import asyncio
 import random
 from BADUC.plugins.bot.clone3 import get_bot_owner
 
-@Client.on_message(filters.command(["dmraid", "pornraid", "emojiraid", "praid", "oraid", "hraid"]))
+@Client.on_message(filters.command(["pornraid", "emojiraid", "praid", "oraid", "hraid"]))
 async def raid_command(client: Client, message: Message):
     bot_info = await client.get_me()
     bot_id = bot_info.id
@@ -22,9 +22,7 @@ async def raid_command(client: Client, message: Message):
     counts = int(args[0]) if args else 10  # Default count to 10 if not provided
     username = args[1] if len(args) > 1 else None
 
-    if command == "dmraid":
-        await dmraid(client, message, counts, username)
-    elif command == "pornraid":
+    if command == "pornraid":
         await pornraid(client, message, counts)
     elif command == "emojiraid":
         await emojiraid(client, message, counts, username)
