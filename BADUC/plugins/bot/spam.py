@@ -11,7 +11,7 @@ from BADUC.core.config import *
 
 
 @bot.on_message(filters.command("spam"))
-async def spam(Badmunda: Client, e: Message):
+async def spam(bot: bot, e: Message):
     usage = f"Command :- /spam (count) (text)\nExample :- `/spam 5 SpamBot OP`\n\n/bigspam (count) (text)\nExample :- `/bigspam 103 Pb Spam Bot`"
     try:
         lol = "".join(e.text.split(maxsplit=1)[1:]).split(" ", 1)
@@ -29,7 +29,7 @@ async def spam(Badmunda: Client, e: Message):
         while sweetie < counts:
             sweetie += 1
             for i in range(1, 26):
-                lol = globals()[f"Client{i}"]
+                lol = globals()[f"bot{i}"]
                 if lol is not None:
                     await lol.send_message(
                         chat.id, f"{lmao.from_user.mention} {spam_text}"
@@ -40,17 +40,17 @@ async def spam(Badmunda: Client, e: Message):
         while sweetie < counts:
             sweetie += 1
             for i in range(1, 26):
-                lol = globals()[f"Client{i}"]
+                lol = globals()[f"bot{i}"]
                 if lol is not None:
                     await lol.send_message(chat.id, str(spam_text))
             await asyncio.sleep(0.3)
     else:
         await e.reply_text(usage)
         return
-    if LOG_CHANNEL:
+    if LOG_GROUP_ID:
         try:
-            await Badmunda.send_message(
-                LOG_CHANNEL,
+            await bot.send_message(
+                LOG_GROUP_ID,
                 f"#Started Spam By User: {e.from_user.id} \n\n Chat: {e.chat.id} \n Counts: {counts} \n Spam Message: {spam_text}",
             )
         except Exception as a:
@@ -58,7 +58,7 @@ async def spam(Badmunda: Client, e: Message):
 
 
 @bot.on_message(filters.command("dspam"))
-async def delayspam(Badmunda: Client, e: Message):
+async def delayspam(bot: bot, e: Message):
     usage = f"Command :- /dspam (count) (sleeptime) (text)\nExample :- `/dspam 25 8 PbBot`"
     lol = "".join(e.text.split(maxsplit=1)[1:]).split(" ", 2)
     try:
@@ -76,7 +76,7 @@ async def delayspam(Badmunda: Client, e: Message):
         lmao = e.reply_to_message
         for _ in range(counts):
             for i in range(1, 26):
-                lol = globals()[f"Client{i}"]
+                lol = globals()[f"bot{i}"]
                 if lol is not None:
                     await lol.send_message(
                         chat.id, f"{lmao.from_user.mention} {spam_text}"
@@ -85,17 +85,17 @@ async def delayspam(Badmunda: Client, e: Message):
     elif len(owo) == 2:
         for _ in range(counts):
             for i in range(1, 26):
-                lol = globals()[f"Client{i}"]
+                lol = globals()[f"bot{i}"]
                 if lol is not None:
                     await lol.send_message(chat.id, str(spam_text))
             await asyncio.sleep(sleeptime)
     else:
         await e.reply_text(usage)
         return
-    if LOG_CHANNEL:
+    if LOG_GROUP_ID:
         try:
-            await Badmunda.send_message(
-                LOG_CHANNEL,
+            await bot.send_message(
+                LOG_GROUP_ID,
                 f"#Started Delay Spam By User: {e.from_user.id} \n\n Chat: {e.chat.id} \n Counts: {counts} \n Spam Message: {spam_text}\n Sleep Time: {sleeptime}",
             )
         except Exception as a:
@@ -103,7 +103,7 @@ async def delayspam(Badmunda: Client, e: Message):
 
 
 @bot.on_message(filters.command("pspam"))
-async def _pornspam(Badmunda: Client, e: Message):
+async def _pornspam(bot: bot, e: Message):
     usage = "Command :- /pspam (count)\n\nExample :- `/pspam 23`"
     
     try:
@@ -127,9 +127,9 @@ async def _pornspam(Badmunda: Client, e: Message):
             # Check file type and send accordingly
             if ".jpg" in porn or ".png" in porn:
                 for i in range(1, 26):
-                    client = globals().get(f"Client{i}")
-                    if client is not None:
-                        await client.send_photo(
+                    bot = globals().get(f"bot{i}")
+                    if bot is not None:
+                        await bot.send_photo(
                             chat.id,
                             porn,
                             caption=f"{lmao.from_user.mention} {random.choice(RAID)}"
@@ -137,9 +137,9 @@ async def _pornspam(Badmunda: Client, e: Message):
                 await asyncio.sleep(0.4)
             elif ".mp4" in porn.lower():
                 for i in range(1, 26):
-                    client = globals().get(f"Client{i}")
-                    if client is not None:
-                        await client.send_video(
+                    bot = globals().get(f"bot{i}")
+                    if bot is not None:
+                        await bot.send_video(
                             chat.id,
                             porn,
                             caption=f"{lmao.from_user.mention} {random.choice(RAID)}"
@@ -151,9 +151,9 @@ async def _pornspam(Badmunda: Client, e: Message):
             # Check file type and send accordingly
             if ".jpg" in porn or ".png" in porn:
                 for i in range(1, 26):
-                    client = globals().get(f"Client{i}")
-                    if client is not None:
-                        await client.send_photo(
+                    bot = globals().get(f"bot{i}")
+                    if bot is not None:
+                        await bot.send_photo(
                             chat.id,
                             porn,
                             caption=random.choice(RAID)
@@ -161,9 +161,9 @@ async def _pornspam(Badmunda: Client, e: Message):
                 await asyncio.sleep(0.4)
             elif ".mp4" in porn.lower():
                 for i in range(1, 26):
-                    client = globals().get(f"Client{i}")
-                    if client is not None:
-                        await client.send_video(
+                    bot = globals().get(f"bot{i}")
+                    if bot is not None:
+                        await bot.send_video(
                             chat.id,
                             porn,
                             caption=random.choice(RAID)
@@ -173,7 +173,7 @@ async def _pornspam(Badmunda: Client, e: Message):
     # Log activity to LOG_GROUP_ID if defined
     if LOG_GROUP_ID:
         try:
-            await Badmunda.send_message(
+            await bot.send_message(
                 LOG_GROUP_ID,
                 f"#Started Porn Spam By User: {e.from_user.id} \n\n Chat: {e.chat.id} \n Counts: {counts}"
             )
