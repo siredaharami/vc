@@ -20,12 +20,7 @@ SUDOERS.append(OWNER_ID)
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 mongodb = mongodb.program
-clonedb = None
-def mongodb():
-    global mongodb
-    global clonedb
-    clonedb = {}
-    mongodb = {}
+
 # import 
 
 # All Clients
@@ -60,40 +55,3 @@ plugs = PLUGINS
 # Variables
 from BADUC.core import config
 vars = config
-
-
-#clone db
-
-CLONE_OWNERS = {}
-
-cloneownerdb = mongodb.clone_owners
-
-
-async def save_clonebot_owner(bot_id, user_id):
-    await cloneownerdb.update_one(
-        {"bot_id": bot_id},
-        {"$set": {"user_id": user_id}},
-        upsert=True
-    )
-async def get_clone_owner(bot_id):
-    data = await cloneownerdb.find_one({"bot_id": bot_id})
-    if data:
-        return data["user_id"]
-    return None
-
-async def delete_clone_owner(bot_id):
-    await cloneownerdb.delete_one({"bot_id": bot_id})
-    CLONE_OWNERS.pop(bot_id, None)
-
-async def save_idclonebot_owner(clone_id, user_id):
-    await cloneownerdb.update_one(
-        {"clone_id": clone_id},
-        {"$set": {"user_id": user_id}},
-        upsert=True
-    )
-
-async def get_idclone_owner(clone_id):
-    data = await cloneownerdb.find_one({"clone_id": clone_id})
-    if data:
-        return data["user_id"]
-    return None
