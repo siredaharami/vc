@@ -4,7 +4,7 @@ from BADUC import SUDOERS
 from BADUC.core.clients import app
 from BADUC.core.command import *
 
-@app.on_message(bad(["alive"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(bad(["repo"]) & (filters.me | filters.user(SUDOERS)))
 async def send_repo(client, message):
     repo_link = "https://github.com/Badhacker98/BAD_USERBOT/fork"  # Link to your repo
     group_link = "https://t.me/PBX_CHAT"  # Link to your group (this will be hidden)
