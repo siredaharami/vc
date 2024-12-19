@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+from BADUC.core.clients import bot
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 # Dictionary to store plugin details automatically
@@ -15,7 +16,7 @@ def plugin(name, description):
     return decorator
 
 # Command to show help with buttons
-@bot.on_message(filters.command("helhp"))
+@bot.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
     buttons = []
     plugin_list = list(plugin_details.keys())
