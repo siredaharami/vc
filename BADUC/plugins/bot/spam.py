@@ -6,6 +6,7 @@ from SukhPB.raid import RAID
 from BADUC.core.clients import bot
 from pyrogram import Client, filters
 from pyrogram.types import *
+from BADUC.core.config import *
 
 
 
@@ -169,15 +170,16 @@ async def _pornspam(Badmunda: Client, e: Message):
                         )
                 await asyncio.sleep(0.4)
     
-    # Log activity to LOG_CHANNEL if defined
-    if LOG_CHANNEL:
+    # Log activity to LOG_GROUP_ID if defined
+    if LOG_GROUP_ID:
         try:
             await Badmunda.send_message(
-                LOG_CHANNEL,
+                LOG_GROUP_ID,
                 f"#Started Porn Spam By User: {e.from_user.id} \n\n Chat: {e.chat.id} \n Counts: {counts}"
             )
         except Exception as err:
             print(f"Failed to log spam: {err}")
+
 
 @bot.on_message(filters.command("hang"))
 async def _hangchat(Badmunda: Client, e: Message):
