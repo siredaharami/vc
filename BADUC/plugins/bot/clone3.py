@@ -3,6 +3,7 @@ import os
 import asyncio
 from pyrogram.enums import ParseMode
 from pyrogram import Client, filters
+from pyrogram.errors import PeerIdInvalid
 from pyrogram.errors.exceptions.bad_request_400 import AccessTokenExpired, AccessTokenInvalid
 from pyrogram.types import BotCommand
 from BADUC.core.config import API_HASH, API_ID, OWNER_ID
@@ -43,29 +44,21 @@ async def clone_txt(client, message):
             await ai.start()
             bot = await ai.get_me()
 
-            # Check if the token belongs to a bot
             if not bot.is_bot:
-                await mi.edit_text("⚠️ The provided token does not belong to a bot. Please provide a valid bot token.")
+                await mi.edit_text("⚠️ The provided token does not belong to a bot.")
                 await ai.stop()
                 return
 
             bot_id = bot.id
             user_id = message.from_user.id
-
-            # Save the bot owner details
             CLONE_OWNERS[bot_id] = user_id
             await save_clonebot_owner(bot_id, user_id)
 
-            # Set bot commands
             await ai.set_bot_commands([
                 BotCommand("start", "✧ sᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ ✧"),
                 BotCommand("help", "✧ ɢᴇᴛ ᴛʜᴇ ʜᴇʟᴘ ᴍᴇɴᴜ ✧"),
-                BotCommand("ping", "✧ ᴄʜᴇᴄᴋ ɪғ ᴛʜᴇ ʙᴏᴛ ɪꜱ ᴀʟɪᴠᴇ ✧"),
-                BotCommand("shipping", "✧ ᴄᴏᴜᴘʟᴇꜱ ᴏғ ᴅᴀʏ ✧"),
-                BotCommand("rankings", "✧ ᴜꜱᴇʀ ᴍꜱɢ ʟᴇᴀᴅᴇʀʙᴏᴀʀᴅ ✧"),
             ])
 
-            # Save cloned bot details
             details = {
                 "bot_id": bot.id,
                 "is_bot": True,
@@ -74,26 +67,26 @@ async def clone_txt(client, message):
                 "token": bot_token,
                 "username": bot.username,
             }
-            cloned_bots = clonebotdb.find()
-            cloned_bots_list = await cloned_bots.to_list(length=None)
 
-            # Notify owner
-            await client.send_message(
-                int(OWNER_ID), f"ɴᴇᴡ~ᴄʟᴏɴᴇ\n\nʙᴏᴛ:- @{bot.username}\n\nᴅᴇᴛᴀɪʟꜱ:-\n{details}"
-            )
+            try:
+                # Notify the owner
+                await client.send_message(
+                    int(OWNER_ID), f"ɴᴇᴡ~ᴄʟᴏɴᴇ\n\nʙᴏᴛ:- @{bot.username}\n\nᴅᴇᴛᴀɪʟꜱ:-\n{details}"
+                )
+            except PeerIdInvalid:
+                # Log the error if the bot hasn't met the owner
+                await mi.edit_text("⚠️ Unable to notify the owner. Ensure the bot has interacted with the OWNER_ID user.")
+                await ai.stop()
+                return
+
             await clonebotdb.insert_one(details)
             CLONES.add(bot.id)
 
             await mi.edit_text(
-                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ ✅."
+                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ."
             )
-        except (AccessTokenExpired, AccessTokenInvalid):
-            await mi.edit_text("ɪɴᴠᴀʟɪᴅ ʙᴏᴛ ᴛᴏᴋᴇɴ. ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴠᴀʟɪᴅ ᴏɴᴇ.")
         except Exception as e:
-            logging.exception("Error while cloning bot.")
-            await mi.edit_text(f"⚠️ <b>Error:</b>\n\n<code>{e}</code>")
-    else:
-        await message.reply_text("ᴘʀᴏᴠɪᴅᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ /clone ᴄᴏᴍᴍᴀɴᴅ ꜰʀᴏᴍ @Botfather.")
+            await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
 @bot.on_message(filters.command("cloned"))
 async def list_cloned_bots(client, message):
