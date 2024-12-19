@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from main import get_bot_owner  # Import the function to check bot owner
+from BADUC.plugins.bot.clone3 import get_bot_owner  # Import the function to check bot owner
 
 @Client.on_message(filters.command("ping"))
 async def ping_command(client, message):
