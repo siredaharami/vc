@@ -149,15 +149,6 @@ async def _(c: Client,m: Message):
 
 @Client.on_message(filters.command("hreplyraid"))
 async def activate_reply_raid(c: Client,m: Message):
-   bot_info = await client.get_me()
-    bot_id = bot_info.id
-    user_id = message.from_user.id
-    
-    # Authorization check
-    owner_id = await get_bot_owner(bot_id)
-    if owner_id != user_id:
-        await message.reply_text("❌ You're not authorized to use this bot.")
-        return
     global que
     if m.forward_from:
         return
@@ -203,15 +194,6 @@ async def activate_reply_raid(c: Client,m: Message):
 
 @Client.on_message(filters.command("dhreplyraid"))
 async def deactivate_reply_raid(c: Client, m: Message):
-   bot_info = await client.get_me()
-    bot_id = bot_info.id
-    user_id = message.from_user.id
-    
-    # Authorization check
-    owner_id = await get_bot_owner(bot_id)
-    if owner_id != user_id:
-        await message.reply_text("❌ You're not authorized to use this bot.")
-        return
     global que
     if m.forward_from:
         return
