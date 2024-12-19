@@ -20,7 +20,12 @@ SUDOERS.append(OWNER_ID)
 mongo_async_cli = _mongo_async_(MONGO_DB_URL)
 mongodb = mongo_async_cli.badmundaxdb
 mongodb = mongodb.program
-
+clonedb = None
+def dbb():
+    global db
+    global clonedb
+    clonedb = {}
+    db = {}
 # import 
 
 # All Clients
