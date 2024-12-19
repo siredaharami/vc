@@ -1,8 +1,7 @@
 import asyncio
 import random
 
-from SukhPB.porn import pornlinks
-from SukhPB.raid import RAID
+
 from BADUC.core.clients import bot
 from pyrogram import Client, filters
 from pyrogram.types import *
