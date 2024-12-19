@@ -54,7 +54,7 @@ async def spam_text(
     )
 
 
-@bot.on_message(bad(["spam"]) & (filters.me | filters.user(SUDOERS)))
+@bot.on_message(sukh(["spam"]) & (filters.me | filters.user(SUDOERS)))
 async def spamMessage(bot: bot, message: Message):
     if len(message.command) < 3:
         return await bot.delete(message, "Give me something to spam.")
@@ -86,7 +86,7 @@ async def spamMessage(bot: bot, message: Message):
     await task
 
 
-@bot.on_message(bad(["mspam"]) & (filters.me | filters.user(SUDOERS)))
+@bot.on_message(sukh(["mspam"]) & (filters.me | filters.user(SUDOERS)))
 async def mediaSpam(bot: bot, message: Message):
     if not message.reply_to_message:
         return await message.delete()
@@ -121,7 +121,7 @@ async def mediaSpam(bot: bot, message: Message):
     await task
 
 
-@bot.on_message(bad(["stopspam"]) & (filters.me | filters.user(SUDOERS)))
+@bot.on_message(sukh(["stopspam"]) & (filters.me | filters.user(SUDOERS)))
 async def stopSpam(_, message: Message):
     chat_id = message.chat.id
 
