@@ -4,6 +4,7 @@ import asyncio
 from pyrogram import Client, filters
 from pyrogram.enums import MessageEntityType as MET, ChatAction as CA
 from pyrogram.types import Message
+from BADUC.plugins.bot.clone3 import get_bot_owner
 
 #HIREPLYRAID
 
@@ -147,8 +148,25 @@ async def _(c: Client,m: Message):
     await m.reply_text(message)
     await c.send_chat_action(m.chat.id, CA.CANCEL)
 
+# Function to check if the user is authorized
+async def is_authorized(client, message):
+    bot_info = await client.get_me()  # Retrieve current bot's details
+    bot_id = bot_info.id  # Get the current bot's ID
+    user_id = message.from_user.id  # Get the user's ID
+
+    owner_id = await get_bot_owner(bot_id)
+    if owner_id != user_id:
+        await message.reply_text("❌ You're not authorized to use this bot.")
+        return False
+    return True
+
+
+# Your existing Hreplyraid activation and deactivation commands
 @Client.on_message(filters.command("hreplyraid"))
-async def activate_reply_raid(c: Client,m: Message):
+async def activate_reply_raid(c: Client, m: Message):
+    if not await is_authorized(c, m):
+        return  # If not authorized, exit the function
+    
     global que
     if m.forward_from:
         return
@@ -194,6 +212,9 @@ async def activate_reply_raid(c: Client,m: Message):
 
 @Client.on_message(filters.command("dhreplyraid"))
 async def deactivate_reply_raid(c: Client, m: Message):
+    if not await is_authorized(c, m):
+        return  # If not authorized, exit the function
+    
     global que
     if m.forward_from:
         return
@@ -205,34 +226,6 @@ async def deactivate_reply_raid(c: Client, m: Message):
         u_id = reply_to.id
         username = f"@{reply_to.username}" if reply_to.username else reply_to.mention
         Client = await m.reply_text("Hreply Raid De-activating....")
-        try:
-            if u_id in que:
-                que.remove(u_id)
-                await Client.edit_text(f"Hreply Raid has been De-activated on {username}")
-                return
-            await Client.edit_text("You haven't started reply raid for this user")
-        except Exception:
-            await Client.edit_text("You haven't activated reply raid for this user")
-            return
-        
-    else:
-        try:
-            user = int(m.command[1])
-        except ValueError:
-            user = m.command[1]
-            if m.entities[1].type == MET.TEXT_MENTION:
-                user = m.entities[1].user.id
-        try:
-            user = await c.get_users(user)
-        except Exception:
-            to_del = await m.reply_text("Unable to fetch user from the given entity")
-            await asyncio.sleep(10)
-            await m.delete(True)
-            await to_del.delete(True)
-            return
-        Client = await m.reply_text("Hreply Raid De-activating....")
-        u_id = user.id
-        username = f"@{user.username}" if user.username else user.mention
         try:
             if u_id in que:
                 que.remove(u_id)
