@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from CakeMusic import app
+from BADUC.core.clients import bot
 
 # Dictionary to store plugin details automatically
 plugin_details = {}
@@ -20,7 +20,7 @@ def plugin(name, description):
     return decorator
 
 # Command to show help with buttons
-@app.on_message(filters.command("helhp"))
+@bot.on_message(filters.command("helhp"))
 async def help(client: Client, message: Message):
     buttons = []
     plugin_list = list(plugin_details.keys())
@@ -46,7 +46,7 @@ async def help(client: Client, message: Message):
     )
 
 # Callback handler for buttons
-@app.on_callback_query()
+@bot.on_callback_query()
 async def button_handler(client, callback_query):
     global current_plugin_index
     user_id = callback_query.from_user.id
