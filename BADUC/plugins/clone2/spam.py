@@ -42,7 +42,7 @@ def cloned_user_only(func):
 spamTask = {}
 
 async def spam_text(
-    bot: bot,
+    Client: Client,
     chat_id: int,
     to_spam: str,
     count: int,
