@@ -30,8 +30,7 @@ async def send_media(client, message, media_url, caption):
 def is_owner(user_id):
     return user_id == OWNER_ID
 
-
-@app.on_message(bad(["allmute"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command(["allmute"]) & (filters.me | filters.user(SUDOERS)))
 async def allmute(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
@@ -66,8 +65,7 @@ async def allmute(client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
 
-
-@app.on_message(bad(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command(["allunmute"]) & (filters.me | filters.user(SUDOERS)))
 async def allunmute(client, message: Message):
     if is_owner(message.from_user.id):
         await message.reply("Owner cannot use this command.")
@@ -101,10 +99,9 @@ async def allunmute(client, message: Message):
         await allunmute(client, message)
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-        
-# Command to unban all members
 
-@app.on_message(bad(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
+# Command to unban all members
+@app.on_message(filters.command(["unbanall"]) & (filters.me | filters.user(SUDOERS)))
 async def unban_all(client, message):
     # Check if the user is an admin
     chat_id = message.chat.id
@@ -137,9 +134,8 @@ async def unban_all(client, message):
         await message.reply(f"An error occurred: {e}")
         print(f"Error: {e}")
 
-
 # Command to ban all members
-@app.on_message(bad(["banall"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command(["banall"]) & (filters.me | filters.user(SUDOERS)))
 async def ban_all(client, message):
     # Check if the user is an admin
     chat_id = message.chat.id
@@ -157,7 +153,7 @@ async def ban_all(client, message):
         # Exclude the bot and admins
         members_to_ban = []
         async for m in members:
-            if m.user.id != client.id and m.status not in ["administrator", "creator"]:
+            if m.user.id != client.me.id and m.status not in ["administrator", "creator"]:
                 members_to_ban.append(m)
 
         if not members_to_ban:
@@ -179,7 +175,7 @@ async def ban_all(client, message):
         print(f"Error: {e}")
 
 # Command to make the user leave the group
-@app.on_message(bad(["kickme"]) & (filters.me | filters.user(SUDOERS)))
+@app.on_message(filters.command(["kickme"]) & (filters.me | filters.user(SUDOERS)))
 async def kick_me(client, message):
     # Check if the command was issued in a group
     if not message.chat:
@@ -201,4 +197,3 @@ async def kick_me(client, message):
     except PeerIdInvalid:
         await message.reply("Failed to kick you from the group.")
         print(f"Failed to kick user {message.from_user.id}")
-        
