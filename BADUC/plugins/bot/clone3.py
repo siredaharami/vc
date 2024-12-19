@@ -103,22 +103,3 @@ async def clone_txt(client, message):
             await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
 
-@bot.on_message(filters.command("cloned"))
-async def list_cloned_bots(client, message):
-    try:
-        cloned_bots = clonebotdb.find()
-        cloned_bots_list = await cloned_bots.to_list(length=None)
-        if not cloned_bots_list:
-            await message.reply_text("ɴᴏ ʙᴏᴛꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴄʟᴏɴᴇᴅ ʏᴇᴛ.")
-            return
-
-        total_clones = len(cloned_bots_list)
-        text = f"**Total Cloned Bots:** {total_clones}\n\n"
-        for bot in cloned_bots_list:
-            text += f"**Bot ID:** `{bot['bot_id']}`\n"
-            text += f"**Bot Name:** {bot['name']}\n"
-            text += f"**Bot Username:** @{bot['username']}\n\n"
-        await message.reply_text(text)
-    except Exception as e:
-        logging.exception(e)
-        await message.reply_text("ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ʟɪꜱᴛɪɴɢ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ.")
