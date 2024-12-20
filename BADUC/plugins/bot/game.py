@@ -1,8 +1,8 @@
 from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent  # Add InlineQueryResultArticle here
-from pyrogram.types import InlineQueryResultArticle
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
+
 
 # Game states
 game_state = {}
@@ -62,7 +62,7 @@ def play_rps(user_choice):
 # Inline Query handling
 @bot.on_inline_query()
 async def inline_query_handler(client, inline_query):
-    # Example of inline query results (you can customize this with buttons or games)
+    # Example of inline query results
     results = [
         InlineQueryResultArticle(
             title="Tic Tac Toe",
@@ -80,30 +80,27 @@ async def inline_query_handler(client, inline_query):
         ),
         # Add more results here...
     ]
-
-    # Answer the inline query
     await inline_query.answer(results)
 
-# Start Game (as done previously)
+# Start Tic-Tac-Toe Game
 @bot.on_callback_query(filters.regex("tic_tac_toe"))
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
-    
     buttons = [
         [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    
-    # Ensure the message is not None before editing it
+
+    # If the message is None, send a new message
     if callback_query.message:
         await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
     else:
-        # Handle case when the message is None (for example, log an error or take action)
-        print("Error: Message is None!")
+        await callback_query.answer("Game started! Your turn (X).", show_alert=True)
 
+# Play Tic-Tac-Toe
 @bot.on_callback_query(filters.regex("play_"))
 async def play_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
@@ -131,7 +128,7 @@ async def play_tic_tac_toe(client, callback_query):
         ])
         await callback_query.edit_message_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
 
-# Number Guessing Game
+# Start Number Guessing Game
 @bot.on_callback_query(filters.regex("guess_game"))
 async def start_number_game(client, callback_query):
     user_id = callback_query.from_user.id
@@ -149,8 +146,8 @@ async def guess_number(client, message):
         except ValueError:
             await message.reply("Please enter a valid number.")
 
-# Rock, Paper, Scissors
-@bot.on_callback_query(filters.regex("rps_game"))
+# Start Rock, Paper, Scissors
+@bot.on_callback_query(filters.regex("rps"))
 async def start_rps_game(client, callback_query):
     buttons = [
         [InlineKeyboardButton("Rock", callback_data="rps_rock"),
@@ -158,10 +155,17 @@ async def start_rps_game(client, callback_query):
          InlineKeyboardButton("Scissors", callback_data="rps_scissors")]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+    if callback_query.message:
+        await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+    else:
+        await callback_query.answer("Let's play Rock, Paper, Scissors!", show_alert=True)
 
+# Play Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps_"))
 async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
-    await callback_query.edit_message_text(result)
+    if callback_query.message:
+        await callback_query.edit_message_text(result)
+    else:
+        await callback_query.answer(result, show_alert=True)
