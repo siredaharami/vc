@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 
 
 # Game states
@@ -59,15 +59,18 @@ async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
 
+    # Edit the original message or send a new message as the reply
+    await callback_query.answer("Game started! Your turn (X).")
+
     # Send a new message for Tic Tac Toe Game
-    message = await callback_query.message.reply_text("Game started! Your turn (X).", reply_markup=InlineKeyboardMarkup([
+    keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
-    ]))
-    
-    # Edit message if required
-    await message.edit_text("Game started! Your turn (X).", reply_markup=message.reply_markup)
+    ])
+
+    # Edit the message to show the new game status
+    await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
 
 # Play Tic-Tac-Toe
 @bot.on_callback_query(filters.regex("play_"))
@@ -108,10 +111,10 @@ async def start_rps_game(client, callback_query):
     keyboard = InlineKeyboardMarkup(buttons)
     
     # Send a new message for Rock Paper Scissors
-    message = await callback_query.message.reply_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
-    
-    # Edit message if required
-    await message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=message.reply_markup)
+    await callback_query.answer("Choose Rock, Paper, or Scissors:")
+
+    # Edit the message to show the choices
+    await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
 
 # Play Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps_"))
