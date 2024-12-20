@@ -66,9 +66,10 @@ async def start_tic_tac_toe(client, callback_query):
             [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
         ])
         try:
+            # Try editing the message
             await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
         except Exception as e:
-            # If edit fails, acknowledge with error message
+            # Catch error if message is not available or something went wrong
             await callback_query.answer("Something went wrong. Please try again.")
             print(f"Error editing message: {e}")
     else:
