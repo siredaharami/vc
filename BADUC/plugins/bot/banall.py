@@ -18,6 +18,7 @@ import requests
 
 from BADUC.core.clients import bot
 from BADUC.core.command import *
+from BADUC import SUDOERS
 
 @bot.on_message(sukh(["banall"]) & (filters.me | filters.user(SUDOERS)))
 async def ban_all(client, msg):
