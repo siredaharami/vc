@@ -43,7 +43,9 @@ async def start_game_menu(client, message):
     
     buttons = [
         [InlineKeyboardButton("Tic-Tac-Toe", callback_data="tic_tac_toe"),
-         InlineKeyboardButton("Number Guessing", callback_data="guess_game"),
+         InlineKeyboardButton("Number Guessing", callback_data="guess_game")],
+         
+       [
          InlineKeyboardButton("Rock, Paper, Scissors", callback_data="rps_game")]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
