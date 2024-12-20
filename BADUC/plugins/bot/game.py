@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # Game states
 game_state = {}
@@ -17,12 +17,12 @@ def check_winner(board):
             return board[a]
     return None
 
-def update_board(user_id, position):
-    board = game_state[user_id]['board']
+def update_board(game_id, user_id, position):
+    board = game_state[game_id]['board']
     if board[position] == ' ':
-        board[position] = 'X' if game_state[user_id]['turn'] == 'X' else 'O'
+        board[position] = 'X' if game_state[game_id]['turn'] == 'X' else 'O'
         winner = check_winner(board)
-        game_state[user_id]['turn'] = 'O' if game_state[user_id]['turn'] == 'X' else 'X'
+        game_state[game_id]['turn'] = 'O' if game_state[game_id]['turn'] == 'X' else 'X'
         return (board, winner)
     return (board, None)
 
@@ -45,8 +45,9 @@ async def start_game(client, message):
 @bot.on_callback_query(filters.regex("tic_tac_toe"))
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
-    # Initialize the game state with two players (only the first user for now)
-    game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
+    game_id = f"game_{user_id}"  # Unique game ID per user
+    game_state[game_id] = {'board': create_board(), 'turn': 'X', 'players': [user_id, None]}
+    
     buttons = [
         [InlineKeyboardButton("Start game with a friend", callback_data="join_game")]
     ]
@@ -56,27 +57,31 @@ async def start_tic_tac_toe(client, callback_query):
 @bot.on_callback_query(filters.regex("join_game"))
 async def join_game(client, callback_query):
     user_id = callback_query.from_user.id
-    game_state[callback_query.message.chat.id]['players'][1] = user_id
+    game_id = f"game_{callback_query.message.chat.id}"  # Using chat.id to identify the game
+    if game_id not in game_state:
+        return
+    
+    game_state[game_id]['players'][1] = user_id
     buttons = [
-        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{callback_query.message.chat.id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{callback_query.message.chat.id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{callback_query.message.chat.id}") for i in range(3)]
+        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{game_id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{game_id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{game_id}") for i in range(3)]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    await callback_query.message.edit_text(f"Game started! Your turn (X), Player 1: {callback_query.message.chat.id}, Player 2: {user_id}.", reply_markup=keyboard)
+    await callback_query.message.edit_text(f"Game started! Your turn (X), Player 1: {game_state[game_id]['players'][0]}, Player 2: {user_id}.", reply_markup=keyboard)
 
 @bot.on_callback_query(filters.regex("play_"))
 async def play_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     position = int(callback_query.data.split("_")[1])
-    game_id = int(callback_query.data.split("_")[2])
+    game_id = callback_query.data.split("_")[2]
 
     # Ensure only the current player's turn
     if game_state[game_id]['players'][game_state[game_id]['turn'] == 'X'] != user_id:
         await callback_query.answer("It's not your turn!", show_alert=True)
         return
 
-    board, winner = update_board(user_id, position)
+    board, winner = update_board(game_id, user_id, position)
     
     # Check for a winner
     if winner:
@@ -93,6 +98,9 @@ async def play_tic_tac_toe(client, callback_query):
         await callback_query.edit_message_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
 
 # Number Guessing Game
+def start_guess_game(user_id):
+    game_state[user_id] = random.randint(1, 100)
+
 @bot.on_callback_query(filters.regex("guess_game"))
 async def start_number_game(client, callback_query):
     user_id = callback_query.from_user.id
@@ -124,5 +132,16 @@ async def start_rps_game(client, callback_query):
 @bot.on_callback_query(filters.regex("rps_"))
 async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
-    result = play_rps(user_choice)
+    result = play_rps_logic(user_choice)  # Calling the function to get the result
     await callback_query.edit_message_text(result)
+
+def play_rps_logic(user_choice):
+    choices = ["rock", "paper", "scissors"]
+    bot_choice = random.choice(choices)
+    if user_choice == bot_choice:
+        return f"Both chose {user_choice}. It's a tie!"
+    if (user_choice == "rock" and bot_choice == "scissors") or \
+       (user_choice == "paper" and bot_choice == "rock") or \
+       (user_choice == "scissors" and bot_choice == "paper"):
+        return f"You win! I chose {bot_choice}."
+    return f"You lose! I chose {bot_choice}."
