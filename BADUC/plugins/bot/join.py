@@ -10,17 +10,17 @@ async def must_join_channels(bot: Client, msg: Message):
         return
     
     not_joined_links = []
-
+    
     for group in MUST_JOIN_GROUPS:
-    try:
-        await bot.get_chat_member(group, msg.from_user.id)
-    except UserNotParticipant:
         try:
-            chat_info = await bot.get_chat(group)
-            link = chat_info.invite_link if not group.isalpha() else f"https://t.me/{group}"
-            not_joined_links.append(link)
-        except Exception as e:
-            print(f"Error accessing group {group}: {e}")
+            await bot.get_chat_member(group, msg.from_user.id)
+        except UserNotParticipant:
+            try:
+                chat_info = await bot.get_chat(group)
+                link = chat_info.invite_link if not group.isalpha() else f"https://t.me/{group}"
+                not_joined_links.append(link)
+            except Exception as e:
+                print(f"Error accessing group {group}: {e}")
     
     if not_joined_links:
         buttons = [
