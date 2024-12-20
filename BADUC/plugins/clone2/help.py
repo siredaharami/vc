@@ -35,7 +35,7 @@ def plugin(name, description):
 async def help(client: Client, message: Message):
     if not await is_authorized(c, m):
         return
-        
+    user = await c.get_users(user)
     buttons = []
     plugin_list = list(plugin_details.keys())
 
@@ -101,4 +101,5 @@ async def button_handler(client, callback_query):
 
             formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
             await callback_query.message.edit(text=formatted_description)
-      
+
+
