@@ -1,10 +1,8 @@
 from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
-from pyrogram import Client, InlineKeyboardButton, InlineKeyboardMarkup
-
-
-
+from pyrogram import Client
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 # Game state to track the board
 game_state = {}
