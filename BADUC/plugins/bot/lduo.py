@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 import random
+from BADUC.core.clients import bot
 
 games = {}
 
