@@ -70,7 +70,7 @@ async def _(c: Client,m: Message):
     await m.reply_text(message)
     await c.send_chat_action(m.chat.id, CA.CANCEL)
 
-@Client.on_message(bad(["preplyraid"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(filters.command("preplyraid"))
 async def activate_reply_raid(c: Client,m: Message):
     if not await is_authorized(c, m):
         return  # If not authorized, exit the function
@@ -118,7 +118,7 @@ async def activate_reply_raid(c: Client,m: Message):
             await Client.edit_text("You already have started Preply raid for this user")
 
 
-@Client.on_message(bad(["dpreplyraid"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(filters.command("dhreplyraid"))
 async def deactivate_reply_raid(c: Client, m: Message):
     if not await is_authorized(c, m):
         return  # If not authorized, exit the function
