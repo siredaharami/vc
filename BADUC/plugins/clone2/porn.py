@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import pytgcalls
 import os, yt_dlp
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-from pytgcalls.types import AudioVideoPiped
 from BADUC.plugins.bot.clone3 import get_bot_owner  # Import the function to check bot owner
 
 keyboard = InlineKeyboardMarkup([
