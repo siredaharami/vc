@@ -17,16 +17,16 @@ def plugin(name, description):
 
 # Help command to show plugins with buttons and photo
 @Client.on_message(filters.command("help"))
-async def help(client: Client, message: Message):
+async def help(client: Client, message: Message, from_menu=False):
     bot_info = await client.get_me()  # Retrieve current bot's details
     bot_id = bot_info.id  # Get the current bot's ID
     user_id = message.from_user.id  # Get the user's ID
 
-    # Check if the user is authorized to use this bot
-    owner_id = await get_bot_owner(bot_id)
-    if owner_id != user_id:
-        await message.reply_text("❌ You're not authorized to access the help menu.")
-        return
+    if not from_menu:  # Skip authorization if called from the "Menu" button
+        owner_id = await get_bot_owner(bot_id)
+        if owner_id != user_id:
+            await message.reply_text("❌ You're not authorized to access the help menu.")
+            return
 
     # Define the photo URL (You can replace this with your desired image URL)
     photo_url = "https://files.catbox.moe/83d5lc.jpg"
@@ -55,12 +55,18 @@ async def help(client: Client, message: Message):
         InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
     ])
 
-    # Send message with the photo and buttons
-    await message.reply_photo(
-        photo_url,
-        caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
-        reply_markup=InlineKeyboardMarkup(buttons)
-    )
+    # Send the help menu
+    if from_menu:
+        await message.edit_media(
+            media=InputMediaPhoto(photo_url, caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂"),
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
+    else:
+        await message.reply_photo(
+            photo_url,
+            caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
 
 # Callback handler for buttons
 @Client.on_callback_query()
@@ -76,7 +82,7 @@ async def button_handler(client, callback_query):
         plugin_description = plugin_details[plugin_name]
         current_plugin_index[user_id] = plugin_number
 
-        # Send message with plugin description (no photo)
+        # Show plugin description
         formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
         
         await callback_query.message.edit(
@@ -86,7 +92,7 @@ async def button_handler(client, callback_query):
                     InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
                     InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
                 ],
-                [InlineKeyboardButton("🔙 Menu", callback_data="menu")]
+                [InlineKeyboardButton("🔙 ᴍᴇɴᴜ", callback_data="menu")]
             ])
         )
 
@@ -134,4 +140,4 @@ async def button_handler(client, callback_query):
 
     elif data == "menu":
         # Return to the main help menu
-        await help(client, callback_query.message)
+        await help(client, callback_query.message, from_menu=True)
