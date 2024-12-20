@@ -92,7 +92,11 @@ async def play_tic_tac_toe(client, callback_query):
     # Check winner
     if winner:
         if callback_query.message:
-            await callback_query.message.edit_text(f"{winner} wins!\n{get_board_message(board)}")
+            try:
+                await callback_query.message.edit_text(f"{winner} wins!\n{get_board_message(board)}")
+            except Exception as e:
+                await callback_query.answer("Something went wrong. Please try again.")
+                print(f"Error editing message: {e}")
         del game_state[user_id]
     else:
         # Update the game state and show next player's turn
