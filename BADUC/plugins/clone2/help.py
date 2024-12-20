@@ -35,8 +35,19 @@ async def help(client: Client, message: Message):
     buttons = []
     plugin_list = list(plugin_details.keys())
 
-    for idx, plugin in enumerate(plugin_list, start=1):
-        buttons.append([InlineKeyboardButton(f"{idx}. {plugin}", callback_data=f"plugin_{idx}")])
+    for i in range(0, len(plugin_list), 2):
+        row = []
+        for j in range(2):
+            if i + j < len(plugin_list):
+                plugin_name = plugin_list[i + j]
+                row.append(InlineKeyboardButton(f"{i + j + 1}. {plugin_name}", callback_data=f"plugin_{i + j + 1}"))
+        buttons.append(row)
+
+    # Add permanent "Support" and "Update" buttons
+    buttons.append([
+        InlineKeyboardButton("ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/PBX_CHAT"),
+        InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇ", url="https://t.me/HEROKUBIN_01")
+    ])
 
     # Add navigation buttons
     buttons.append([
@@ -74,7 +85,8 @@ async def button_handler(client, callback_query):
                 [
                     InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
                     InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
-                ]
+                ],
+                [InlineKeyboardButton("🔙 Menu", callback_data="menu")]
             ])
         )
 
@@ -94,7 +106,8 @@ async def button_handler(client, callback_query):
                     [
                         InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
                         InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
-                    ]
+                    ],
+                    [InlineKeyboardButton("🔙 ᴍᴇɴᴜ", callback_data="menu")]
                 ])
             )
 
@@ -114,6 +127,11 @@ async def button_handler(client, callback_query):
                     [
                         InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
                         InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
-                    ]
+                    ],
+                    [InlineKeyboardButton("🔙 ᴍᴇɴᴜ", callback_data="menu")]
                 ])
             )
+
+    elif data == "menu":
+        # Return to the main help menu
+        await help(client, callback_query.message)
