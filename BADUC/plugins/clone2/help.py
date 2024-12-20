@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from BADUC.plugins.bot.clone3 import get_bot_owner  # Ensure this import is correct
+from BADUC.plugins.bot.clone3 import get_bot_owner  # Ensure correct import
 
 # Dictionary to store plugin details automatically
 plugin_details = {}
