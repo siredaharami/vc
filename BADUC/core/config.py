@@ -25,8 +25,6 @@ PM_GUARD_TEXT = getenv("PM_GUARD_TEXT", "**👋🏻𝐇ყ !**\n❤️𝐎ɯɳҽ
 PM_GUARD_LIMIT = int(getenv("PM_GUARD_LIMIT", 3))
 PM_PIC = getenv("PM_PIC", "https://files.catbox.moe/rix20t.jpg")
 BOT_PICTURE_URL = "https://files.catbox.moe/83d5lc.jpg"
-MUST_JOIN_GROUPS = ["-1002122353644", "-1001693569838", "-1002056907061", "-1002020205239", "-1002138886770"]
-
 # Don't Edit This Codes From This Line
 
 LOGGER = logging.getLogger("main")
