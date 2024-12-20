@@ -30,34 +30,6 @@ def get_board_message(board):
     board_str = "\n".join([" | ".join(board[i:i+3]) for i in range(0, 9, 3)])
     return f"Current Board:\n{board_str}"
 
-# Number Guessing Game
-def start_guess_game(user_id):
-    game_state[user_id] = random.randint(1, 100)
-
-def check_guess(user_id, guess):
-    if user_id not in game_state:
-        return None
-    target = game_state[user_id]
-    if guess < target:
-        return "Too low!"
-    elif guess > target:
-        return "Too high!"
-    else:
-        del game_state[user_id]
-        return f"Correct! The number was {target}. You win!"
-
-# Rock Paper Scissors
-def play_rps(user_choice):
-    choices = ["rock", "paper", "scissors"]
-    bot_choice = random.choice(choices)
-    if user_choice == bot_choice:
-        return f"Both chose {user_choice}. It's a tie!"
-    if (user_choice == "rock" and bot_choice == "scissors") or \
-       (user_choice == "paper" and bot_choice == "rock") or \
-       (user_choice == "scissors" and bot_choice == "paper"):
-        return f"You win! I chose {bot_choice}."
-    return f"You lose! I chose {bot_choice}."
-
 # Start Game
 @bot.on_message(filters.command("games"))
 async def start_game(client, message):
@@ -73,39 +45,50 @@ async def start_game(client, message):
 @bot.on_callback_query(filters.regex("tic_tac_toe"))
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
+    # Initialize the game state with two players (only the first user for now)
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
     buttons = [
-        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
+        [InlineKeyboardButton("Start game with a friend", callback_data="join_game")]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+    await callback_query.message.edit_text("Game started! Waiting for another player to join...", reply_markup=keyboard)
+
+@bot.on_callback_query(filters.regex("join_game"))
+async def join_game(client, callback_query):
+    user_id = callback_query.from_user.id
+    game_state[callback_query.message.chat.id]['players'][1] = user_id
+    buttons = [
+        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{callback_query.message.chat.id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{callback_query.message.chat.id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{callback_query.message.chat.id}") for i in range(3)]
+    ]
+    keyboard = InlineKeyboardMarkup(buttons)
+    await callback_query.message.edit_text(f"Game started! Your turn (X), Player 1: {callback_query.message.chat.id}, Player 2: {user_id}.", reply_markup=keyboard)
 
 @bot.on_callback_query(filters.regex("play_"))
 async def play_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     position = int(callback_query.data.split("_")[1])
-    current_user = int(callback_query.data.split("_")[2])
+    game_id = int(callback_query.data.split("_")[2])
 
-    # Ensure only the current player can play
-    if current_user != user_id:
+    # Ensure only the current player's turn
+    if game_state[game_id]['players'][game_state[game_id]['turn'] == 'X'] != user_id:
         await callback_query.answer("It's not your turn!", show_alert=True)
         return
 
     board, winner = update_board(user_id, position)
     
-    # Check winner
+    # Check for a winner
     if winner:
         await callback_query.edit_message_text(f"{winner} wins!\n{get_board_message(board)}")
-        del game_state[user_id]
+        del game_state[game_id]
     else:
-        # Update the game state and show next player's turn
-        next_turn = game_state[user_id]['turn']
+        # Update the game state and show the next player's turn
+        next_turn = game_state[game_id]['turn']
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
+            [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{game_id}") for i in range(3)],
+            [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{game_id}") for i in range(3)],
+            [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{game_id}") for i in range(3)]
         ])
         await callback_query.edit_message_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
 
@@ -143,5 +126,3 @@ async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
     await callback_query.edit_message_text(result)
-
-                                            
