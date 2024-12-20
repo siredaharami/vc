@@ -59,18 +59,17 @@ async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
 
-    # Edit the original message or send a new message as the reply
-    await callback_query.answer("Game started! Your turn (X).")
-
-    # Send a new message for Tic Tac Toe Game
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
-        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
-    ])
-
-    # Edit the message to show the new game status
-    await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+    # Ensure the message exists before trying to edit it
+    if callback_query.message:
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
+            [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
+            [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
+        ])
+        await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+    else:
+        # Fallback in case callback_query.message is None
+        await callback_query.answer("Something went wrong. Please try again.")
 
 # Play Tic-Tac-Toe
 @bot.on_callback_query(filters.regex("play_"))
@@ -88,7 +87,8 @@ async def play_tic_tac_toe(client, callback_query):
     
     # Check winner
     if winner:
-        await callback_query.edit_message_text(f"{winner} wins!\n{get_board_message(board)}")
+        if callback_query.message:
+            await callback_query.message.edit_text(f"{winner} wins!\n{get_board_message(board)}")
         del game_state[user_id]
     else:
         # Update the game state and show next player's turn
@@ -98,7 +98,8 @@ async def play_tic_tac_toe(client, callback_query):
             [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
             [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
         ])
-        await callback_query.edit_message_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
+        if callback_query.message:
+            await callback_query.message.edit_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
 
 # Start Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps"))
@@ -110,11 +111,11 @@ async def start_rps_game(client, callback_query):
     ]
     keyboard = InlineKeyboardMarkup(buttons)
     
-    # Send a new message for Rock Paper Scissors
-    await callback_query.answer("Choose Rock, Paper, or Scissors:")
-
-    # Edit the message to show the choices
-    await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+    # Ensure the message exists before editing it
+    if callback_query.message:
+        await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+    else:
+        await callback_query.answer("Something went wrong. Please try again.")
 
 # Play Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps_"))
@@ -122,5 +123,8 @@ async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
     
-    # Edit message to show the result
-    await callback_query.edit_message_text(result)
+    # Ensure the message exists before editing it
+    if callback_query.message:
+        await callback_query.message.edit_text(result)
+    else:
+        await callback_query.answer("Something went wrong. Please try again.")
