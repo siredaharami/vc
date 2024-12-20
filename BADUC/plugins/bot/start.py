@@ -3,6 +3,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import random
 import os
 import traceback
+from BADUC.core.clients import bot
 
 # List of start image URLs
 START_IMAGES = [
