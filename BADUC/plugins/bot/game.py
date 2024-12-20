@@ -2,6 +2,8 @@ from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InputTextMessageContent
+
 
 # Game states
 game_state = {}
@@ -61,29 +63,26 @@ def play_rps(user_choice):
 # Inline Query handling
 @bot.on_inline_query()
 async def inline_query_handler(client, inline_query):
-    games = [
-        ("Tic-Tac-Toe", "tic_tac_toe"),
-        ("Number Guessing", "guess_game"),
-        ("Rock, Paper, Scissors", "rps_game")
+    # Example of inline query results (you can customize this with buttons or games)
+    results = [
+        InlineQueryResultArticle(
+            title="Tic Tac Toe",
+            input_message_content=InputTextMessageContent("Let's play Tic Tac Toe!"),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Play", callback_data="tic_tac_toe")]
+            ])
+        ),
+        InlineQueryResultArticle(
+            title="Rock, Paper, Scissors",
+            input_message_content=InputTextMessageContent("Let's play Rock, Paper, Scissors!"),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Play", callback_data="rps")]
+            ])
+        ),
+        # Add more results here...
     ]
-    
-    results = []
-    for game_name, game_data in games:
-        results.append(
-            {
-                "type": "article",
-                "id": game_data,
-                "title": game_name,
-                "input_message_content": {
-                    "message_text": f"Starting {game_name}..."
-                },
-                "reply_markup": InlineKeyboardMarkup([
-                    [InlineKeyboardButton(game_name, callback_data=game_data)]
-                ])
-            }
-        )
-    
-    # Send the results back as inline suggestions
+
+    # Answer the inline query
     await inline_query.answer(results)
 
 # Start Game (as done previously)
@@ -160,4 +159,6 @@ async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
     await callback_query.edit_message_text(result)
+
+
 
