@@ -36,6 +36,19 @@ def get_board_message(board):
     return f"Current Board:\n{board_str}"
 
 # Tic-Tac-Toe Handlers
+@bot.on_message(filters.command("games"))
+async def start_game_menu(client, message):
+    # Add debug log
+    print("Received /games command from user:", message.from_user.id)
+    
+    buttons = [
+        [InlineKeyboardButton("Tic-Tac-Toe", callback_data="tic_tac_toe"),
+         InlineKeyboardButton("Number Guessing", callback_data="guess_game"),
+         InlineKeyboardButton("Rock, Paper, Scissors", callback_data="rps_game")]
+    ]
+    keyboard = InlineKeyboardMarkup(buttons)
+    await message.reply("Choose a game to play:", reply_markup=keyboard)
+
 @bot.on_callback_query(filters.regex("tic_tac_toe"))
 async def start_tic_tac_toe(client, callback_query):
     chat_id = callback_query.message.chat.id
@@ -161,14 +174,3 @@ async def guess_number(client, message):
             await message.reply(result)
         except ValueError:
             await message.reply("Please enter a valid number.")
-
-# Start Game Menu
-@bot.on_message(filters.command("games"))
-async def start_game_menu(client, message):
-    buttons = [
-        [InlineKeyboardButton("Tic-Tac-Toe", callback_data="tic_tac_toe"),
-         InlineKeyboardButton("Number Guessing", callback_data="guess_game"),
-         InlineKeyboardButton("Rock, Paper, Scissors", callback_data="rps_game")]
-    ]
-    keyboard = InlineKeyboardMarkup(buttons)
-    await message.reply("Choose a game to play:", reply_markup=keyboard)
