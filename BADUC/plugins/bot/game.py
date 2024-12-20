@@ -89,13 +89,20 @@ async def inline_query_handler(client, inline_query):
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
+    
     buttons = [
         [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+    
+    # Ensure the message is not None before editing it
+    if callback_query.message:
+        await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+    else:
+        # Handle case when the message is None (for example, log an error or take action)
+        print("Error: Message is None!")
 
 @bot.on_callback_query(filters.regex("play_"))
 async def play_tic_tac_toe(client, callback_query):
