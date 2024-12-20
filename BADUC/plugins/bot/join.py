@@ -18,26 +18,26 @@ async def must_join_channel(app: Client, msg: Message):
                 await app.get_chat_member(channel, msg.from_user.id)
             except UserNotParticipant:
                 if channel.isalpha():
-                    link = "https://t.me/" + channel
+                    link = f"https://t.me/{channel}"
                 else:
                     chat_info = await app.get_chat(channel)
                     link = chat_info.invite_link
 
-                try:
-                    await msg.reply_photo(
-                        photo="https://envs.sh/Tn_.jpg",
-                        caption=(
-                            f"๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ "
-                            f"[ᴊᴏɪɴ]({link}) ʏᴇᴛ. ᴘʟᴇᴀsᴇ ᴊᴏɪɴ ᴛᴏ ᴜsᴇ ᴍʏ ꜰᴇᴀᴛᴜʀᴇs."
-                        ),
-                        reply_markup=InlineKeyboardMarkup(
-                            [[InlineKeyboardButton("Join", url=link)]]
+                # Ensure the link is valid before sending
+                if link:
+                    try:
+                        await msg.reply_photo(
+                            photo="https://envs.sh/Tn_.jpg",
+                            caption=(
+                                f"๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ "
+                                f"[ᴊᴏɪɴ]({link}) ʏᴇᴛ. ᴘʟᴇᴀsᴇ ᴊᴏɪɴ ᴛᴏ ᴜsᴇ ᴍʏ ꜰᴇᴀᴛᴜʀᴇs."
+                            ),
+                            reply_markup=InlineKeyboardMarkup(
+                                [[InlineKeyboardButton("Join", url=link)]]
+                            )
                         )
-                    )
-                    await msg.stop_propagation()
-                except ChatWriteForbidden:
-                    pass
+                        await msg.stop_propagation()
+                    except ChatWriteForbidden:
+                        pass
         except ChatAdminRequired:
             print(f"๏ Please promote me as an admin in the chat: {channel}!")
-
-# Your bot initialization and other code here
