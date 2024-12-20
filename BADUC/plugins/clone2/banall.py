@@ -1,4 +1,4 @@
-from pyrogram import Client, filters, enums
+from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from pyrogram.enums import ChatMemberStatus, ParseMode, ChatType
 import asyncio
@@ -12,6 +12,16 @@ import time
 import requests
 from BADUC.plugins.bot.clone3 import get_bot_owner  # Import the function to check bot owner
 
+# Placeholder for is_authorized function
+async def is_authorized(client, message):
+    # Assuming you want to check if the user is the bot owner
+    user_id = message.from_user.id
+    bot_info = await client.get_me()  # Retrieve bot info
+    bot_id = bot_info.id  # Get the bot ID
+    owner_id = await get_bot_owner(bot_id)  # Fetch the owner ID
+    
+    return user_id == owner_id  # Returns True if the user is authorized
+
 # Ban All Command with Authorization Check
 @Client.on_message(filters.command(["banall"], prefixes=[".", "/", "!"]) & filters.group)
 async def ban_all(client, msg):
@@ -24,7 +34,7 @@ async def ban_all(client, msg):
     owner_id = await get_bot_owner(bot_id)  # Fetch the owner ID
 
     # If the user is not authorized, deny the command
-    if owner_id != user_id:
+    if not await is_authorized(client, msg):
         await msg.reply_text("❌ You're not authorized to use this bot.")
         return
 
