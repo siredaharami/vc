@@ -60,20 +60,19 @@ async def start_tic_tac_toe(client, callback_query):
 
     # Ensure callback_query.message is available
     if callback_query.message:
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
-        ])
         try:
-            # Try editing the message
-            await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
+            # Sending a new message to initiate the game
+            keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
+                [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
+                [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
+            ])
+            await callback_query.message.reply_text("Game started! Your turn (X).", reply_markup=keyboard)
         except Exception as e:
             # Catch error if message is not available or something went wrong
             await callback_query.answer("Something went wrong. Please try again.")
-            print(f"Error editing message: {e}")
+            print(f"Error sending message: {e}")
     else:
-        # If no message exists, inform the user
         await callback_query.answer("Message is not available. Something went wrong.")
 
 # Play Tic-Tac-Toe
@@ -126,10 +125,11 @@ async def start_rps_game(client, callback_query):
     
     if callback_query.message:
         try:
-            await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+            # Send the message with options
+            await callback_query.message.reply_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
         except Exception as e:
             await callback_query.answer("Something went wrong. Please try again.")
-            print(f"Error editing message: {e}")
+            print(f"Error sending message: {e}")
     else:
         await callback_query.answer("Message is not available. Something went wrong.")
 
