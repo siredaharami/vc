@@ -3,93 +3,93 @@ from BADUC.plugins.clone2.help import plugin  # Ensure the correct path for the 
 
 # 1. banall Plugin
 @plugin(
-    name="banall",
+    name="ʙᴀɴᴀʟʟ",
     description="""
-    **BanAll Plugin**
-    - **Command**: /banall
-    - **Description**: Bans all members from the group.
-    - **Usage**: Type /banall to remove all members from the group.
+    ʙᴀɴᴀʟʟ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅ: /ʙᴀɴᴀʟʟ
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ʙᴀɴs ᴀʟʟ ᴍᴇᴍʙᴇʀs ғʀᴏᴍ ᴛʜᴇ ɢʀᴏᴜᴘ.
+    - ᴜsᴀɢᴇ: ᴛʏᴘᴇ /ʙᴀɴᴀʟʟ ᴛᴏ ʀᴇᴍᴏᴠᴇ ᴀʟʟ ᴍᴇᴍʙᴇʀs ғʀᴏᴍ ᴛʜᴇ ɢʀᴏᴜᴘ.
     """
 )
 async def banall_plugin(client: Client, message):
-    await message.reply_text("All members have been banned!")
+    await message.reply_text("ᴀʟʟ ᴍᴇᴍʙᴇʀs ʜᴀᴠᴇ ʙᴇᴇɴ ʙᴀɴɴᴇᴅ!")
 
 # 2. replyraid Plugin
 @plugin(
-    name="replyraid",
+    name="ʀᴇᴘʟʏʀᴀɪᴅ",
     description="""
-    **ReplyRaid Plugin**
-    - **Commands**:
-      - /hreplyraid: Start a high-intensity reply raid.
-      - /preplyraid: Start a persistent reply raid.
-      - /replyraid: Start a standard reply raid.
-    - **Description**: This plugin triggers a raid-like series of replies to messages.
-    - **Usage**: Type one of the above commands to start a reply raid.
+    ʀᴇᴘʟʏʀᴀɪᴅ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅs:
+      - /ʜʀᴇᴘʟʏʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ʜɪɢʜ-ɪɴᴛᴇɴsɪᴛʏ ʀᴇᴘʟʏ ʀᴀɪᴅ.
+      - /ᴘʀᴇᴘʟʏʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ᴘᴇʀsɪsᴛᴇɴᴛ ʀᴇᴘʟʏ ʀᴀɪᴅ.
+      - /ʀᴇᴘʟʏʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ sᴛᴀɴᴅᴀʀᴅ ʀᴇᴘʟʏ ʀᴀɪᴅ.
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ᴛʜɪs ᴘʟᴜɢɪɴ ᴛʀɪɢɢᴇʀs ᴀ ʀᴀɪᴅ-ʟɪᴋᴇ sᴇʀɪᴇs ᴏғ ʀᴇᴘʟɪᴇs ᴛᴏ ᴍᴇssᴀɢᴇs.
+    - ᴜsᴀɢᴇ: ᴛʏᴘᴇ ᴏɴᴇ ᴏғ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ sᴛᴀʀᴛ ᴀ ʀᴇᴘʟʏ ʀᴀɪᴅ.
     """
 )
 async def replyraid_plugin(client: Client, message):
-    await message.reply_text("Reply raid initiated!")
+    await message.reply_text("ʀᴇᴘʟʏ ʀᴀɪᴅ ɪɴɪᴛɪᴀᴛᴇᴅ!")
 
 # 3. ping Plugin
 @plugin(
-    name="ping",
+    name="ᴘɪɴɢ",
     description="""
-    **Ping Plugin**
-    - **Command**: /ping
-    - **Description**: Check the bot's responsiveness.
-    - **Usage**: Type /ping to get a response time from the bot.
+    ᴘɪɴɢ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅ: /ᴘɪɴɢ
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ᴄʜᴇᴄᴋ ᴛʜᴇ ʙᴏᴛ's ʀᴇsᴘᴏɴsɪᴠᴇɴᴇss.
+    - ᴜsᴀɢᴇ: ᴛʏᴘᴇ /ᴘɪɴɢ ᴛᴏ ɢᴇᴛ ᴀ ʀᴇsᴘᴏɴsᴇ ᴛɪᴍᴇ ғʀᴏᴍ ᴛʜᴇ ʙᴏᴛ.
     """
 )
 async def ping_plugin(client: Client, message):
-    await message.reply_text("Pong! The bot is active.")
+    await message.reply_text("ᴘᴏɴɢ! ᴛʜᴇ ʙᴏᴛ ɪs ᴀᴄᴛɪᴠᴇ.")
 
 # 4. tager Plugin
 @plugin(
-    name="tager",
+    name="ᴛᴀɢᴇʀ",
     description="""
-    **Tager Plugin**
-    - **Commands**:
-      - /utag: Tag users with a specific message.
-      - /tagall: Tag all members in the group.
-      - /ptag: Persistent tagging of users.
-      - /pgntag: Tag users except admins.
-      - /pgmtag: Tag group moderators.
-      - /pvctag: Tag users in voice chat.
-    - **Description**: This plugin provides tagging utilities for different scenarios.
-    - **Usage**: Use the above commands based on the tagging needs.
+    ᴛᴀɢᴇʀ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅs:
+      - /ᴜᴛᴀɢ: ᴛᴀɢ ᴜsᴇʀs ᴡɪᴛʜ ᴀ sᴘᴇᴄɪғɪᴄ ᴍᴇssᴀɢᴇ.
+      - /ᴛᴀɢᴀʟʟ: ᴛᴀɢ ᴀʟʟ ᴍᴇᴍʙᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ.
+      - /ᴘᴛᴀɢ: ᴘᴇʀsɪsᴛᴇɴᴛ ᴛᴀɢɢɪɴɢ ᴏғ ᴜsᴇʀs.
+      - /ᴘɢɴᴛᴀɢ: ᴛᴀɢ ᴜsᴇʀs ᴇxᴄᴇᴘᴛ ᴀᴅᴍɪɴs.
+      - /ᴘɢᴍᴛᴀɢ: ᴛᴀɢ ɢʀᴏᴜᴘ ᴍᴏᴅᴇʀᴀᴛᴏʀs.
+      - /ᴘᴠᴄᴛᴀɢ: ᴛᴀɢ ᴜsᴇʀs ɪɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ᴛʜɪs ᴘʟᴜɢɪɴ ᴘʀᴏᴠɪᴅᴇs ᴛᴀɢɢɪɴɢ ᴜᴛɪʟɪᴛɪᴇs ғᴏʀ ᴅɪғғᴇʀᴇɴᴛ sᴄᴇɴᴀʀɪᴏs.
+    - ᴜsᴀɢᴇ: ᴜsᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ʙᴀsᴇᴅ ᴏɴ ᴛʜᴇ ᴛᴀɢɢɪɴɢ ɴᴇᴇᴅs.
     """
 )
 async def tager_plugin(client: Client, message):
-    await message.reply_text("Tagging functionality accessed!")
+    await message.reply_text("ᴛᴀɢɢɪɴɢ ғᴜɴᴄᴛɪᴏɴᴀʟɪᴛʏ ᴀᴄᴄᴇssᴇᴅ!")
 
 # 5. raid Plugin
 @plugin(
-    name="raid",
+    name="ʀᴀɪᴅ",
     description="""
-    **Raid Plugin**
-    - **Commands**:
-      - /hraid: Start a high-intensity raid.
-      - /praid: Start a persistent raid.
-      - /oneraid: Start a single-instance raid.
-      - /raid: Start a general raid.
-    - **Description**: This plugin triggers various types of raid events.
-    - **Usage**: Use the above commands to trigger specific raids.
+    ʀᴀɪᴅ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅs:
+      - /ʜʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ʜɪɢʜ-ɪɴᴛᴇɴsɪᴛʏ ʀᴀɪᴅ.
+      - /ᴘʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ᴘᴇʀsɪsᴛᴇɴᴛ ʀᴀɪᴅ.
+      - /ᴏɴᴇʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ sɪɴɢʟᴇ-ɪɴsᴛᴀɴᴄᴇ ʀᴀɪᴅ.
+      - /ʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ɢᴇɴᴇʀᴀʟ ʀᴀɪᴅ.
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ᴛʜɪs ᴘʟᴜɢɪɴ ᴛʀɪɢɢᴇʀs ᴠᴀʀɪᴏᴜs ᴛʏᴘᴇs ᴏғ ʀᴀɪᴅ ᴇᴠᴇɴᴛs.
+    - ᴜsᴀɢᴇ: ᴜsᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴛʀɪɢɢᴇʀ sᴘᴇᴄɪғɪᴄ ʀᴀɪᴅs.
     """
 )
 async def raid_plugin(client: Client, message):
-    await message.reply_text("Raid mode activated!")
+    await message.reply_text("ʀᴀɪᴅ ᴍᴏᴅᴇ ᴀᴄᴛɪᴠᴀᴛᴇᴅ!")
 
 # 6. spam Plugin
 @plugin(
-    name="spam",
+    name="ꜱᴘᴀᴍ",
     description="""
-    **Spam Plugin**
-    - **Commands**:
-      - /emojiraid: Send a flood of emojis in the chat.
-      - /mraid: Start a media spam raid.
-    - **Description**: This plugin handles spamming functionalities for emojis and media.
-    - **Usage**: Use the above commands for specific spamming needs.
+    sᴘᴀᴍ ᴘʟᴜɢɪɴ
+    - ᴄᴏᴍᴍᴀɴᴅs:
+      - /ᴇᴍᴏᴊɪʀᴀɪᴅ: sᴇɴᴅ ᴀ ғʟᴏᴏᴅ ᴏғ ᴇᴍᴏᴊɪs ɪɴ ᴛʜᴇ ᴄʜᴀᴛ.
+      - /ᴍʀᴀɪᴅ: sᴛᴀʀᴛ ᴀ ᴍᴇᴅɪᴀ sᴘᴀᴍ ʀᴀɪᴅ.
+    - ᴅᴇsᴄʀɪᴘᴛɪᴏɴ: ᴛʜɪs ᴘʟᴜɢɪɴ ʜᴀɴᴅʟᴇs sᴘᴀᴍᴍɪɴɢ ғᴜɴᴄᴛɪᴏɴᴀʟɪᴛɪᴇs ғᴏʀ ᴇᴍᴏᴊɪs ᴀɴᴅ ᴍᴇᴅɪᴀ.
+    - ᴜsᴀɢᴇ: ᴜsᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ sᴘᴇᴄɪғɪᴄ sᴘᴀᴍᴍɪɴɢ ɴᴇᴇᴅs.
     """
 )
 async def spam_plugin(client: Client, message):
-    await message.reply_text("Spam functionality activated!")
+    await message.reply_text("sᴘᴀᴍ ғᴜɴᴄᴛɪᴏɴᴀʟɪᴛʏ ᴀᴄᴛɪᴠᴀᴛᴇᴅ!")
