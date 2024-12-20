@@ -100,3 +100,75 @@ async def play_tic_tac_toe(client, callback_query):
             await callback_query.message.edit_text(f"Next turn: {next_turn}\n{get_board_message(board)}", reply_markup=keyboard)
     else:
         await callback_query.answer("It's not your turn!", show_alert=True)
+
+# Rock, Paper, Scissors Handlers
+def play_rps_logic(user_choice):
+    choices = ["rock", "paper", "scissors"]
+    bot_choice = random.choice(choices)
+    if user_choice == bot_choice:
+        return f"Both chose {user_choice}. It's a tie!"
+    if (user_choice == "rock" and bot_choice == "scissors") or \
+       (user_choice == "paper" and bot_choice == "rock") or \
+       (user_choice == "scissors" and bot_choice == "paper"):
+        return f"You win! I chose {bot_choice}."
+    return f"You lose! I chose {bot_choice}."
+
+@bot.on_callback_query(filters.regex("rps_game"))
+async def start_rps_game(client, callback_query):
+    buttons = [
+        [InlineKeyboardButton("Rock", callback_data="rps_rock"),
+         InlineKeyboardButton("Paper", callback_data="rps_paper"),
+         InlineKeyboardButton("Scissors", callback_data="rps_scissors")]
+    ]
+    keyboard = InlineKeyboardMarkup(buttons)
+    await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+
+@bot.on_callback_query(filters.regex(r"rps_"))
+async def play_rps(client, callback_query):
+    user_choice = callback_query.data.split("_")[1]
+    result = play_rps_logic(user_choice)
+    await callback_query.message.edit_text(result)
+
+# Number Guessing Handlers
+def start_guess_game(user_id):
+    game_state[user_id] = random.randint(1, 100)
+
+def check_guess(user_id, guess):
+    if user_id not in game_state:
+        return None
+    target = game_state[user_id]
+    if guess < target:
+        return "Too low!"
+    elif guess > target:
+        return "Too high!"
+    else:
+        del game_state[user_id]
+        return f"Correct! The number was {target}. You win!"
+
+@bot.on_callback_query(filters.regex("guess_game"))
+async def start_number_game(client, callback_query):
+    user_id = callback_query.from_user.id
+    start_guess_game(user_id)
+    await callback_query.message.edit_text("I have selected a number between 1 and 100. Guess the number!")
+
+@bot.on_message(filters.text)
+async def guess_number(client, message):
+    user_id = message.from_user.id
+    if user_id in game_state and isinstance(game_state[user_id], int):
+        try:
+            guess = int(message.text)
+            result = check_guess(user_id, guess)
+            await message.reply(result)
+        except ValueError:
+            await message.reply("Please enter a valid number.")
+
+# Start Game Menu
+@bot.on_message(filters.command("games"))
+async def start_game_menu(client, message):
+    buttons = [
+        [InlineKeyboardButton("Tic-Tac-Toe", callback_data="tic_tac_toe"),
+         InlineKeyboardButton("Number Guessing", callback_data="guess_game"),
+         InlineKeyboardButton("Rock, Paper, Scissors", callback_data="rps_game")]
+    ]
+    keyboard = InlineKeyboardMarkup(buttons)
+    await message.reply("Choose a game to play:", reply_markup=keyboard)
