@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 from BADUC.plugins.bot.clone3 import get_bot_owner  # Ensure correct import
 
 # Dictionary to store plugin details automatically
@@ -15,7 +15,7 @@ def plugin(name, description):
         return func
     return decorator
 
-# Help command to show plugins with buttons
+# Help command to show plugins with buttons and photo
 @Client.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
     bot_info = await client.get_me()  # Retrieve current bot's details
@@ -27,6 +27,9 @@ async def help(client: Client, message: Message):
     if owner_id != user_id:
         await message.reply_text("❌ You're not authorized to access the help menu.")
         return
+
+    # Define the photo URL (You can replace this with your desired image URL)
+    photo_url = "https://files.catbox.moe/83d5lc.jpg"
 
     # Generate buttons for plugins
     buttons = []
@@ -41,9 +44,10 @@ async def help(client: Client, message: Message):
         InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
     ])
 
-    # Send message with buttons
-    await message.reply(
-        "👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
+    # Send message with the photo and buttons
+    await message.reply_photo(
+        photo_url,
+        caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
@@ -61,7 +65,9 @@ async def button_handler(client, callback_query):
         plugin_description = plugin_details[plugin_name]
         current_plugin_index[user_id] = plugin_number
 
+        # Send message with plugin description (no photo)
         formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
+        
         await callback_query.message.edit(
             text=formatted_description,
             reply_markup=InlineKeyboardMarkup([
@@ -81,7 +87,16 @@ async def button_handler(client, callback_query):
             plugin_description = plugin_details[plugin_name]
 
             formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
-            await callback_query.message.edit(text=formatted_description)
+            
+            await callback_query.message.edit(
+                text=formatted_description,
+                reply_markup=InlineKeyboardMarkup([
+                    [
+                        InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
+                        InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
+                    ]
+                ])
+            )
 
     elif data == "prev":
         # Handle "Previous" button
@@ -92,4 +107,13 @@ async def button_handler(client, callback_query):
             plugin_description = plugin_details[plugin_name]
 
             formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
-            await callback_query.message.edit(text=formatted_description)
+            
+            await callback_query.message.edit(
+                text=formatted_description,
+                reply_markup=InlineKeyboardMarkup([
+                    [
+                        InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
+                        InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
+                    ]
+                ])
+            )
