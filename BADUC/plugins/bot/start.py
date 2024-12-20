@@ -2,6 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import random
 import os
+import traceback
 
 # Replace with the bot instance and owner/assistant details
 from BADUC.core.clients import bot
@@ -24,6 +25,7 @@ OWNER_USERNAME = "https://t.me/II_BAD_BABY_II"
 @bot.on_message(filters.command("start"))
 async def start(client, message):
     try:
+        print("Start command received.")  # Debugging message
         # Randomly select an image
         selected_image = random.choice(START_IMAGES)
 
@@ -50,10 +52,11 @@ async def start(client, message):
             ),
             reply_markup=keyboard
         )
+        print("Message sent successfully.")  # Debugging message
 
     except Exception as e:
-        # Log the error and notify the user
-        print(f"Error in start command: {e}")
+        print("Error in start command: ", str(e))
+        print(traceback.format_exc())  # More detailed error output
         await message.reply("An error occurred while processing your request. Please try again later.")
 
 
@@ -61,8 +64,9 @@ async def start(client, message):
 @bot.on_callback_query()
 async def callback_query(client, callback_query):
     data = callback_query.data
-
     try:
+        print(f"Callback data received: {data}")  # Debugging message
+
         # Handle the BADUSERBOT button click
         if data == "baduserbot":
             keyboard = InlineKeyboardMarkup([
@@ -106,6 +110,7 @@ async def callback_query(client, callback_query):
             await callback_query.message.edit_text("Please type the session cloning details.")
 
     except Exception as e:
-        # Log callback handling errors
-        print(f"Error in callback query: {e}")
+        print("Error in callback query: ", str(e))
+        print(traceback.format_exc())  # More detailed error output
         await callback_query.answer("An error occurred while processing your request.", show_alert=True)
+
