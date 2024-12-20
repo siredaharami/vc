@@ -2,21 +2,6 @@ from pyrogram import Client, filters
 from BADUC.plugins.bot.clone3 import get_bot_owner
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
-
-
-# Function to check if the user is authorized
-async def is_authorized(client, message):
-    bot_info = await client.get_me()  # Retrieve current bot's details
-    bot_id = bot_info.id  # Get the current bot's ID
-    user_id = message.from_user.id  # Get the user's ID
-
-    owner_id = await get_bot_owner(bot_id)
-    if owner_id != user_id:
-        await message.reply_text("❌ You're not authorized to use this bot.")
-        return False
-    return True
-    
-
 # Dictionary to store plugin details automatically
 plugin_details = {}
 
@@ -33,13 +18,20 @@ def plugin(name, description):
 # ᴄᴏᴍᴍᴀɴᴅ to show help with buttons
 @Client.on_message(filters.command("help"))
 async def help(client: Client, message: Message):
-    if not await is_authorized(c, m):
+    bot_info = await client.get_me()  # Retrieve current bot's details
+    bot_id = bot_info.id  # Get the current bot's ID
+    user_id = message.from_user.id  # Get the user's ID
+
+    # Check if the user is authorized to use this bot
+    owner_id = await get_bot_owner(bot_id)
+    if owner_id != user_id:
+        await message.reply_text("❌ You're not authorized to access the help menu.")
         return
-    user = await c.get_users(user)
+
+    # Generate buttons for plugins
     buttons = []
     plugin_list = list(plugin_details.keys())
 
-    # Generate buttons for plugins
     for idx, plugin in enumerate(plugin_list, start=1):
         buttons.append([InlineKeyboardButton(f"{idx}. {plugin}", callback_data=f"plugin_{idx}")])
 
@@ -101,5 +93,3 @@ async def button_handler(client, callback_query):
 
             formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
             await callback_query.message.edit(text=formatted_description)
-
-
