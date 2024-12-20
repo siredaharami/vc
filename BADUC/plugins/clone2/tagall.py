@@ -29,7 +29,7 @@ async def is_authorized(client, message):
     return True
 
 
-@Client.on_message(filters.command(["all", "utag"], prefixes=["/", "@"]))
+@Client.on_message(filters.command(["utag"], prefixes=["/", "@"]))
 async def tag_all_users(client, message):
     if not await is_authorized(client, message):
         return  # Exit if the user is not authorized
