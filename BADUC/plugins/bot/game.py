@@ -38,14 +38,14 @@ async def inline_query_handler(client, inline_query):
     results = [
         InlineQueryResultArticle(
             title="Tic Tac Toe",
-            input_message_content=InputTextMessageContent("Let's play Tic Tac Toe!"),
+            input_message_content=InputTextMessageContent("Let's play Tic Tac Toe! Click Play to start."),
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Play", callback_data="tic_tac_toe")]
             ])
         ),
         InlineQueryResultArticle(
             title="Rock, Paper, Scissors",
-            input_message_content=InputTextMessageContent("Let's play Rock, Paper, Scissors!"),
+            input_message_content=InputTextMessageContent("Let's play Rock, Paper, Scissors! Click Play to start."),
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Play", callback_data="rps")]
             ])
@@ -58,19 +58,16 @@ async def inline_query_handler(client, inline_query):
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
+
+    # Send a new message for Tic Tac Toe Game
+    message = await callback_query.message.reply_text("Game started! Your turn (X).", reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
+        [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
+    ]))
     
-    # Ensure the callback_query.message is valid before trying to edit it
-    if callback_query.message:
-        buttons = [
-            [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
-            [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
-        ]
-        keyboard = InlineKeyboardMarkup(buttons)
-        await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
-    else:
-        # If message is None, send a new message
-        await callback_query.answer("Something went wrong, please try again.")
+    # Edit message if required
+    await message.edit_text("Game started! Your turn (X).", reply_markup=message.reply_markup)
 
 # Play Tic-Tac-Toe
 @bot.on_callback_query(filters.regex("play_"))
@@ -110,11 +107,11 @@ async def start_rps_game(client, callback_query):
     ]
     keyboard = InlineKeyboardMarkup(buttons)
     
-    # Ensure the callback_query.message is valid before trying to edit it
-    if callback_query.message:
-        await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
-    else:
-        await callback_query.answer("Something went wrong, please try again.")
+    # Send a new message for Rock Paper Scissors
+    message = await callback_query.message.reply_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
+    
+    # Edit message if required
+    await message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=message.reply_markup)
 
 # Play Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps_"))
@@ -122,8 +119,5 @@ async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
     
-    # Ensure the callback_query.message is valid before trying to edit it
-    if callback_query.message:
-        await callback_query.edit_message_text(result)
-    else:
-        await callback_query.answer("Something went wrong, please try again.")
+    # Edit message to show the result
+    await callback_query.edit_message_text(result)
