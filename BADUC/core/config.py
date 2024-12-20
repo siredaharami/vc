@@ -24,7 +24,8 @@ PM_GUARD = bool(getenv("PM_GUARD", True))
 PM_GUARD_TEXT = getenv("PM_GUARD_TEXT", "**👋🏻𝐇ყ !**\n❤️𝐎ɯɳҽɾ 𝐈ʂ 𝐎ϝϝℓιɳҽ 𝐒ꪮ 𝐏ℓꫀαʂꫀ 𝐃σɳ'ƚ 𝐒ραɱ🌪️ \n⚡𝐈ϝ 𝐘συ 𝐒ραɱ , 𝐘συ 𝐖ιℓℓ 𝐁ҽ 𝐁ℓσ¢ƙҽԃ 𝐀υƚσɱαƚι¢ℓℓу 🌸 🦋 𝐖αιт 𝐅σя  𝐌у 𝐂υтє [𝐎ωиєя](tg://settings) ❤️**\n**💫 𝐉ᴏɪɴ 𝐎ᴜʀ 𝐓ᴇᴀᴍ 𝐓ʜᴀɴᴋᴜ ❣️")
 PM_GUARD_LIMIT = int(getenv("PM_GUARD_LIMIT", 3))
 PM_PIC = getenv("PM_PIC", "https://files.catbox.moe/rix20t.jpg")
-BOT_PICTURE_URL = "https://files.catbox.moe/83d5lc.jpg"  # Replace with actual URL
+BOT_PICTURE_URL = "https://files.catbox.moe/83d5lc.jpg"
+MUST_JOIN_GROUPS = ["@HEROKUBIN_01", "@PBX_CHAT", "@ll_BAD_MUNDA_WORLD_ll", "@ll_BAD_ABOUT_ll", "@BEAUTIFUl_DPZ"]
 
 # Don't Edit This Codes From This Line
 
