@@ -78,7 +78,6 @@ async def inline_query_handler(client, inline_query):
                 [InlineKeyboardButton("Play", callback_data="rps")]
             ])
         ),
-        # Add more results here...
     ]
     await inline_query.answer(results)
 
@@ -87,18 +86,16 @@ async def inline_query_handler(client, inline_query):
 async def start_tic_tac_toe(client, callback_query):
     user_id = callback_query.from_user.id
     game_state[user_id] = {'board': create_board(), 'turn': 'X', 'players': [callback_query.from_user.id, None]}
+    
+    # Display the initial game board
     buttons = [
         [InlineKeyboardButton(str(i), callback_data=f"play_{i}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 3), callback_data=f"play_{i + 3}_{user_id}") for i in range(3)],
         [InlineKeyboardButton(str(i + 6), callback_data=f"play_{i + 6}_{user_id}") for i in range(3)]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-
-    # If the message is None, send a new message
-    if callback_query.message:
-        await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
-    else:
-        await callback_query.answer("Game started! Your turn (X).", show_alert=True)
+    
+    await callback_query.message.edit_text("Game started! Your turn (X).", reply_markup=keyboard)
 
 # Play Tic-Tac-Toe
 @bot.on_callback_query(filters.regex("play_"))
@@ -155,17 +152,11 @@ async def start_rps_game(client, callback_query):
          InlineKeyboardButton("Scissors", callback_data="rps_scissors")]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    if callback_query.message:
-        await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
-    else:
-        await callback_query.answer("Let's play Rock, Paper, Scissors!", show_alert=True)
+    await callback_query.message.edit_text("Choose Rock, Paper, or Scissors:", reply_markup=keyboard)
 
 # Play Rock, Paper, Scissors
 @bot.on_callback_query(filters.regex("rps_"))
 async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
-    if callback_query.message:
-        await callback_query.edit_message_text(result)
-    else:
-        await callback_query.answer(result, show_alert=True)
+    await callback_query.edit_message_text(result)
