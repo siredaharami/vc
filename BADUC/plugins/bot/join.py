@@ -7,7 +7,7 @@ from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForb
 MUST_JOIN = ["PBX_CHAT", "HEROKUBIN_01", "ll_BAD_ABOUT_ll", "BEAUTIFUl_DPZ", "ll_BAD_MUNDA_WORLD_ll"]
 
 @bot.on_message(filters.incoming & filters.private, group=-1)
-async def must_join_channel(app: Client, msg: Message):
+async def must_join_channel(bot: Client, msg: Message):
     if not MUST_JOIN:
         return
 
@@ -15,12 +15,12 @@ async def must_join_channel(app: Client, msg: Message):
         try:
             try:
                 # Check if the user is a member of the channel/group
-                await app.get_chat_member(channel, msg.from_user.id)
+                await bot.get_chat_member(channel, msg.from_user.id)
             except UserNotParticipant:
                 if channel.isalpha():
                     link = f"https://t.me/{channel}"
                 else:
-                    chat_info = await app.get_chat(channel)
+                    chat_info = await bot.get_chat(channel)
                     link = chat_info.invite_link
 
                 # Ensure the link is valid before sending
