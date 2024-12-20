@@ -1,6 +1,14 @@
 from pyrogram import Client, filters
 from BADUC.plugins.bot.clone3 import get_bot_owner  # Import the function to check bot owner
 
+# Function to register this plugin
+def register_plugin(plugin_details):
+    plugin_details["ping"] = """
+**Ping Plugin**
+- **Command**: /ping
+- **Description**: Checks the bot's latency.
+"""
+    
 @Client.on_message(filters.command("ping"))
 async def ping_command(client, message):
     bot_info = await client.get_me()  # Retrieve current bot's details
