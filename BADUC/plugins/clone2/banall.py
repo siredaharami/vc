@@ -1,54 +1,45 @@
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
-from pyrogram import Client, errors
-from pyrogram.enums import ChatMemberStatus, ParseMode
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatMemberStatus, ParseMode, ChatType
 import asyncio
 import os
 from os import getenv
 import traceback
-from pyrogram import filters, Client
 from pyrogram.types import Message
 from unidecode import unidecode
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-import random 
-import time
 import random
+import time
 import requests
+from BADUC.plugins.bot.clone3 import get_bot_owner  # Import the function to check bot owner
 
-# Function to check if the user is authorized
-async def is_authorized(client, message):
+# Ban All Command with Authorization Check
+@Client.on_message(filters.command(["banall"], prefixes=[".", "/", "!"]) & filters.group)
+async def ban_all(client, msg):
+    chat_id = msg.chat.id
+    user_id = msg.from_user.id
+
+    # Check bot details and owner
     bot_info = await client.get_me()  # Retrieve current bot's details
     bot_id = bot_info.id  # Get the current bot's ID
-    user_id = message.from_user.id  # Get the user's ID
+    owner_id = await get_bot_owner(bot_id)  # Fetch the owner ID
 
-    owner_id = await get_bot_owner(bot_id)  # Assuming get_bot_owner function is available
+    # If the user is not authorized, deny the command
     if owner_id != user_id:
-        await message.reply_text("❌ You're not authorized to use this bot.")
-        return False
-    return True
-    
-@Client.on_message(filters.command(["banall"], prefixes=[".","/","!"]) & filters.group)
-async def ban_all(client, msg):
-    if not await is_authorized(c, m):
+        await msg.reply_text("❌ You're not authorized to use this bot.")
         return
-        
-    chat_id = msg.chat.id    
-    LOL = await msg.reply_text("hii")
-    Client = await client.get_me()
-    BOT_ID = Client.id
-    x = 0
-    bot = await client.get_chat_member(chat_id, BOT_ID)
-    bot_permission = bot.privileges.can_restrict_members == True    
+
+    LOL = await msg.reply_text("🚨 Initiating ban process...")
+    bot = await client.get_chat_member(chat_id, bot_id)
+    bot_permission = bot.privileges and bot.privileges.can_restrict_members
+
     if bot_permission:
-        banned_users = []
-        async for member in client.get_chat_members(chat_id):       
+        x = 0
+        async for member in client.get_chat_members(chat_id):
             try:
-                await client.ban_chat_member(chat_id, member.user.id) 
+                await client.ban_chat_member(chat_id, member.user.id)
                 x += 1
-                await LOL.edit_text(f"✫ ᴜꜱᴇʀꜱ : {x} ✫")
-            except Exception:
-                pass
+                await LOL.edit_text(f"✫ Banned Users: {x} ✫")
+            except Exception as e:
+                print(f"Error banning user {member.user.id}: {e}")
     else:
-        await msg.reply_text("ɪ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴛʜᴇ ʀɪɢʜᴛ ᴛᴏ ʀᴇsᴛʀɪᴄᴛ ᴜsᴇʀs.")
-        
+        await msg.reply_text("❌ I don't have the permission to restrict users.")
