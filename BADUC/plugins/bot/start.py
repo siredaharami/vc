@@ -4,10 +4,6 @@ import random
 import os
 import traceback
 
-# Replace with the bot instance and owner/assistant details
-from BADUC.core.clients import bot
-from BADUC.core.command import *
-
 # List of start image URLs
 START_IMAGES = [
     "https://files.catbox.moe/mpkdqt.jpg",  
@@ -21,11 +17,13 @@ SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
 OWNER_USERNAME = "https://t.me/II_BAD_BABY_II"
 
 
+
 # Start command handler
 @bot.on_message(filters.command("start"))
 async def start(client, message):
     try:
         print("Start command received.")  # Debugging message
+        
         # Randomly select an image
         selected_image = random.choice(START_IMAGES)
 
@@ -113,4 +111,5 @@ async def callback_query(client, callback_query):
         print("Error in callback query: ", str(e))
         print(traceback.format_exc())  # More detailed error output
         await callback_query.answer("An error occurred while processing your request.", show_alert=True)
+
 
