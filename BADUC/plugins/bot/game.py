@@ -37,7 +37,7 @@ def get_board_message(board):
     return f"Current Board:\n{board_str}"
 
 # Start a new game
-@bot.on_message(filters.command("startgame"))
+@bot.on_message(filters.command("game"))
 async def start_game(client, message):
     user_id = message.from_user.id
     game_state[user_id] = {
