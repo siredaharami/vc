@@ -6,16 +6,14 @@ import asyncio
 
 SPAM_CHATS = []
 
-async def is_admin(chat_id, user_id):
+async def is_admin(client, chat_id, user_id):
     admin_ids = [
         admin.user.id
-        async for admin in Client.get_chat_members(
+        async for admin in client.get_chat_members(
             chat_id, filter=ChatMembersFilter.ADMINISTRATORS
         )
     ]
-    if user_id in admin_ids:
-        return True
-    return False
+    return user_id in admin_ids
 
 
 async def is_authorized(client, message):
@@ -34,7 +32,7 @@ async def tag_all_users(client, message):
     if not await is_authorized(client, message):
         return  # Exit if the user is not authorized
 
-    admin = await is_admin(message.chat.id, message.from_user.id)
+    admin = await is_admin(client, message.chat.id, message.from_user.id)
     if not admin:
         return
 
@@ -104,7 +102,7 @@ async def admintag_with_reporting(client, message):
 
     reply = message.reply_to_message or message
     reply_user_id = reply.from_user.id if reply.from_user else reply.sender_chat.id
-    if reply_user_id == Client.id:
+    if reply_user_id == client.id:
         return await message.reply_text("Why would I report myself?")
     if reply_user_id in admins:
         return await message.reply_text("You are trying to report an admin.")
