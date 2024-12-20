@@ -1,9 +1,8 @@
 from pyrogram import Client, filters
 import random
 from BADUC.core.clients import bot
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.types import InputTextMessageContent
-
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent  # Add InlineQueryResultArticle here
+from pyrogram.types import InlineQueryResultArticle
 
 # Game states
 game_state = {}
@@ -159,6 +158,3 @@ async def play_rps(client, callback_query):
     user_choice = callback_query.data.split("_")[1]
     result = play_rps(user_choice)
     await callback_query.edit_message_text(result)
-
-
-
