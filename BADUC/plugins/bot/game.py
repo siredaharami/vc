@@ -1,8 +1,10 @@
 from pyrogram import Client, filters
 import random
-from BADUC.core.clients import app
-from pyrogram import Client
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from BADUC.core.clients import bot
+from pyrogram import Client, InlineKeyboardButton, InlineKeyboardMarkup
+
+
+
 
 # Game state to track the board
 game_state = {}
@@ -35,7 +37,7 @@ def get_board_message(board):
     return f"Current Board:\n{board_str}"
 
 # Start a new game
-@app.on_message(filters.command("startgame"))
+@bot.on_message(filters.command("startgame"))
 async def start_game(client, message):
     user_id = message.from_user.id
     game_state[user_id] = {
@@ -50,7 +52,7 @@ async def start_game(client, message):
     await message.reply("Game started! Your turn (X).", reply_markup=keyboard)
 
 # Handle the moves
-@app.on_callback_query()
+@bot.on_callback_query()
 async def on_move(client, callback_query):
     user_id = callback_query.from_user.id
     position = int(callback_query.data.split("_")[1])
@@ -66,4 +68,4 @@ async def on_move(client, callback_query):
             [InlineKeyboardButton(str(i+6), callback_data=f"play_{i+6}") for i in range(3)]
         ])
         await callback_query.edit_message_text(f"Next turn: {game_state[user_id]['turn']}\n{get_board_message(board)}", reply_markup=keyboard)
-  
+        
