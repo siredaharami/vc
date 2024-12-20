@@ -45,26 +45,20 @@ async def help(client: Client, message: Message, from_menu=False):
 
     # Add permanent "Support" and "Update" buttons
     buttons.append([
-        InlineKeyboardButton("ꜱᴜᴘᴘᴏʀᴛ", url="https://t.me/PBX_CHAT"),
-        InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇ", url="https://t.me/HEROKUBIN_01")
-    ])
-
-    # Add navigation buttons
-    buttons.append([
-        InlineKeyboardButton("↩️ ᴘʀᴇᴠɪᴏᴜꜱ", callback_data="prev"),
-        InlineKeyboardButton("ɴᴇxᴛ ↪️", callback_data="next")
+        InlineKeyboardButton("🥀 ꜱᴜᴘᴘᴏʀᴛ ❤️", url="https://t.me/PBX_CHAT"),
+        InlineKeyboardButton("🥀 ᴜᴘᴅᴀᴛᴇ ❤️", url="https://t.me/HEROKUBIN_01")
     ])
 
     # Send the help menu
     if from_menu:
         await message.edit_media(
-            media=InputMediaPhoto(photo_url, caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂"),
+            media=InputMediaPhoto(photo_url, caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂"),
             reply_markup=InlineKeyboardMarkup(buttons)
         )
     else:
         await message.reply_photo(
             photo_url,
-            caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
+            caption="👻 ʜᴇʟᴘ ᴍᴇɴᴜ ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ❤️\n🔍ꜱᴇʟᴇᴄᴛ ᴀ ᴘʟᴜɢɪɴ ᴛᴏ ꜱᴇᴇ ɪᴛꜱ ᴅᴇᴛᴀɪʟꜱ📂",
             reply_markup=InlineKeyboardMarkup(buttons)
         )
 
@@ -82,7 +76,7 @@ async def button_handler(client, callback_query):
         plugin_description = plugin_details[plugin_name]
         current_plugin_index[user_id] = plugin_number
 
-        # Show plugin description
+        # Show plugin description with navigation buttons
         formatted_description = f"**ᴄᴏᴍᴍᴀɴᴅ:** {plugin_name}\n{plugin_description}"
         
         await callback_query.message.edit(
