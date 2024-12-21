@@ -30,18 +30,18 @@ async def must_join_channel(bot: Client, msg: Message):
                 # Add link and button to the list
                 if link:
                     missing_links.append(link)
-                    buttons.append([InlineKeyboardButton(f"Join {channel}", url=link)])
+                    buttons.append([InlineKeyboardButton(f"ᴊᴏɪɴ {channel}", url=link)])
             except ChatAdminRequired:
-                print(f"๏ Please promote me as an admin in the chat: {channel}!")
+                print(f"๏ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴍᴏᴛᴇ ᴍᴇ ᴀꜱ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄʜᴀᴛ {channel}!")
 
     # Send a single message with all missing links and buttons
     if missing_links:
         try:
             await msg.reply_photo(
-                photo="https://envs.sh/Tn_.jpg",
+                photo="https://files.catbox.moe/2kporf.jpg",
                 caption=(
                     "๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴛʜᴇꜱᴇ ᴄʜᴀɴɴᴇʟꜱ/ɢʀᴏᴜᴘꜱ ʏᴇᴛ:\n\n"
-                    + "\n".join([f"[Join {channel}]({link})" for channel, link in zip(MUST_JOIN, missing_links)])
+                    + "\n".join([f"[ᴊᴏɪɴ {channel}]({link})" for channel, link in zip(MUST_JOIN, missing_links)])
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
