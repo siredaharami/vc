@@ -465,29 +465,25 @@ async def apply_bass_boost(stream_file, level=10):
     await process.communicate()  # Wait for the process to complete
     return boosted_file
 
-@app.on_message(filters.command("bassboost") & filters.group)
-async def toggle_bass_boost(client, message):
+@app.on_message(filters.command("bassboosted×") & filters.group)
+async def increment_bass_boost(client, message):
     chat_id = message.chat.id
-    if len(message.command) > 1 and message.command[1] == "double":
-        BASS_BOOST_ENABLED[chat_id] = True
-        BASS_BOOST_LEVEL[chat_id] = 50  # 5x bass boost
-        await message.reply_text("🔊 Bass Boost 5x enabled for the current voice chat!")
-    else:
-        if chat_id not in BASS_BOOST_ENABLED or not BASS_BOOST_ENABLED[chat_id]:
-            BASS_BOOST_ENABLED[chat_id] = True
-            BASS_BOOST_LEVEL[chat_id] = 10  # Default bass boost
-            await message.reply_text("🔊 Bass Boost enabled for the current voice chat!")
-        else:
-            BASS_BOOST_ENABLED[chat_id] = False
-            await message.reply_text("🔇 Bass Boost disabled for the current voice chat.")
+    if chat_id not in BASS_BOOST_LEVEL:
+        BASS_BOOST_LEVEL[chat_id] = 10  # Start with default level
+    BASS_BOOST_LEVEL[chat_id] += 5  # Increment bass level by 5
+    BASS_BOOST_ENABLED[chat_id] = True
+    current_level = BASS_BOOST_LEVEL[chat_id]
+    await message.reply_text(f"🔊 Bass Boost increased! Current boost level: {current_level}x")
+    await change_stream(chat_id)  # Apply changes to the current stream
 
 @app.on_message(filters.command("bassclear") & filters.group)
 async def clear_bass_boost(client, message):
     chat_id = message.chat.id
     BASS_BOOST_ENABLED[chat_id] = False
-    BASS_BOOST_LEVEL[chat_id] = 0  # Normal mode
+    BASS_BOOST_LEVEL[chat_id] = 0  # Reset to normal
     await message.reply_text("🔇 Bass cleared! Playing in normal mode.")
-    
+    await change_stream(chat_id)  # Apply changes to the current stream
+
 # Change stream & Close Stream
 
 
