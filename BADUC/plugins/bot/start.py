@@ -4,9 +4,9 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 # Photo URLs for Start Command
 start_photos = [
-    "https://files.catbox.moe/zh4g9l.jpg",
-    "https://files.catbox.moe/mi2asx.jpg",
-    "https://files.catbox.moe/wxlgwq.jpg"
+    "https://files.catbox.moe/r4m4n7.jpg",
+    "https://files.catbox.moe/8cv5nb.jpg",
+    "https://files.catbox.moe/uxqorv.jpg"
 ]
 current_photo = 0  # To track the current photo index
 
