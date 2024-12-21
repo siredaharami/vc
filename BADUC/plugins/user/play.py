@@ -454,38 +454,30 @@ async def stream_logger(
 # Track if bass boost is enabled for a chat
 BASS_BOOST_ENABLED = {}
 BASS_BOOST_LEVEL = {}
-
-async def apply_bass_boost(stream_file, level=10):
+async def apply_bass_boost(stream_file, level=20):
     """
-    Applies bass boost to the audio using FFmpeg.
+    Applies bass boost to the audio using FFmpeg with enhanced settings.
     """
     boosted_file = "bass_boosted_audio.mp3"
-    ffmpeg_command = f"ffmpeg -i {stream_file} -af 'bass=g={level}' {boosted_file} -y"
+    # Combined filters for stronger bass
+    ffmpeg_command = f"ffmpeg -i {stream_file} -af 'bass=g={level},dynaudnorm=f=150:g=15' {boosted_file} -y"
     process = await asyncio.create_subprocess_shell(ffmpeg_command)
     await process.communicate()  # Wait for the process to complete
     return boosted_file
 
-@app.on_message(filters.command("bassboosted×") & filters.group)
+@app.on_message(filters.command("bassboosted5") & filters.group)
 async def increment_bass_boost(client, message):
     chat_id = message.chat.id
     if chat_id not in BASS_BOOST_LEVEL:
         BASS_BOOST_LEVEL[chat_id] = 10  # Start with default level
-    BASS_BOOST_LEVEL[chat_id] += 5  # Increment bass level by 5
+    BASS_BOOST_LEVEL[chat_id] += 20  # Increment bass level by 20
     BASS_BOOST_ENABLED[chat_id] = True
     current_level = BASS_BOOST_LEVEL[chat_id]
-    await message.reply_text(f"🔊 Bass Boost increased! Current boost level: {current_level}x")
+    await message.reply_text(f"🔊 Bass Boost increased! Current boost level: {current_level}")
     await change_stream(chat_id)  # Apply changes to the current stream
 
-@app.on_message(filters.command("bassclear") & filters.group)
-async def clear_bass_boost(client, message):
-    chat_id = message.chat.id
-    BASS_BOOST_ENABLED[chat_id] = False
-    BASS_BOOST_LEVEL[chat_id] = 0  # Reset to normal
-    await message.reply_text("🔇 Bass cleared! Playing in normal mode.")
-    await change_stream(chat_id)  # Apply changes to the current stream
 
 # Change stream & Close Stream
-
 
 async def change_stream(chat_id):
     queued = QUEUE.get(chat_id)
