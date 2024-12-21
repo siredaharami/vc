@@ -59,7 +59,7 @@ async def callback_query_handler(bot, query):
     elif query.data == "game":
         # Game Text with Back Button
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("Back", callback_data="help")]
+            [InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="help")]
         ])
         await query.message.edit_text(
             "🎮 ɢᴀᴍᴇ ᴍᴇɴᴜ \n\n"
@@ -85,7 +85,7 @@ async def callback_query_handler(bot, query):
 
     elif query.data == "session_clone":
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("Back to Clone Menu", callback_data="clone")]
+            [InlineKeyboardButton("ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ", callback_data="clone")]
         ])
         await query.message.edit_text(
             "💢 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
@@ -100,7 +100,7 @@ async def callback_query_handler(bot, query):
 
     elif query.data == "bot_clone":
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("Back to Clone Menu", callback_data="clone")]
+            [InlineKeyboardButton("ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ", callback_data="clone")]
         ])
         await query.message.edit_text(
             "💢ʙᴏᴛ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
@@ -112,3 +112,4 @@ async def callback_query_handler(bot, query):
             "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ' ᴛᴏ ʀᴇᴛᴜʀɴ.",
             reply_markup=keyboard
         )
+        
