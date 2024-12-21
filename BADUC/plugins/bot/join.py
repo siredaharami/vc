@@ -11,8 +11,8 @@ async def must_join_channel(bot: Client, msg: Message):
     if not MUST_JOIN:
         return
 
-    missing_links = []
-    buttons = []
+    missing_channels = []  # To store missing channel names
+    buttons = []  # To store button objects
 
     for channel in MUST_JOIN:
         try:
@@ -29,19 +29,20 @@ async def must_join_channel(bot: Client, msg: Message):
 
                 # Add link and button to the list
                 if link:
-                    missing_links.append(link)
+                    missing_channels.append(channel)
                     buttons.append([InlineKeyboardButton(f"ᴊᴏɪɴ {channel}", url=link)])
             except ChatAdminRequired:
                 print(f"๏ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴍᴏᴛᴇ ᴍᴇ ᴀꜱ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄʜᴀᴛ {channel}!")
 
     # Send a single message with all missing links and buttons
-    if missing_links:
+    if missing_channels:
         try:
+            # Make sure all buttons are added to the InlineKeyboardMarkup
             await msg.reply_photo(
                 photo="https://files.catbox.moe/2kporf.jpg",
                 caption=(
-                    "๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴛʜᴇꜱᴇ ᴄʜᴀɴɴᴇʟꜱ/ɢʀᴏᴜᴘꜱ ʏᴇᴛ:\n\n"
-                    + "\n".join([f"[ᴊᴏɪɴ {channel}]({link})" for channel, link in zip(MUST_JOIN, missing_links)])
+                    "๏ ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ, ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴛʜᴇꜱᴇ ᴄʜᴀɴɴᴇʟꜱ/ɢʀᴏᴜᴘꜱ ʏᴇᴛ:\n\n"
+                    + "\n".join([f"[ᴊᴏɪɴ {channel}](https://t.me/{channel})" for channel in missing_channels])
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons)
             )
