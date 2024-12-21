@@ -167,11 +167,11 @@ async def run_async_clients():
             LOG_GROUP_ID,
             photo=BOT_PICTURE_URL,  # Use the same bot picture URL here
             caption=(
-                f"**Baduser Bot is Alive!** ✅\n\n"
-                f"**🔹 Python ➠ ** `{python_version}`\n"
-                f"**🔹 Pyrogram ➠ ** `{pyrogram_version}`\n"
-                f"**🔹 Pytgcalls ➠ ** `{pytgcalls_version}`\n"
-                f"**🔹 Version ➠ ** `{BOT_VERSION}`"
+                f"**ʙᴀᴅᴜꜱᴇʀ ʙᴏᴛ ɪꜱ ᴀʟɪᴠᴇ!** ✅\n\n"
+                f"**🔹 ᴘʏᴛʜᴏɴ ➠ ** `{python_version}`\n"
+                f"**🔹 ᴘʏʀᴏɢʀᴀᴍ ➠ ** `{pyrogram_version}`\n"
+                f"**🔹 ᴘʏᴛɢ-ᴄᴀʟʟꜱ➠ ** `{pytgcalls_version}`\n"
+                f"**🔹 ʙᴏᴛ-ᴠᴇʀꜱɪᴏɴ ➠ ** `{BOT_VERSION}`"
             ),
             reply_markup=InlineKeyboardMarkup(
                     [
