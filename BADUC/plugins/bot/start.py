@@ -1,116 +1,63 @@
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import random
-import os
-import traceback
 from BADUC.core.clients import bot
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-# List of start image URLs
-START_IMAGES = [
-    "https://files.catbox.moe/mpkdqt.jpg",  
-    "https://files.catbox.moe/wbog9f.jpg",  
-    "https://files.catbox.moe/abcd123.jpg"   # Example image
+# Photo URLs for Start Command
+start_photos = [
+    "https://files.catbox.moe/zh4g9l.jpg",
+    "https://files.catbox.moe/mi2asx.jpg",
+    "https://files.catbox.moe/wxlgwq.jpg"
 ]
+current_photo = 0  # To track the current photo index
 
-# Config placeholders
-ASSISTANT_ID = "https://t.me/II_BAD_BABY_II"  # Telegram link to the assistant
-SESSION_LINK = "https://telegram.tools/session-string-generator#pyrogram,user"
-OWNER_USERNAME = "https://t.me/II_BAD_BABY_II"
+async def get_next_photo():
+    global current_photo
+    photo = start_photos[current_photo]
+    current_photo = (current_photo + 1) % len(start_photos)
+    return photo
 
-
-
-# Start command handler
+# Start Command
 @bot.on_message(filters.command("start"))
-async def start(client, message):
-    try:
-        print("Start command received.")  # Debugging message
-        
-        # Randomly select an image
-        selected_image = random.choice(START_IMAGES)
+async def start(bot, message):
+    # Buttons with text
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Repo", url="https://your-repo-link.com"),
+         InlineKeyboardButton("Support", url="https://your-support-link.com")],
+        [InlineKeyboardButton("Update", url="https://your-update-link.com"),
+         InlineKeyboardButton("Help", callback_data="help")]
+    ])
+    photo = await get_next_photo()
+    caption = (
+        "👋 **Welcome to the Bot!**\n\n"
+        "📚 **Features:**\n"
+        "- Explore the Repo.\n"
+        "- Join Support and Update channels.\n"
+        "- Get Help for various options.\n\n"
+        "🔘 **Click the buttons below to proceed.**"
+    )
+    await message.reply_photo(photo, caption=caption, reply_markup=keyboard)
 
-        # Keyboard layout
+# Callback Query Handler
+@bot.on_callback_query()
+async def callback_query_handler(bot, query):
+    if query.data == "help":
         keyboard = InlineKeyboardMarkup([
-            [
-                InlineKeyboardButton("BADUSERBOT", callback_data="baduserbot"),
-                InlineKeyboardButton("Group Support", url="https://t.me/support_group"),
-            ],
-            [
-                InlineKeyboardButton("Channel Update", url="https://t.me/your_channel"),
-            ]
+            [InlineKeyboardButton("Game", callback_data="game"),
+             InlineKeyboardButton("Clone", callback_data="clone")],
+            [InlineKeyboardButton("String Session", url="https://your-string-session-link.com")]
         ])
-
-        # Send the response with a random image
-        await message.reply_photo(
-            photo=selected_image,
-            caption=(
-                "Welcome to the Bot! Here are some details:\n\n"
-                f"**Userbot Version**: 1.0.0\n"
-                f"**Python Version**: {os.sys.version.split()[0]}\n"
-                f"**Pytgcalls Version**: 1.1.1\n"
-                f"**Pyrogram Version**: 1.2.0"
-            ),
+        await query.message.edit_text(
+            "📖 **Help Menu**\n\n"
+            "1️⃣ **Game**: Instructions for the game.\n"
+            "2️⃣ **Clone**: How to use cloning features.\n"
+            "3️⃣ **String Session**: Generate a string session easily.\n\n"
+            "🔘 **Click the buttons below to proceed.**",
             reply_markup=keyboard
         )
-        print("Message sent successfully.")  # Debugging message
 
-    except Exception as e:
-        print("Error in start command: ", str(e))
-        print(traceback.format_exc())  # More detailed error output
-        await message.reply("An error occurred while processing your request. Please try again later.")
+    elif query.data == "game":
+        await query.message.edit_text("🎮 **Game Instructions:**\n\nLearn how to play the game here!")
 
-
-# Callback query handler
-@bot.on_callback_query()
-async def callback_query(client, callback_query):
-    data = callback_query.data
-    try:
-        print(f"Callback data received: {data}")  # Debugging message
-
-        # Handle the BADUSERBOT button click
-        if data == "baduserbot":
-            keyboard = InlineKeyboardMarkup([
-                [
-                    InlineKeyboardButton("Assistant", url=ASSISTANT_ID),  # Opens the assistant's link
-                    InlineKeyboardButton("BOT OWNER", callback_data="bot_owner"),
-                ],
-                [
-                    InlineKeyboardButton("CLONE", callback_data="clone"),
-                ]
-            ])
-            await callback_query.message.edit_text(
-                "Choose an option:",
-                reply_markup=keyboard
-            )
-
-        # Handle the BOT OWNER button click
-        elif data == "bot_owner":
-            await callback_query.message.edit_text(f"Contact the bot owner: @{OWNER_USERNAME}")
-
-        # Handle the CLONE button click
-        elif data == "clone":
-            keyboard = InlineKeyboardMarkup([
-                [
-                    InlineKeyboardButton("Bot Clone", callback_data="bot_clone"),
-                    InlineKeyboardButton("Session Clone", callback_data="session_clone"),
-                    InlineKeyboardButton("String Generate", url=SESSION_LINK),
-                ]
-            ])
-            await callback_query.message.edit_text(
-                "Select cloning option:",
-                reply_markup=keyboard
-            )
-
-        # Handle the Bot Clone button click
-        elif data == "bot_clone":
-            await callback_query.message.edit_text("Please type the bot cloning details.")
-
-        # Handle the Session Clone button click
-        elif data == "session_clone":
-            await callback_query.message.edit_text("Please type the session cloning details.")
-
-    except Exception as e:
-        print("Error in callback query: ", str(e))
-        print(traceback.format_exc())  # More detailed error output
-        await callback_query.answer("An error occurred while processing your request.", show_alert=True)
-
-
+    elif query.data == "clone":
+        await query.message.edit_text("📦 **Clone Instructions:**\n\nLearn how to use cloning features here!")
+        
