@@ -52,7 +52,7 @@ def is_authorized(bot_id, user_id):
 @bot.on_message(filters.command(["botclone"]))
 async def clone_txt(client, message):
     if len(message.command) > 1:
-        bot_token = message.text.split("/clone", 1)[1].strip()
+        bot_token = message.text.split("/botclone", 1)[1].strip()
         mi = await message.reply_text("ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ ᴡʜɪʟᴇ ɪ ᴄʜᴇᴄᴋ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ.")
         try:
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token, plugins=dict(root="BADUC/plugins/clone2"))
