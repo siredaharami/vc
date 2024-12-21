@@ -91,7 +91,7 @@ async def callback_query_handler(bot, query):
             "💢 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
             "1️⃣ ᴜꜱᴇ /sessionclone [PASTE_SESSION_STRING_HERE]\n"
             "ᴇxᴀᴍᴘʟᴇ: /sessionclone BQGIzloAxVcKLTx6W9kSvRVtHGy..\n\n"
-            "💢 ** ᴅᴇʟᴇᴛᴇ ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ **\n
+            "💢 ** ᴅᴇʟᴇᴛᴇ ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ **\n\n"
             "2️⃣ ᴜꜱᴇ /sessiondelete [PASTE_SESSION_STRING_HERE]\n"
             "ᴇxᴀᴍᴘʟᴇ: /sessiondelete BQGIzloAxVcKLTx6W9kSvRVtHGy..\n\n"
             "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ' ᴛᴏ ʀᴇᴛᴜʀɴ.",
@@ -106,7 +106,7 @@ async def callback_query_handler(bot, query):
             "💢ʙᴏᴛ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
             "1️⃣ ᴜꜱᴇ /botclone [PASTE_BOT_TOKEN_HERE]\n"
             "ᴇxᴀᴍᴘʟᴇ: /botclone 7656510911:AAEyXD6baANnUNZ...\n\n"
-            "💢 ** ᴅᴇʟᴇᴛᴇ ʙᴏᴛ ᴄʟᴏɴᴇ **\n
+            "💢 ** ᴅᴇʟᴇᴛᴇ ʙᴏᴛ ᴄʟᴏɴᴇ **\\n"
             "2️⃣ ᴜꜱᴇ /botdelete [PASTE_BOT_TOKEN_HERE]\n"
             "ᴇxᴀᴍᴘʟᴇ: /botdelete 7656510911:AAEyXD6baANnUNZ...\n\n"
             "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ' ᴛᴏ ʀᴇᴛᴜʀɴ.",
