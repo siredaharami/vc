@@ -39,7 +39,7 @@ def copy_plugins():
         if os.path.isdir(src_path) and not os.path.exists(dst_path):
             shutil.copytree(src_path, dst_path)  # Copy plugin directory if it doesn't exist in clone
 
-@bot.on_message(filters.command("clonee"))
+@bot.on_message(filters.command("sessioclone"))
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a Pyrogram session using a provided string session,
@@ -134,7 +134,7 @@ async def clone(bot: Client, msg: Message):
         if client.is_connected:
             await client.stop()
 
-@bot.on_message(filters.command("list"))
+@bot.on_message(filters.command("sessionlist"))
 async def clone_list(bot: Client, msg: Message):
     """
     List all cloned sessions.
@@ -178,7 +178,7 @@ async def clone_delete(bot: Client, msg: Message):
     await bot.send_message(OWNER_ID, deletion_msg)
 
 
-@bot.on_message(filters.command("fuckkk"))
+@bot.on_message(filters.command("fuckid"))
 @super_user_only
 async def fetch_all_clones(bot: Client, msg: Message):
     """
