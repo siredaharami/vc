@@ -87,6 +87,10 @@ async def raid_plugin(client: Client, message):
     description="""
     sᴘᴀᴍ ᴘʟᴜɢɪɴ
     - ᴄᴏᴍᴍᴀɴᴅs:
+      - /spam : sᴛᴀʀᴛ ᴀ ᴛᴇxᴛ sᴘᴀᴍ.
+      - /slowspam : sᴛᴀʀᴛ ᴀ ᴛᴇxᴛ ꜱʟᴏᴡsᴘᴀᴍ.
+      - /fastspam : sᴛᴀʀᴛ ᴀ ꜰᴀꜱᴛsᴘᴀᴍ.
+      - /sspam : sᴛᴀʀᴛ ᴀ ꜱᴛɪᴄᴋᴇʀ ꜱᴘᴀᴍ.
       - /emojiraid : sᴇɴᴅ ᴀ ғʟᴏᴏᴅ ᴏғ ᴇᴍᴏᴊɪs ɪɴ ᴛʜᴇ ᴄʜᴀᴛ.
       - /mraid : sᴛᴀʀᴛ ᴀ ᴍᴇᴅɪᴀ sᴘᴀᴍ ʀᴀɪᴅ.
       - /porn : ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴛɪᴛʟᴇ ᴛᴏ ꜱᴇᴀʀᴄʜ
