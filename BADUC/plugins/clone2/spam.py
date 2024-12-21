@@ -106,7 +106,7 @@ async def delayspam(client: Client, message: Message):
             break
 
     await client.send_message(
-        LOG_GROUP, "**#DELAYSPAM**\nDelaySpam was executed successfully"
+        LOG_GROUP_ID, "**#DELAYSPAM**\nDelaySpam was executed successfully"
     )
 
 
