@@ -449,7 +449,45 @@ async def stream_logger(
                 await bot.send_photo(OWNER_ID, photo=thumbnail, caption=caption)
             except Exception:
                 pass
-                
+
+
+# Track if bass boost is enabled for a chat
+BASS_BOOST_ENABLED = {}
+BASS_BOOST_LEVEL = {}
+
+async def apply_bass_boost(stream_file, level=10):
+    """
+    Applies bass boost to the audio using FFmpeg.
+    """
+    boosted_file = "bass_boosted_audio.mp3"
+    ffmpeg_command = f"ffmpeg -i {stream_file} -af 'bass=g={level}' {boosted_file} -y"
+    process = await asyncio.create_subprocess_shell(ffmpeg_command)
+    await process.communicate()  # Wait for the process to complete
+    return boosted_file
+
+@app.on_message(filters.command("bassboost") & filters.group)
+async def toggle_bass_boost(client, message):
+    chat_id = message.chat.id
+    if len(message.command) > 1 and message.command[1] == "double":
+        BASS_BOOST_ENABLED[chat_id] = True
+        BASS_BOOST_LEVEL[chat_id] = 50  # 5x bass boost
+        await message.reply_text("🔊 Bass Boost 5x enabled for the current voice chat!")
+    else:
+        if chat_id not in BASS_BOOST_ENABLED or not BASS_BOOST_ENABLED[chat_id]:
+            BASS_BOOST_ENABLED[chat_id] = True
+            BASS_BOOST_LEVEL[chat_id] = 10  # Default bass boost
+            await message.reply_text("🔊 Bass Boost enabled for the current voice chat!")
+        else:
+            BASS_BOOST_ENABLED[chat_id] = False
+            await message.reply_text("🔇 Bass Boost disabled for the current voice chat.")
+
+@app.on_message(filters.command("bassclear") & filters.group)
+async def clear_bass_boost(client, message):
+    chat_id = message.chat.id
+    BASS_BOOST_ENABLED[chat_id] = False
+    BASS_BOOST_LEVEL[chat_id] = 0  # Normal mode
+    await message.reply_text("🔇 Bass cleared! Playing in normal mode.")
+    
 # Change stream & Close Stream
 
 
@@ -480,6 +518,11 @@ async def change_stream(chat_id):
         else:
             requested_by = queued[0].get("user").title
 
+        # Apply bass boost if enabled
+    if BASS_BOOST_ENABLED.get(chat_id, False):
+        boost_level = BASS_BOOST_LEVEL.get(chat_id, 10)
+        stream_file = await apply_bass_boost(stream_file, level=boost_level)
+        
     if stream_type == "Audio":
         stream_media = MediaStream(
             media_path=stream_file,
