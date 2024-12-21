@@ -150,7 +150,7 @@ async def clone_list(bot: Client, msg: Message):
     
     await msg.reply(clone_list_msg)
 
-@bot.on_message(filters.command("deletee"))
+@bot.on_message(filters.command("sessiondelete"))
 async def clone_delete(bot: Client, msg: Message):
     """
     Delete a cloned session.
