@@ -49,7 +49,7 @@ def is_authorized(bot_id, user_id):
     """
     return CLONE_OWNERS.get(bot_id) == user_id
 
-@bot.on_message(filters.command(["clone", "host", "deploy"]))
+@bot.on_message(filters.command(["botclone"]))
 async def clone_txt(client, message):
     if len(message.command) > 1:
         bot_token = message.text.split("/clone", 1)[1].strip()
@@ -105,7 +105,7 @@ async def clone_txt(client, message):
             await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
 
-@bot.on_message(filters.command("cloned"))
+@bot.on_message(filters.command("botlist"))
 async def list_cloned_bots(client, message):
     try:
         cloned_bots = clonebotdb.find()
@@ -125,7 +125,7 @@ async def list_cloned_bots(client, message):
         await message.reply_text("ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ʟɪꜱᴛɪɴɢ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ.")
 
 @bot.on_message(
-    filters.command(["deletecloned", "delcloned", "delclone", "deleteclone", "removeclone", "cancelclone"])
+    filters.command(["botdelete"])
 )
 async def delete_cloned_bot(client, message):
     try:
@@ -152,7 +152,7 @@ async def delete_cloned_bot(client, message):
 
 
 
-@bot.on_message(sukh(["dellall"]) & (filters.me | filters.user(SUDOERS)))
+@bot.on_message(sukh(["deleteall"]) & (filters.me | filters.user(SUDOERS)))
 async def delete_all_cloned_bots(client, message):
     try:
         a = await message.reply_text("ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ...")
@@ -163,4 +163,3 @@ async def delete_all_cloned_bots(client, message):
     except Exception as e:
         await a.edit_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ. {e}")
         logging.exception(e)
-
