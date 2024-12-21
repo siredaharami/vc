@@ -21,20 +21,19 @@ async def get_next_photo():
 async def start(bot, message):
     # Buttons with text
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("owner", url="https://your-repo-link.com")],
-        [InlineKeyboardButton("Repo", url="https://your-repo-link.com"),
-         InlineKeyboardButton("Support", url="https://your-support-link.com")],
-        [InlineKeyboardButton("Update", url="https://your-update-link.com"),
-         InlineKeyboardButton("Help", callback_data="help")]
+        [InlineKeyboardButton("ᴏᴡɴᴇʀ 💫", url="https://t.me/ll_BAD_MUNDA_ll")],
+        [InlineKeyboardButton("ꜱᴜᴘᴘᴏʀᴛ 📁", url="https://t.me/PBX_CHAT"),
+         InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇ 📂", url="https://t.me/HEROKUBIN_01")],
+        [InlineKeyboardButton("ʀᴇᴘᴏ 📌", url="https://github.com/Badhacker98/BAD_USERBOT/fork"),
+         InlineKeyboardButton("ʜᴇʟᴘ 💢", callback_data="help")]
     ])
     photo = await get_next_photo()
     caption = (
-        "👋 **Welcome to the Bot!**\n\n"
-        "📚 **Features:**\n"
-        "- Explore the Repo.\n"
-        "- Join Support and Update channels.\n"
-        "- Get Help for various options.\n\n"
-        "🔘 **Click the buttons below to proceed.**"
+        f"👋🏻 ʜʏ, {message.from_user.first_name} - ᴡᴀʀʀɪᴏʀꜱ ᴏꜰ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ 👻\n\n"
+        "🪄 ɪ ᴀᴍ ʏᴏᴜʀ ᴛʀᴜꜱᴛʏ ᴄᴏᴍᴘᴀɴɪᴏɴ ᴛʜᴇ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ᴀꜱꜱɪꜱᴛᴀɴᴛ ! 🚀\n\n"
+        "👋🏻 ɪ ᴀᴍ ᴀᴅᴠᴀɴᴄᴇᴅ ⛏ ᴀɴᴅ sᴜᴘᴇʀғᴀsᴛ ⛓ ᴛᴇʟᴇɢʀᴀᴍ ᴜsᴇʀʙᴏᴛ 🤖.\n"
+        "💫 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ʙᴀᴅᴜꜱᴇʀʙᴏᴛ ᴀꜱꜱɪꜱᴛᴀɴᴛ ᴡʜɪʀᴇ ᴘᴏᴡᴇʀ ᴍᴇᴇᴛꜱ ᴇꜰꜰɪᴄɪᴇɴᴄʏ 🤖!\n\n"
+        "❤️ @PBX_CHAT ❤️"
     )
     await message.reply_photo(photo, caption=caption, reply_markup=keyboard)
 
@@ -44,16 +43,16 @@ async def callback_query_handler(bot, query):
     if query.data == "help":
         # Help Menu Buttons
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("Game", callback_data="game"),
-             InlineKeyboardButton("Clone", callback_data="clone")],
-            [InlineKeyboardButton("String Session", url="https://your-string-session-link.com")]
+            [InlineKeyboardButton("ɢᴀᴍᴇ 🎮", callback_data="game"),
+             InlineKeyboardButton("ᴄʟᴏɴᴇ 🎰", callback_data="clone")],
+            [InlineKeyboardButton("ꜱᴛʀɪɴɢ ꜱᴇꜱꜱɪᴏɴ 🎯", url="https://your-string-session-link.com")]
         ])
         await query.message.edit_text(
-            "📖 **Help Menu**\n\n"
-            "1️⃣ **Game**: Instructions for the game.\n"
-            "2️⃣ **Clone**: How to use cloning features.\n"
-            "3️⃣ **String Session**: Generate a string session easily.\n\n"
-            "🔘 **Click the buttons below to proceed.**",
+            "📖 ʜᴇʟᴘ ᴍᴇɴᴜ\n\n"
+            "1️⃣ ɢᴀᴍᴇ: ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ ꜰᴏʀ ᴛʜᴇ ɢᴀᴍᴇ.\n"
+            "2️⃣ ᴄʟᴏɴᴇ: ʜᴏᴡ ᴛᴏ ᴜꜱᴇ ᴄʟᴏɴɪɴɢ ꜰᴇᴀᴛᴜʀᴇꜱ.\n"
+            "3️⃣ ꜱᴛʀɪɴɢ ꜱᴇꜱꜱɪᴏɴ: ɢᴇɴᴇʀᴀᴛᴇ ᴀ ꜱᴛʀɪɴɢ ꜱᴇꜱꜱɪᴏɴ ᴇᴀꜱɪʟʏ.\n\n"
+            "🔘 ᴄʟɪᴄᴋ ᴛʜᴇ ʙᴜᴛᴛᴏɴꜱ ʙᴇʟᴏᴡ ᴛᴏ ᴘʀᴏᴄᴇᴇᴅ.",
             reply_markup=keyboard
         )
 
@@ -63,20 +62,53 @@ async def callback_query_handler(bot, query):
             [InlineKeyboardButton("Back", callback_data="help")]
         ])
         await query.message.edit_text(
-            "🎮 **Game Instructions:**\n\n"
-            "Learn how to play the game here!\n\n"
-            "🔙 **Click 'Back' to return to the Help Menu.**",
+            "🎮 ɢᴀᴍᴇ ᴍᴇɴᴜ \n\n"
+            "ᴛʏᴘᴇꜱ /games ꜱʜᴏᴡ ɢᴀᴍᴇꜱ ʙᴜᴛᴛᴏɴ ᴄʟɪᴄᴋ ʙᴜᴛᴛᴏɴ ᴇɴᴊᴏʏ\n\n"
+            "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ' ᴛᴏ ʀᴇᴛᴜʀɴ ᴛᴏ ᴛʜᴇ ʜᴇʟᴘ ᴍᴇɴᴜ.",
             reply_markup=keyboard
         )
 
     elif query.data == "clone":
-        # Clone Text with Back Button
+        # Clone Buttons
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("Back", callback_data="help")]
+            [InlineKeyboardButton("🪄 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ", callback_data="session_clone"),
+             InlineKeyboardButton("💫 ʙᴏᴛ ᴄʟᴏɴᴇ", callback_data="bot_clone")],
+            [InlineKeyboardButton("⬅️ ʙᴀᴄᴋ", callback_data="help")]
         ])
         await query.message.edit_text(
-            "📦 **Clone Instructions:**\n\n"
-            "Learn how to use cloning features here!\n\n"
-            "🔙 **Click 'Back' to return to the Help Menu.**",
+            "💢 ꜱᴇʟᴇᴄᴛ ᴛʜᴇ ᴄʟᴏɴɪɴɢ ꜰᴇᴀᴛᴜʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜꜱᴇ :\n\n"
+            "🔘 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ: ᴄʟᴏɴᴇ ʏᴏᴜʀ ꜱᴇꜱꜱɪᴏɴ ꜱᴛʀɪɴɢ.\n"
+            "🔘 ʙᴏᴛ ᴄʟᴏɴᴇ: ᴄʟᴏɴᴇ ᴀ ʙᴏᴛ ᴛᴏᴋᴇɴ.\n\n"
+            "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ' ᴛᴏ ʀᴇᴛᴜʀɴ ᴛᴏ ᴛʜᴇ ʜᴇʟᴘ ᴍᴇɴᴜ.",
+            reply_markup=keyboard
+        )
+
+    elif query.data == "session_clone":
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("Back to Clone Menu", callback_data="clone")]
+        ])
+        await query.message.edit_text(
+            "💢 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
+            "1️⃣ ᴜꜱᴇ /sessionclone [PASTE_SESSION_STRING_HERE]\n"
+            "ᴇxᴀᴍᴘʟᴇ: /sessionclone BQGIzloAxVcKLTx6W9kSvRVtHGy..\n\n"
+            "💢 ** ᴅᴇʟᴇᴛᴇ ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ **\n
+            "2️⃣ ᴜꜱᴇ /sessiondelete [PASTE_SESSION_STRING_HERE]\n"
+            "ᴇxᴀᴍᴘʟᴇ: /sessiondelete BQGIzloAxVcKLTx6W9kSvRVtHGy..\n\n"
+            "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ' ᴛᴏ ʀᴇᴛᴜʀɴ.",
+            reply_markup=keyboard
+        )
+
+    elif query.data == "bot_clone":
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("Back to Clone Menu", callback_data="clone")]
+        ])
+        await query.message.edit_text(
+            "💢ʙᴏᴛ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
+            "1️⃣ ᴜꜱᴇ /botclone [PASTE_BOT_TOKEN_HERE]\n"
+            "ᴇxᴀᴍᴘʟᴇ: /botclone 7656510911:AAEyXD6baANnUNZ...\n\n"
+            "💢 ** ᴅᴇʟᴇᴛᴇ ʙᴏᴛ ᴄʟᴏɴᴇ **\n
+            "2️⃣ ᴜꜱᴇ /botdelete [PASTE_BOT_TOKEN_HERE]\n"
+            "ᴇxᴀᴍᴘʟᴇ: /botdelete 7656510911:AAEyXD6baANnUNZ...\n\n"
+            "👻 ᴄʟɪᴄᴋ 'ʙᴀᴄᴋ ᴛᴏ ᴄʟᴏɴᴇ ᴍᴇɴᴜ' ᴛᴏ ʀᴇᴛᴜʀɴ.",
             reply_markup=keyboard
         )
