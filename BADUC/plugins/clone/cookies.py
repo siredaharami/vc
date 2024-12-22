@@ -73,7 +73,7 @@ async def check_cookies(video_url):
         return False
 
 
-@app.on_message(bad(["cookies"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(bad(["cookies"]) & (filters.me | filters.user(SUDOERS)))
 async def list_formats(client, message):
     status_message = "sᴛᴀᴛᴜs⚣\n\n"
     status_message += "ᴄᴏᴏᴋɪᴇs⚣︎ ᴄʜᴇᴄᴋɪɴɢ ... "
