@@ -140,7 +140,9 @@ async def add_served_chat(chat_id: int):
         return
     return await chatsdb.insert_one({"chat_id": chat_id})
 
-
+async def get_my_chat_member(client, chat_id):
+    # Fetch the current user's information
+    me = await client.get_me()
 
 # Served Users
 
@@ -513,7 +515,7 @@ async def change_stream(chat_id):
             ],
         ]
     )
-    return await app.send_photo(chat_id, thumbnail, caption, reply_markup=buttons)
+    return await Client.send_photo(chat_id, thumbnail, caption, reply_markup=buttons)
 
 
 async def close_stream(chat_id):
@@ -712,7 +714,7 @@ async def stream_audio_or_video(client, message):
                 await call.play(chat_id, stream_media, config=call_config)
             except NoActiveGroupCall:
                 try:
-                    assistant = await app.get_chat_member(chat_id, app.me.id)
+                    assistant = await client.get_chat_member(chat_id, me.id)
                     if (
                         assistant.status == ChatMemberStatus.BANNED
                         or assistant.status == ChatMemberStatus.RESTRICTED
