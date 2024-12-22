@@ -263,6 +263,8 @@ async def change_stream(chat_id):
     await call.play(chat_id, stream_media, config=call_config)
     await add_active_media_chat(chat_id, stream_type)
 
+    vid_url =
+    "https://www.youtube.com/watch?v=DFVk71WxxBE"
     encoded_url = urllib.parse.quote(vid_url, safe=":/?&=")
     caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
     
