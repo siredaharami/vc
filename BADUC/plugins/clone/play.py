@@ -740,8 +740,8 @@ async def stream_audio_or_video(client, message):
                 try:
                     assistant = await client.get_chat_member(chat_id, me.id)
                     return assistant
-                    except Exception as e:
-                        return None
+                except Exception as e:
+                    return None
                     
                     if (
                         assistant.status == ChatMemberStatus.BANNED
