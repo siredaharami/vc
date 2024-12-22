@@ -165,7 +165,7 @@ async def download_thumbnail(vidid: str):
         # If no valid thumbnail found
         return None
 
-async def create_thumbnail_from_url(url, save_path):
+async def create_thumbnail(url, save_path):
     try:
         # Download the image from the URL
         async with aiohttp.ClientSession() as session:
