@@ -144,17 +144,18 @@ async def add_served_user(user_id: int):
         return
     return await usersdb.insert_one({"user_id": user_id})
     
- 
+
 # Function to download the YouTube thumbnail
 async def download_thumbnail(vidid: str):
     async with aiohttp.ClientSession() as session:
+        # Links to possible thumbnail sizes
         links = [
             f"https://i.ytimg.com/vi/{vidid}/maxresdefault.jpg",
             f"https://i.ytimg.com/vi/{vidid}/sddefault.jpg",
             f"https://i.ytimg.com/vi/{vidid}/hqdefault.jpg",
             START_IMAGE_URL,  # Fallback image if all else fails
         ]
-        thumbnail = f"cache/temp_{vidid}.png"
+        thumbnail = f"cache/temp_{vidid}.jpg"
         for url in links:
             async with session.get(url) as resp:
                 if resp.status != 200:
@@ -165,92 +166,34 @@ async def download_thumbnail(vidid: str):
                     await f.write(await resp.read())
                     await f.close()
                     return thumbnail
+    return START_IMAGE_URL  # Return default image if all else fails
 
-# Function to get the user logo (fallback to bot logo if no user logo exists)
-async def get_user_logo(user_id):
-    try:
-        user_chat = await bot.get_chat(user_id)
-        userimage = user_chat.photo.big_file_id
-        user_logo = await bot.download_media(userimage, f"cache/{user_id}.png")
-    except:
-        user_chat = await bot.get_me()
-        userimage = user_chat.photo.big_file_id
-        user_logo = await bot.download_media(userimage, f"cache/{bot.id}.png")
-    return user_logo
-
-# Function to resize image while maintaining aspect ratio
-def changeImageSize(maxWidth, maxHeight, image):
-    widthRatio = maxWidth / image.size[0]
-    heightRatio = maxHeight / image.size[1]
-    newWidth = int(widthRatio * image.size[0])
-    newHeight = int(heightRatio * image.size[1])
-    newImage = image.resize((newWidth, newHeight))
-    return newImage
-
-# Function to create a circular image mask (for logos)
-def circle_image(image, size):
-    size = (size, size)
-    mask = Image.new("L", size, 0)
-    draw = ImageDraw.Draw(mask)
-    draw.ellipse((0, 0) + size, fill=255)
-    output = ImageOps.fit(image, mask.size, centering=(0.5, 0.5))
-    output.putalpha(mask)
-    return output
-
-# Function to generate a simple thumbnail with the video image and optional user logo
-async def create_thumbnail(results, user_id):
+# Function to generate a simple thumbnail with the video image
+async def create_thumbnail(results):
     if not results:
         return START_IMAGE_URL  # Return default image if results are empty
     
-    title = results.get("title")
-    title = re.sub("\W+", " ", title)  # Clean the title
-    title = title.title()  # Capitalize the title
-    vidid = results.get("id")
-    
+    vidid = results.get("id")  # Get video ID
+
     # Download the video thumbnail image
     image = await download_thumbnail(vidid)
-    
-    # Get user logo
-    logo = await get_user_logo(user_id)
 
     try:
-        # Open the downloaded image and user logo
+        # Open the downloaded image (no resizing, no additional effects)
         image01 = Image.open(image)
-        image02 = Image.open(logo)
 
-        # Resize the video thumbnail to fit (1280x720)
-        image04 = changeImageSize(1280, 720, image01)
-        
-        # Enhance the brightness and contrast of the video thumbnail
-        image05 = ImageEnhance.Brightness(image04)
-        image06 = image05.enhance(1.3)
-        image07 = ImageEnhance.Contrast(image06)
-        image08 = image07.enhance(1.3)
-
-        # Resize the logo to fit (90x90)
-        image10 = circle_image(image02, 90)
-
-        # Apply Gaussian blur to the background image
-        image11 = image08.filter(ImageFilter.GaussianBlur(15))
-        
-        # Enhance the brightness of the blurred image
-        image12 = ImageEnhance.Brightness(image11)
-        image13 = image12.enhance(0.5)
-
-        # Paste the circular logo on top of the video image
-        image13.paste(image10, (410, 450), mask=image10)
+        # Resize the image to 1280x720 (standard YouTube thumbnail size)
+        image01 = image01.resize((1280, 720))
 
         # Save the final image
-        thumbnail_path = f"cache/{vidid}_{user_id}_thumbnail.png"
-        image13.save(thumbnail_path)
+        thumbnail_path = f"cache/{vidid}_thumbnail.jpg"
+        image01.save(thumbnail_path)
 
         return thumbnail_path
 
     except Exception as e:
         print(f"Error creating thumbnail: {e}")
         return START_IMAGE_URL  # Return default image if error occurs
-        
-# Some Functions For VC Player (Updated for UserBot)
 
 async def add_active_media_chat(
     chat_id, stream_type
