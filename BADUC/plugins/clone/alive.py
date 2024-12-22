@@ -68,7 +68,7 @@ PING_TEMPLATE = [
 
 # Commands
 @Client.on_message(bad(["alive"]) & (filters.me | filters.user(SUDOERS)))
-async def alive(_, message: Message):
+async def alive(client, message: Message):  # Corrected the parameter
     owner = message.from_user.first_name if message.from_user else "Unknown"
     uptime = datetime.now().strftime("%H:%M:%S, %d-%m-%Y")
     pyrogram_version = "2.0.106"
@@ -83,14 +83,14 @@ async def alive(_, message: Message):
         uptime=uptime,
     )
     
-    await Client.send_photo(
-        message.chat.id,
+    await client.send_photo(  # Changed `Client.send_photo` to `client.send_photo`
+        chat_id=message.chat.id,  # Added `chat_id`
         photo=ALIVE_PIC,
         caption=text,
     )
 
 @Client.on_message(bad(["ping"]) & (filters.me | filters.user(SUDOERS)))
-async def ping(_, message: Message):
+async def ping(client, message: Message):  # Corrected the parameter
     owner = message.from_user.first_name if message.from_user else "Unknown"
     start_time = time.time()
     uptime = datetime.now().strftime("%H:%M:%S, %d-%m-%Y")
@@ -98,12 +98,12 @@ async def ping(_, message: Message):
     speed = round(1 / (time.time() - start_time), 2)  # Calculating speed
     text = PING_TEMPLATE[current_ping_template].format(speed=speed, uptime=uptime, owner=owner)
 
-    await Client.send_photo(
-        message.chat.id,
+    await client.send_photo(  # Changed `Client.send_photo` to `client.send_photo`
+        chat_id=message.chat.id,  # Added `chat_id`
         photo=PING_PIC,
         caption=text,
     )
-
+    
 @Client.on_message(bad(["setvar"]) & (filters.me | filters.user(SUDOERS)))
 async def set_variable(_, message: Message):
     global ALIVE_PIC, PING_PIC, current_template, current_ping_template
