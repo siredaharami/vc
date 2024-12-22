@@ -64,10 +64,21 @@ vars = config
 cloneownerdb = db.clone_owners
 
 async def load_clone_owners():
-    async for entry in cloneownerdb.find():
-        bot_id = entry["bot_id"]
-        user_id = entry["user_id"]
-        CLONE_OWNERS[bot_id] = user_id
+    try:
+        async for entry in cloneownerdb.find():
+            bot_id = entry.get("bot_id", entry.get("user_id"))  # Default to user_id if bot_id is missing
+            user_id = entry.get("user_id")
+
+            if user_id is None:
+                print(f"Skipping invalid entry without user_id: {entry}")
+                continue
+
+            CLONE_OWNERS[bot_id] = user_id
+
+        print("Clone owners loaded successfully.")
+
+    except Exception as e:
+        print(f"An error occurred while loading clone owners: {e}")
 
 async def save_clonebot_owner(bot_id, user_id):
     await cloneownerdb.update_one(
