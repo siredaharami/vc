@@ -39,7 +39,7 @@ def copy_plugins():
         if os.path.isdir(src_path) and not os.path.exists(dst_path):
             shutil.copytree(src_path, dst_path)  # Copy plugin directory if it doesn't exist in clone
 
-@bot.on_message(filters.command("sessioclone"))
+@bot.on_message(filters.command("clone"))
 async def clone(bot: Client, msg: Message):
     """
     Clone command: Clone a Pyrogram session using a provided string session,
