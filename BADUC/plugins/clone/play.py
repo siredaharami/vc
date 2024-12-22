@@ -492,7 +492,7 @@ async def stream_audio_or_video(client, message):
                         position = await add_to_queue(
                             chat_id, user, title, duration, stream_file, stream_type, thumbnail
                         )
-                caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
+                        caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
                 
 💫 Tɪᴛʟᴇ ❤️  {title}
 🗡️ Dᴜʀᴀᴛɪᴏɴ ⏰  {duration}
