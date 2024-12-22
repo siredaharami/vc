@@ -89,7 +89,7 @@ async def callback_query_handler(bot, query):
         ])
         await query.message.edit_text(
             "💢 ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ ɪɴꜱᴛʀᴜᴄᴛɪᴏɴꜱ:\n\n"
-            "1️⃣ ᴜꜱᴇ /sessionclone [PASTE_SESSION_STRING_HERE]\n"
+            "1️⃣ ᴜꜱᴇ /clone [PASTE_SESSION_STRING_HERE]\n"
             "ᴇxᴀᴍᴘʟᴇ: /sessionclone BQGIzloAxVcKLTx6W9kSvRVtHGy..\n\n"
             "💢 ** ᴅᴇʟᴇᴛᴇ ꜱᴇꜱꜱɪᴏɴ ᴄʟᴏɴᴇ **\n\n"
             "2️⃣ ᴜꜱᴇ /sessiondelete [PASTE_SESSION_STRING_HERE]\n"
