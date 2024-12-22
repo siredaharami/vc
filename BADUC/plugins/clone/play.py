@@ -165,17 +165,24 @@ async def download_thumbnail(vidid: str):
         # If no valid thumbnail found
         return None
 
-def create_thumbnail(image_path, thumbnail_path, size=(128, 128)):
+async def create_thumbnail_from_url(url, save_path):
     try:
-        with Image.open(image_path) as img:
-            # Create thumbnail with a fixed size
-            img.thumbnail(size)
-            img.save(thumbnail_path)
-            return thumbnail_path  # Return the path to the saved thumbnail
+        # Download the image from the URL
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    image_data = await response.read()  # Read the image data
+                    image = Image.open(BytesIO(image_data))  # Open image from the byte data
+                    image.thumbnail((128, 128))  # Resize to thumbnail size
+                    image.save(save_path)  # Save the thumbnail
+                    return save_path
+                else:
+                    print(f"Error fetching thumbnail from URL: {url}")
+                    return None
     except Exception as e:
         print(f"Error creating thumbnail: {e}")
         return None
-
+        
 # Some Functions For VC Player (Updated for UserBot)
 
 async def add_active_media_chat(
