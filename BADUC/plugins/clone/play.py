@@ -806,7 +806,7 @@ async def stream_audio_or_video(client, message):
 🗡️ Dᴜʀᴀᴛɪᴏɴ ⏰  {duration}
 🔉 Sᴛʀᴇᴀᴍ Tʏᴘᴇ 🔊  {stream_type}
 💌 Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ 💌  {requested_by}"""
-                await app.send_photo(chat_id, thumbnail, caption, reply_markup=buttons)
+                await Client.send_photo(chat_id, thumbnail, caption, reply_markup=buttons)
                 await stream_logger(
                     chat_id, user, title, duration, stream_type, thumbnail
                 )
@@ -853,7 +853,7 @@ async def resume_paused_stream_on_vc(client, message):
             return
     except Exception as e:
         try:
-            await app.send_message(chat_id, f"🚫 ꜱᴛʀᴇᴀᴍ ʀᴇꜱᴜᴍᴇ ᴇʀʀᴏʀ: `{e}`")
+            await Client.send_message(chat_id, f"🚫 ꜱᴛʀᴇᴀᴍ ʀᴇꜱᴜᴍᴇ ᴇʀʀᴏʀ: `{e}`")
         except Exception:
             LOGGER.info(f"🚫 ꜱᴛʀᴇᴀᴍ ʀᴇꜱᴜᴍᴇ ᴇʀʀᴏʀ: {e}")
             return
