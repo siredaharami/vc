@@ -191,13 +191,13 @@ async def download_thumbnail(vidid: str):
 
 async def get_user_logo(user_id):
     try:
-        user_chat = await app.get_chat(user_id)
+        user_chat = await Client.get_chat(user_id)
         userimage = user_chat.photo.big_file_id
-        user_logo = await app.download_media(userimage, f"cache/{user_id}.png")
+        user_logo = await Client.download_media(userimage, f"cache/{user_id}.png")
     except:
-        user_chat = await app.get_me()
+        user_chat = await Client.get_me()
         userimage = user_chat.photo.big_file_id
-        user_logo = await app.download_media(userimage, f"cache/{app.id}.png")
+        user_logo = await Client.download_media(userimage, f"cache/{Client.id}.png")
     return user_logo
 
 
