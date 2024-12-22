@@ -25,8 +25,8 @@ async def clone_txt(client, message):
         try:
             ai = Client(
                 name="BaduserBot",
-                api_id=config.API_ID,
-                api_hash=config.API_HASH,
+                api_id=API_ID,
+                api_hash=API_HASH,
                 session_string=str(string_session),
                 no_updates=False,
                 plugins=dict(root="BADUC/plugins/clone"),
@@ -141,8 +141,8 @@ async def restart_idchatbots():
             string_session = session["session"]
             ai = Client(
                 name="BaduserBot",
-                api_id=config.API_ID,
-                api_hash=config.API_HASH,
+                api_id=API_ID,
+                api_hash=API_HASH,
                 session_string=str(string_session),
                 no_updates=False,
                 plugins=dict(root="BADUC/plugins/clone"),
