@@ -142,19 +142,32 @@ async def add_served_chat(chat_id: int):
 
 
 async def get_my_chat_member(client: Client, chat_id: int):
-    # Ensure get_me() is called on the provided client instance
+    # Fetch the current user's information
     me = await client.get_me()
+    try:
+        # Fetch the user's chat member information
+        assistant = await client.get_chat_member(chat_id, me.id)
+        return assistant
+    except Exception as e:
+        # Return None if there is an issue (e.g., not a member of the chat)
+        return None
 
+# Command handler
 @Client.on_message(filters.command("check_member") & filters.me)
-async def check_member_handler(client, message):
+async def check_member_handler(client: Client, message):
     chat_id = message.chat.id
     try:
+        # Call the function to get member information
         assistant = await get_my_chat_member(client, chat_id)
-        await message.reply_text(f"Your status in this chat: {assistant.status}")
+        if assistant:
+            # Reply with the status if available
+            await message.reply_text(f"Your status in this chat: {assistant.status}")
+        else:
+            # Handle case where no member info is returned
+            await message.reply_text("You are not a member of this chat.")
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         
-
 # Served Users
 
 async def is_served_user(user_id: int) -> bool:
