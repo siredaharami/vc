@@ -148,7 +148,6 @@ async def add_served_user(user_id: int):
 # Function to download the YouTube thumbnail
 async def download_thumbnail(vidid: str):
     async with aiohttp.ClientSession() as session:
-        # Links to possible thumbnail sizes
         links = [
             f"https://i.ytimg.com/vi/{vidid}/maxresdefault.jpg",
             f"https://i.ytimg.com/vi/{vidid}/sddefault.jpg",
@@ -169,7 +168,7 @@ async def download_thumbnail(vidid: str):
     return START_IMAGE_URL  # Return default image if all else fails
 
 # Function to generate a simple thumbnail with the video image
-async def create_thumbnail(results):
+async def create_thumbnail(results, user_id):
     if not results:
         return START_IMAGE_URL  # Return default image if results are empty
     
