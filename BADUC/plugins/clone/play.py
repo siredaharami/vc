@@ -146,6 +146,29 @@ async def add_served_user(user_id: int):
     
 
 # Function to download the YouTube thumbnail
+
+async def download_thumbnail_with_timeout(vidid: str):
+    timeout = aiohttp.ClientTimeout(total=60)  # Set total timeout to 60 seconds
+    async with aiohttp.ClientSession(timeout=timeout) as session:
+        links = [
+            f"https://i.ytimg.com/vi/{vidid}/maxresdefault.jpg",
+            f"https://i.ytimg.com/vi/{vidid}/sddefault.jpg",
+            f"https://i.ytimg.com/vi/{vidid}/hqdefault.jpg",
+            START_IMAGE_URL,  # Fallback image if all else fails
+        ]
+        thumbnail = f"cache/temp_{vidid}.jpg"
+        for url in links:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    continue
+                else:
+                    # Save the thumbnail image to a file
+                    f = await aiofiles.open(thumbnail, mode="wb")
+                    await f.write(await resp.read())
+                    await f.close()
+                    return thumbnail
+    return START_IMAGE_URL  # Return default image if all else fails
+    
 async def download_thumbnail(vidid: str):
     async with aiohttp.ClientSession() as session:
         links = [
