@@ -481,7 +481,7 @@ async def stream_audio_or_video(client, message):
                     await aux.edit_text("❌ The channel you're trying to access is invalid or the bot doesn't have access to it.")
                 else:
                     await aux.edit_text(f"⚠️ Error: {str(e)}")
-                                        except NoActiveGroupCall:
+            except NoActiveGroupCall:
                     try:
                     return await aux.edit_text(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ❗...")
             except Exception:
