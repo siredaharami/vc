@@ -189,15 +189,18 @@ async def download_thumbnail(vidid: str):
                     return thumbnail
 
 
-async def get_user_logo(user_id):
+async def get_user_logo(client, user_id):
     try:
-        user_chat = await Client.get_chat(user_id)
+        # Fetch the user's chat details
+        user_chat = await client.get_chat(user_id)
         userimage = user_chat.photo.big_file_id
-        user_logo = await Client.download_media(userimage, f"cache/{user_id}.png")
-    except:
-        user_chat = await Client.get_me()
+        user_logo = await client.download_media(userimage, f"cache/{user_id}.png")
+    except Exception as e:
+        print(f"Error fetching user logo: {e}")
+        # Fallback to fetching the bot's own profile photo
+        user_chat = await client.get_me()
         userimage = user_chat.photo.big_file_id
-        user_logo = await Client.download_media(userimage, f"cache/{Client.id}.png")
+        user_logo = await client.download_media(userimage, f"cache/{user_chat.id}.png")
     return user_logo
 
 
