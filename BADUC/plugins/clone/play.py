@@ -482,16 +482,16 @@ async def stream_audio_or_video(client, message):
                 else:
                     await aux.edit_text(f"⚠️ Error: {str(e)}")
             except NoActiveGroupCall:
-                    try:
-                    return await aux.edit_text(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ❗...")
-            except Exception:
-                LOGGER.info(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ ({chat_id})❗... ")
-                return
                 try:
-                    thumbnail = await create_thumbnail(result_x, user.id)
-                    position = await add_to_queue(
-                        chat_id, user, title, duration, stream_file, stream_type, thumbnail
-                    )
+                    return await aux.edit_text(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ❗...")
+                except Exception:
+                    LOGGER.info(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ ({chat_id})❗... ")
+                    return
+                    try:
+                        thumbnail = await create_thumbnail(result_x, user.id)
+                        position = await add_to_queue(
+                            chat_id, user, title, duration, stream_file, stream_type, thumbnail
+                        )
                 caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
                 
 💫 Tɪᴛʟᴇ ❤️  {title}
