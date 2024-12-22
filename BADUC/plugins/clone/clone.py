@@ -14,7 +14,7 @@ OWNER = os.environ.get("OWNER", None)
 BIO = os.environ.get("BIO", "ɪ ᴀᴍ ᴘᴀʀᴛ ᴏғ ᴘʙx ᴛᴇᴀᴍ ♡ ᴊᴏɪɴ ɴᴏᴡ @PBX_CHAT")
 
 
-@app.on_message(bad(["clone"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(bad(["clone"]) & (filters.me | filters.user(SUDOERS)))
 async def clone(client: Client, message: Message):
     text = get_text(message)
     op = await message.edit_text("`Cloning`")
@@ -38,7 +38,7 @@ async def clone(client: Client, message: Message):
     await message.edit(f"**From now I'm** __{f_name}__")
 
 
-@app.on_message(bad(["unclone"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(bad(["unclone"]) & (filters.me | filters.user(SUDOERS)))
 async def revert(client: Client, message: Message):
     await message.edit("`unclone`")
     r_bio = BIO
@@ -52,4 +52,3 @@ async def revert(client: Client, message: Message):
     photos = [p async for p in client.get_chat_photos("me")]
     await client.delete_profile_photos(photos[0].file_id)
     await message.edit("`I am back!`")
-
