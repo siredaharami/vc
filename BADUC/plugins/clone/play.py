@@ -165,6 +165,16 @@ async def download_thumbnail(vidid: str):
         # If no valid thumbnail found
         return None
 
+def create_thumbnail(image_path, thumbnail_path, size=(128, 128)):
+    try:
+        with Image.open(image_path) as img:
+            # Create thumbnail with a fixed size
+            img.thumbnail(size)
+            img.save(thumbnail_path)
+            return thumbnail_path  # Return the path to the saved thumbnail
+    except Exception as e:
+        print(f"Error creating thumbnail: {e}")
+        return None
 
 # Some Functions For VC Player (Updated for UserBot)
 
