@@ -1,6 +1,7 @@
 import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
+import urllib.parse
 
 from BADUC.core.clients import *
 from pyrogram import Client, filters
@@ -261,10 +262,11 @@ async def change_stream(chat_id):
 
     await call.play(chat_id, stream_media, config=call_config)
     await add_active_media_chat(chat_id, stream_type)
-    
+
+    encoded_url = urllib.parse.quote(vid_url, safe=":/?&=")
     caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
     
-💫 Tɪᴛʟᴇ ❤️  {title}
+💫 Tɪᴛʟᴇ ❤️  [{title}]({encoded_url})
 🗡️ Dᴜʀᴀᴛɪᴏɴ ⏰  {duration}
 🔉 Sᴛʀᴇᴀᴍ Tʏᴘᴇ 🔊  {stream_type}
 💌 Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ 💌  {requested_by}"""
