@@ -7,7 +7,7 @@ from pyrogram import Client, filters
 from BADUC.core.config import *
 from BADUC import *
 from BADUC import SUDOERS
-from BADUC.plugins.clone.play import *
+from BADUC.plugins.user.play import *
 from BADUC.core.command import *
 from os import getenv
 from io import BytesIO
