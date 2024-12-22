@@ -476,23 +476,18 @@ async def stream_audio_or_video(client, message):
         elif call_status == "IDLE" or call_status == "NOTHING":
             try:
                 await call.play(chat_id, stream_media, config=call_config)
-            except TelegramServerError as e:
-                if "CHANNEL_INVALID" in str(e):
-                    await aux.edit_text("❌ The channel you're trying to access is invalid or the bot doesn't have access to it.")
-                else:
-                    await aux.edit_text(f"⚠️ Error: {str(e)}")
             except NoActiveGroupCall:
                 try:
                     return await aux.edit_text(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ❗...")
                 except Exception:
                     LOGGER.info(f"⚠️ ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴄ ({chat_id})❗... ")
                     return
-                    try:
-                        thumbnail = await create_thumbnail(result_x, user.id)
-                        position = await add_to_queue(
-                            chat_id, user, title, duration, stream_file, stream_type, thumbnail
-                        )
-                        caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
+            try:
+                thumbnail = await create_thumbnail(result_x, user.id)
+                position = await add_to_queue(
+                    chat_id, user, title, duration, stream_file, stream_type, thumbnail
+                )
+                caption = f"""ꜱᴛᴀʀᴛᴇᴅ ꜱᴛʀᴇᴀᴍɪɴɢ ᴏɴ ᴠᴄ.
                 
 💫 Tɪᴛʟᴇ ❤️  {title}
 🗡️ Dᴜʀᴀᴛɪᴏɴ ⏰  {duration}
