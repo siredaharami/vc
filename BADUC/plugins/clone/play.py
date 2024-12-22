@@ -140,9 +140,21 @@ async def add_served_chat(chat_id: int):
         return
     return await chatsdb.insert_one({"chat_id": chat_id})
 
+
 async def get_my_chat_member(client, chat_id):
-    # Fetch the current user's information
-    me = await client.get_me()
+    # Ensure you are passing a valid client instance
+    me = await client.get_me()  # Correctly call get_me() on the client instance
+
+
+@Client.on_message(filters.command("check_member") & filters.me)
+async def check_member_handler(client, message):
+    chat_id = message.chat.id
+    try:
+        assistant = await get_my_chat_member(client, chat_id)
+        await message.reply_text(f"Your status in this chat: {assistant.status}")
+    except Exception as e:
+        await message.reply_text(f"Error: {e}")
+        
 
 # Served Users
 
