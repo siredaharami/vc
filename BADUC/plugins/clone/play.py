@@ -2,7 +2,7 @@ import aiohttp, aiofiles, asyncio, base64, logging
 import os, platform, random, re, socket
 import sys, time, textwrap
 
-from BADUC.core.clients import *
+from BADUC.plugins.bot.app import app
 from pyrogram import Client, filters
 from BADUC.core.config import *
 from BADUC import *
