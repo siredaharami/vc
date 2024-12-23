@@ -5,7 +5,7 @@ import openai
 from BADUC.core.clients import bot
 
 # Retrieve the OpenAI API key from an environment variable
-openai.api_key = os.getenv("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")
+openai.api_key = os.getenv("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")
 
 # Validate that the API key is set
 if not openai.api_key:
