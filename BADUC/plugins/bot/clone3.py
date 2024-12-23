@@ -1,6 +1,7 @@
 import logging
-import os
 import asyncio
+import os
+import subprocess
 from pyrogram.enums import ParseMode
 from pyrogram import Client, filters
 from pyrogram.errors import PeerIdInvalid
@@ -22,31 +23,19 @@ clonebotdb = mongodb.clonebotdb
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 async def initialize_clones():
-    """
-    Initialize the list of cloned bots at startup.
-    """
     global CLONES
     cloned_bots = [bot async for bot in clonebotdb.find()]
     CLONES = {bot["bot_id"] for bot in cloned_bots}
     logging.info(f"Initialized {len(CLONES)} cloned bots.")
 
 async def save_clonebot_owner(bot_id, user_id):
-    """
-    Save the bot owner details to the database.
-    """
     await cloneownerdb.insert_one({"bot_id": bot_id, "user_id": user_id})
 
 async def get_bot_owner(bot_id):
-    """
-    Retrieve the owner of a specific bot.
-    """
     owner = await cloneownerdb.find_one({"bot_id": bot_id})
     return owner["user_id"] if owner else None
 
 def is_authorized(bot_id, user_id):
-    """
-    Check if the user is authorized to execute commands for a bot.
-    """
     return CLONE_OWNERS.get(bot_id) == user_id
 
 @bot.on_message(filters.command(["botclone"]))
@@ -84,27 +73,87 @@ async def clone_txt(client, message):
                 "username": bot.username,
             }
 
-            try:
-                # Notify the owner
-                await client.send_message(
-                    int(OWNER_ID), f"ɴᴇᴡ~ᴄʟᴏɴᴇ\n\nʙᴏᴛ:- @{bot.username}\n\nᴅᴇᴛᴀɪʟꜱ:-\n{details}"
-                )
-            except PeerIdInvalid:
-                # Log the error if the bot hasn't met the owner
-                await mi.edit_text("⚠️ Unable to notify the owner. Ensure the bot has interacted with the OWNER_ID user.")
-                await ai.stop()
-                return
-
             await clonebotdb.insert_one(details)
             CLONES.add(bot.id)
 
             await mi.edit_text(
-                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ."
+                f"ʙᴏᴛ @{bot.username} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴄʟᴏɴᴇᴅ."
             )
         except Exception as e:
             await mi.edit_text(f"[ʀᴏᴏᴛ]:: Error while cloning bot.\n\n**Error**: {e}")
 
+@bot.on_message(filters.command("botdelete"))
+async def delete_cloned_bot(client, message):
+    try:
+        if len(message.command) < 2:
+            await message.reply_text("⚠️ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ.")
+            return
 
+        bot_token = " ".join(message.command[1:])
+        ok = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ...")
+
+        cloned_bot = await clonebotdb.find_one({"token": bot_token})
+        if cloned_bot:
+            await clonebotdb.delete_one({"token": bot_token})
+            CLONES.remove(cloned_bot["bot_id"])
+            await ok.edit_text(
+                f"🤖 ʙᴏᴛ @{cloned_bot['username']} ʜᴀꜱ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ꜰʀᴏᴍ ᴅᴀᴛᴀʙᴀꜱᴇ."
+            )
+        else:
+            await ok.edit_text("⚠️ ᴛʜᴇ ᴘʀᴏᴠɪᴅᴇᴅ ʙᴏᴛ ᴛᴏᴋᴇɴ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʟɪꜱᴛ.")
+    except Exception as e:
+        logging.exception(e)
+        await message.reply_text(f"Error occurred: {e}")
+
+@bot.on_message(filters.command(["deleteall"]) & filters.user(SUDOERS))
+async def delete_all_cloned_bots(client, message):
+    try:
+        a = await message.reply_text("ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ...")
+        await clonebotdb.delete_many({})
+        CLONES.clear()
+        await a.edit_text("ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ꜱᴜᴄᴄᴇꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ✅")
+    except Exception as e:
+        logging.exception(e)
+        await message.reply_text(f"Error occurred while deleting all cloned bots: {e}")
+
+@bot.on_message(filters.command("updateall") & filters.user(SUDOERS))
+async def update_all_bots(client, message):
+    try:
+        a = await message.reply_text("🔄 Updating all bots from the repository...")
+        process = subprocess.run(["git", "pull"], capture_output=True, text=True)
+        if process.returncode == 0:
+            await a.edit_text("✅ All bots have been updated successfully!")
+        else:
+            await a.edit_text(f"⚠️ Update failed:\n\n{process.stderr}")
+    except Exception as e:
+        logging.exception(e)
+        await message.reply_text(f"Error occurred during update: {e}")
+        
+@bot.on_message(filters.command("botdelete"))
+async def delete_cloned_bot(client, message):
+    try:
+        if len(message.command) < 2:
+            await message.reply_text("⚠️ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ.")
+            return
+
+        bot_token = " ".join(message.command[1:])
+        ok = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ...")
+
+        cloned_bot = await clonebotdb.find_one({"token": bot_token})
+        if cloned_bot:
+            await clonebotdb.delete_one({"token": bot_token})
+            CLONES.remove(cloned_bot["bot_id"])
+            await ok.edit_text(
+                f"🤖 Your cloned bot **@{cloned_bot['username']}** has been removed from my database ✅.\n"
+                "🔄 Kindly revoke your bot token from @BotFather for security purposes."
+            )
+        else:
+            await ok.edit_text("⚠️ The provided bot token is not in the cloned list.")
+    except Exception as e:
+        logging.exception(e)
+        await message.reply_text(f"An error occurred while deleting the cloned bot: {e}")
+        
+        
 @bot.on_message(filters.command("botlist"))
 async def list_cloned_bots(client, message):
     try:
@@ -123,43 +172,3 @@ async def list_cloned_bots(client, message):
     except Exception as e:
         logging.exception(e)
         await message.reply_text("ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ʟɪꜱᴛɪɴɢ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ.")
-
-@bot.on_message(
-    filters.command(["botdelete"])
-)
-async def delete_cloned_bot(client, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text("⚠️ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ ᴀꜰᴛᴇʀ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ.")
-            return
-
-        bot_token = " ".join(message.command[1:])
-        ok = await message.reply_text("ᴄʜᴇᴄᴋɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴛᴏᴋᴇɴ...")
-
-        cloned_bot = await clonebotdb.find_one({"token": bot_token})
-        if cloned_bot:
-            await clonebotdb.delete_one({"token": bot_token})
-            CLONES.remove(cloned_bot["bot_id"])
-            await ok.edit_text(
-                "🤖 ʏᴏᴜʀ ᴄʟᴏɴᴇᴅ ʙᴏᴛ ʜᴀꜱ ʙᴇᴇɴ ʀᴇᴍᴏᴠᴇᴅ ꜰʀᴏᴍ ᴍʏ ᴅᴀᴛᴀʙᴀꜱᴇ ✅\n🔄 ᴋɪɴᴅʟʏ ʀᴇᴠᴏᴋᴇ ʏᴏᴜʀ ʙᴏᴛ ᴛᴏᴋᴇɴ ꜰʀᴏᴍ @botfather ᴏᴛʜᴇʀᴡɪꜱᴇ ʏᴏᴜʀ ʙᴏᴛ ᴡɪʟʟ ꜱᴛᴏᴘ ᴡʜᴇɴ @{bot.username} ᴡɪʟʟ ʀᴇꜱᴛᴀʀᴛ ☠️"
-            )
-            os.system(f"kill -9 {os.getpid()} && bash start")
-        else:
-            await message.reply_text("⚠️ ᴛʜᴇ ᴘʀᴏᴠɪᴅᴇᴅ ʙᴏᴛ ᴛᴏᴋᴇɴ ɪꜱ ɴᴏᴛ ɪɴ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʟɪꜱᴛ.")
-    except Exception as e:
-        await message.reply_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴛʜᴇ ᴄʟᴏɴᴇᴅ ʙᴏᴛ: {e}")
-        logging.exception(e)
-
-
-
-@bot.on_message(sukh(["deleteall"]) & (filters.me | filters.user(SUDOERS)))
-async def delete_all_cloned_bots(client, message):
-    try:
-        a = await message.reply_text("ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ...")
-        await clonebotdb.delete_many({})
-        CLONES.clear()
-        await a.edit_text("ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴅᴇʟᴇᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅")
-        os.system(f"kill -9 {os.getpid()} && bash start")
-    except Exception as e:
-        await a.edit_text(f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ᴀʟʟ ᴄʟᴏɴᴇᴅ ʙᴏᴛꜱ. {e}")
-        logging.exception(e)
