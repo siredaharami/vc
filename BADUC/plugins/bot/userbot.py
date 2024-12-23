@@ -9,7 +9,7 @@ from pyrogram.types import BotCommand
 from BADUC.core.config import API_HASH, API_ID, OWNER_ID
 from BADUC import CLONE_OWNERS
 from BADUC.core.clients import bot
-from BADUC import save_clonebot_owner, save_idclonebot_owner
+from BADUC import *
 from BADUC import mongodb
 
 IDCLONES = set()
