@@ -85,16 +85,6 @@ async def stream_audio(client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
 
-    # Check if the chat is served
-    if not await is_served_chat(chat_id):
-        await app.send_message(chat_id, "This chat is not authorized to use the bot.")
-        return
-
-    # Check if the user is served
-    if not await is_served_user(user_id):
-        await app.send_message(chat_id, "You are not authorized to use the bot.")
-        return
-
     # Extract the query from the message
     query = message.text.split(' ', 1)[1] if len(message.text.split(' ', 1)) > 1 else None
 
@@ -255,16 +245,6 @@ async def queue_media(client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
 
-    # Check if the chat is served
-    if not await is_served_chat(chat_id):
-        await app.send_message(chat_id, "This chat is not authorized to use the bot.")
-        return
-
-    # Check if the user is served
-    if not await is_served_user(user_id):
-        await app.send_message(chat_id, "You are not authorized to use the bot.")
-        return
-
     # Extract media details from the message (assuming the format of the message includes necessary data)
     stream_type = "Audio"  # Change based on the media type
     title = message.text.split(' ', 1)[1]  # Assuming the song name is the text following the command
@@ -275,4 +255,3 @@ async def queue_media(client, message: Message):
         await add_to_queue(chat_id, stream_file, stream_type, title, duration, message.from_user)
     else:
         await app.send_message(chat_id, "Couldn't find the song.")
-        
