@@ -570,7 +570,7 @@ async def give_wink(bot: Client, message: Message):
                 ),
             )
 
-@app.on_message(bad(["happy"]) & (filters.me | filters.user(SUDOERS)))
+@Client.on_message(bad(["happy"]) & (filters.me | filters.user(SUDOERS)))
 async def give_happy(bot: Client, message: Message):
     URL = "https://api.waifu.pics/sfw/happy"
     async with aiohttp.ClientSession() as session:
