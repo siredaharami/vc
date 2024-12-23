@@ -1,5 +1,5 @@
 import asyncio
-from functools import partial
+import logging
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pytgcalls import PyTgCalls
@@ -9,6 +9,9 @@ from pytgcalls.exceptions import NoActiveGroupCall
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
 from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 # MongoDB Database Initialization (Assuming MongoDB is initialized elsewhere)
 chatsdb = mongodb.chatsdb
@@ -79,11 +82,28 @@ def get_readable_time(seconds: int) -> str:
     ping_time += ":".join(time_list)
     return ping_time
 
+# Log message to file and console
+async def paste_queue(log_message: str):
+    # Log to console
+    logging.info(log_message)
+
+    # Or log to a file
+    with open("song_requests.log", "a") as f:
+        f.write(log_message + "\n")
+
 # Stream Audio function with MongoDB checks and logging
 @app.on_message(filters.command("play") & filters.group)
 async def stream_audio(client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
+
+    # Check if the chat is served
+    if not await is_served_chat(chat_id):
+        return
+
+    # Check if the user is served
+    if not await is_served_user(user_id):
+        return
 
     # Extract the query from the message
     query = message.text.split(' ', 1)[1] if len(message.text.split(' ', 1)) > 1 else None
@@ -244,6 +264,14 @@ async def add_to_queue(chat_id, stream_file, stream_type, title, duration, user)
 async def queue_media(client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
+
+    # Check if the chat is served
+    if not await is_served_chat(chat_id):
+        return
+
+    # Check if the user is served
+    if not await is_served_user(user_id):
+        return
 
     # Extract media details from the message (assuming the format of the message includes necessary data)
     stream_type = "Audio"  # Change based on the media type
