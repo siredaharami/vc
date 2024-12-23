@@ -6,7 +6,6 @@ import openai
 
 # OpenAI API key
 openai.api_key = "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"
-
 # Function to get response from GPT-4
 async def get_gpt4_response(prompt):
     response = openai.ChatCompletion.create(
