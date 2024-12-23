@@ -1,28 +1,31 @@
-import os
-import asyncio
-from pyrogram import Client, filters
-import openai
+import time
+import requests
+from pyrogram import filters
+from pyrogram.enums import ChatAction
+
 from BADUC.core.clients import bot
 
-# Retrieve the OpenAI API key from an environment variable
-openai.api_key = os.getenv("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")
-
-
-# Function to get response from GPT-4
-async def get_gpt4_response(prompt):
+# Helper function to get chat GPT response
+def get_chat_gpt_response(question):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=150
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+        response = requests.get(f'https://chatgpt.apinepdev.workers.dev/?question={question}')
+        response.raise_for_status()
+        return response.json().get("answer", "No answer available")
+    except (requests.RequestException, ValueError):
+        return "Error retrieving response."
 
-# Handler for messages
-@bot.on_message(filters.text)
-async def gpt4_response_handler(client, message):
-    query = message.text
-    response = await get_gpt4_response(query)
-    await message.reply_text(response)
+@bot.on_message(filters.me)
+async def chat_gpt(bot, message):
+    question = message.text.strip()
+
+    if not question:
+        # Skip processing if the message is empty
+        return
+
+    await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
+
+    answer = get_chat_gpt_response(question)
+
+    await message.reply_text(answer)
+
+# Optional: Remove the error handler if you don't need to handle errors explicitly
