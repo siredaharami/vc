@@ -4,8 +4,12 @@ from pyrogram import Client, filters, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.types import Message
 from pytgcalls import PyTgCalls
 from pytgcalls.types import AudioPiped, VideoPiped
+from BADUC.core.clients import *
 import yt_dlp as ytdl  # We use yt-dlp to handle YouTube downloads and streaming
-from some_media_library import MediaStream, AudioQuality, VideoQuality  # Replace with actual media library imports
+from pytgcalls.exceptions import NoActiveGroupCall
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pytgcalls.types import ChatUpdate, Update, GroupCallConfig
+from pytgcalls.types import Call, MediaStream, AudioQuality, VideoQuality
 
 # MongoDB Database Initialization (Assuming MongoDB is initialized elsewhere)
 chatsdb = mongodb.chatsdb
