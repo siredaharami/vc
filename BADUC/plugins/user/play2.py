@@ -3,7 +3,6 @@ from functools import partial
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pytgcalls import PyTgCalls
-from pytgcalls.types import AudioPiped, VideoPiped
 from BADUC.core.clients import *
 import yt_dlp as ytdl  # We use yt-dlp to handle YouTube downloads and streaming
 from pytgcalls.exceptions import NoActiveGroupCall
