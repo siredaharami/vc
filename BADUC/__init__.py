@@ -63,8 +63,6 @@ vars = config
 
 cloneownerdb = db.clone_owners
 
-CLONE_OWNERS = {}
-
 async def load_clone_owners():
     async for entry in cloneownerdb.find():
         bot_id = entry.get("bot_id")
