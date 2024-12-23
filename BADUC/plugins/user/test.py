@@ -7,8 +7,6 @@ from pytgcalls.types.input_stream import AudioPiped
 from pytgcalls.exceptions import NoActiveGroupCall
 
 # Initialize Pyrogram client and PyTgCalls
-app = Client("userbot")
-call_client = PyTgCalls(app)
 
 COOKIES_FILE = "cookies.txt"  # Path to your YouTube cookies file
 
@@ -73,9 +71,3 @@ async def stop_song(client, message):
         await message.reply(f"Error: {str(e)}")
 
 
-# Start Pyrogram client and PyTgCalls
-@app.on_start
-async def start_clients():
-    await call_client.start()
-
-app.run()
