@@ -1,4 +1,5 @@
 import os
+from BADUC.core.clients import bot
 import asyncio
 from pyrogram import Client, filters
 import openai
