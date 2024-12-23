@@ -7,9 +7,6 @@ from BADUC.core.clients import bot
 # Retrieve the OpenAI API key from an environment variable
 openai.api_key = os.getenv("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")
 
-# Validate that the API key is set
-if not openai.api_key:
-    raise ValueError("OpenAI API key not found in environment variables.")
 
 # Function to get response from GPT-4
 async def get_gpt4_response(prompt):
