@@ -1,6 +1,6 @@
 import asyncio
 from functools import partial
-from pyrogram import Client, filters, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram import Client, filters
 from pyrogram.types import Message
 from pytgcalls import PyTgCalls
 from pytgcalls.types import AudioPiped, VideoPiped
