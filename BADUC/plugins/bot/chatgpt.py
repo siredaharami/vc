@@ -5,7 +5,7 @@ from pyrogram import Client, filters
 import openai
 
 # OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 # Function to get response from GPT-4
 async def get_gpt4_response(prompt):
     response = openai.ChatCompletion.create(
