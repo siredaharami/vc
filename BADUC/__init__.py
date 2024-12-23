@@ -63,14 +63,11 @@ vars = config
 
 cloneownerdb = db.clone_owners
 
-def load_clone_owners():
-    for entry in data_source:  # Assuming data_source is your input
-        if "bot_id" not in entry:
-            print(f"Key 'bot_id' missing in entry: {entry}")
-            continue  # Skip this entry or handle it differently
-
+async def load_clone_owners():
+    async for entry in cloneownerdb.find():
         bot_id = entry["bot_id"]
-        # Proceed with your logic
+        user_id = entry["user_id"]
+        CLONE_OWNERS[bot_id] = user_id
 
 async def save_clonebot_owner(bot_id, user_id):
     await cloneownerdb.update_one(
